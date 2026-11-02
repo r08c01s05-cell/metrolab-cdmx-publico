@@ -41,7 +41,7 @@ assert(scorch().uScorch.value===0&&scorch().uEmber.value===0&&resin.emissiveInte
  assert.equal(stage.decor.children.filter(o=>o.name==='Sombra de contacto225').length,2,'Una sombra de contacto por conjunto');
  assert.equal(stage.decor.children.filter(o=>o.name==='Línea de seguridad225').length,4,'Línea de seguridad alrededor del equipo estudiado');
  stage.fit([b],null);assert.equal(stage.decor.children.length,1,'Al cambiar de escenario se reemplazan sombras y línea');
- assert(room.fog,'Niebla que funde el piso con el fondo');stage.dispose();assert(!room.fog&&!room.getObjectByName('Piso de referencia225'),'El piso se libera al cerrar');
+ assert(stage.room.userData.bounds229,'El piso queda dentro de un cuarto (229, sustituye a la niebla)');stage.dispose();assert(!room.getObjectByName('Piso de referencia225'),'El piso se libera al cerrar');
  const camera=new T.PerspectiveCamera(),controls={target:new T.Vector3()};camera.position.set(0,0,10);
  const tw=cameraTween225(camera,controls,new T.Vector3(10,0,0),new T.Vector3(1,1,1),1000,600);
  assert(tw.step(1300)&&Math.abs(camera.position.x-5)<1e-9,'A la mitad del tiempo, a la mitad del camino');assert(!tw.step(1700)&&camera.position.x===10&&controls.target.y===1,'Termina exactamente en el destino');}
