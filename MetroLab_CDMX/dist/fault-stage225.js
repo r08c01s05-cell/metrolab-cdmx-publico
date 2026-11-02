@@ -7,7 +7,7 @@ import * as T from 'three';
 const ROOM225='#c9cdca',JOINT225=1.5;
 function concreteTexture225(){
  const size=512,canvas=globalThis.document?.createElement?.('canvas');if(!canvas)return null;canvas.width=canvas.height=size;
- const ctx=canvas.getContext('2d');ctx.fillStyle='#9a9d99';ctx.fillRect(0,0,size,size);
+ const ctx=canvas.getContext?.('2d');if(!ctx?.createRadialGradient?.(0,0,0,0,0,1)?.addColorStop)return null;ctx.fillStyle='#9a9d99';ctx.fillRect(0,0,size,size);
  // Deterministic aggregate speckle and soft trowel clouds.
  let seed=225;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
  for(let i=0;i<70;i++){const x=rnd()*size,y=rnd()*size,r=40+rnd()*120,g=ctx.createRadialGradient(x,y,0,x,y,r),l=rnd()<.5?255:0;g.addColorStop(0,`rgba(${l},${l},${l},${.035+rnd()*.03})`);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2);}
@@ -30,7 +30,7 @@ export class FaultStage225{
   const floorGeometry=new T.PlaneGeometry(size,size);this.owned.push(floorMaterial,floorGeometry);
   this.floor=new T.Mesh(floorGeometry,floorMaterial);this.floor.rotation.x=-Math.PI/2;this.floor.name='Piso de concreto pulido225';this.floor.renderOrder=-1;this.root.add(this.floor);
   this.blob=blobTexture225();this.owned.push(this.blob);
-  this.shadowMaterial=new T.MeshBasicMaterial({color:'#101413',map:this.blob,transparent:true,opacity:.5,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});this.owned.push(this.shadowMaterial);
+  this.shadowMaterial=new T.MeshBasicMaterial({color:'#101413',map:this.blob,transparent:true,opacity:.32,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});this.owned.push(this.shadowMaterial);
   this.lineMaterial=new T.MeshStandardMaterial({color:'#d9b13b',roughness:.55});this.owned.push(this.lineMaterial);
   this.decor=new T.Group();this.root.add(this.decor);
  }

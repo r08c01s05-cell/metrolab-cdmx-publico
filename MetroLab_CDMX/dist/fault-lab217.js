@@ -6,8 +6,9 @@ import {photographicRenderer130} from './photographic130.js?v=205';
 import {loadFaultModel217} from './fault-model217.js?v=222';
 import {FAULT_CASES217,FAULT_SOURCES217,FAULT_SCOPE217,FaultClock217} from './fault-catalog217.js?v=217';
 import {sampleOutcome218,variants218,EXTRA_SOURCES218} from './fault-outcomes218.js?v=218';
-import {FaultStage225,cameraTween225} from './fault-stage225.js?v=228';
-import {FaultAnimation218,createConsequence218} from './fault-animation218.js?v=228';
+import {studyShadows226} from './fault-realism226.js?v=229';
+import {FaultStage225,cameraTween225} from './fault-stage225.js?v=229';
+import {FaultAnimation218,createConsequence218} from './fault-animation218.js?v=229';
 const NS='http://www.w3.org/2000/svg',svg=(tag,attrs)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));return e;};
 export class FaultLab217{
  constructor(doc=document){
@@ -27,7 +28,7 @@ export class FaultLab217{
   const id=globalThis.window?.workshopGame?.selectedModel216;if(['NM22','NM79','MP82'].includes(id))this.$('[data-f217-model]').value=id;
   this.cases();this.dialog.showModal();try{this.init3D();await this.change();}catch(e){this.$('[data-f217-load]').textContent='La vista 3D no pudo iniciarse. Cierra y vuelve a abrir para reintentar.';console.error('Ensayos visuales:',e);}this.start();
  }
- init3D(){if(this.renderer)return;this.renderer=new T.WebGLRenderer({canvas:this.$('canvas'),antialias:true,powerPreference:'high-performance'});photographicRenderer130(this.renderer);this.budget=new RenderBudget101(this.renderer,{fps:60});this.scene=new T.Scene();this.scene.background=new T.Color('#edf0ed');this.stage225=new FaultStage225(this.scene);this.env=createMetroEnvironment(this.renderer,'workshop');this.scene.environment=this.env.texture;this.scene.environmentIntensity=.85;this.scene.add(new T.HemisphereLight('#fff9ed','#52605c',1.6));const key=new T.DirectionalLight('#fff4e1',2.5);key.position.set(-6,9,7);this.scene.add(key);this.camera=new T.PerspectiveCamera(38,1,.03,250);this.controls=new OrbitControls(this.camera,this.$('canvas'));this.controls.enableDamping=true;this.controls.dampingFactor=.09;this.controls.maxPolarAngle=Math.PI*.495;this.controls.addEventListener('change',()=>this.dirty=true);this.controls.minDistance=.35;this.controls.maxDistance=60;this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(this.$('.f217-stage'));this.resize();}
+ init3D(){if(this.renderer)return;this.renderer=new T.WebGLRenderer({canvas:this.$('canvas'),antialias:true,powerPreference:'high-performance'});photographicRenderer130(this.renderer);this.budget=new RenderBudget101(this.renderer,{fps:60});this.scene=new T.Scene();this.scene.background=new T.Color('#edf0ed');this.stage225=new FaultStage225(this.scene);this.env=createMetroEnvironment(this.renderer,'workshop');this.scene.environment=this.env.texture;this.scene.environmentIntensity=.85;this.scene.add(new T.HemisphereLight('#fff9ed','#52605c',1.6));const key=new T.DirectionalLight('#fff4e1',2.5);key.position.set(-6,9,7);this.scene.add(key);this.scene.add(key.target);this.key226=key;this.camera=new T.PerspectiveCamera(38,1,.03,250);this.controls=new OrbitControls(this.camera,this.$('canvas'));this.controls.enableDamping=true;this.controls.dampingFactor=.09;this.controls.maxPolarAngle=Math.PI*.495;this.controls.addEventListener('change',()=>this.dirty=true);this.controls.minDistance=.35;this.controls.maxDistance=60;this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(this.$('.f217-stage'));this.resize();}
  async change(keepVariant=false){
   const scenario=FAULT_CASES217.find(c=>c.id===this.$('[data-f217-case]').value);if(!scenario)return;this.scenario=scenario;if(!keepVariant){const select=this.$('[data-f218-variant]');select.replaceChildren();for(const [value,title]of variants218(scenario.id)){const option=this.doc.createElement('option');option.value=value;option.textContent=title;select.append(option);}this.$('[data-f218-variant-label]').hidden=select.options.length===1;}this.variant=this.$('[data-f218-variant]').value;this.clock.pause();this.clock.seek(0);this.describe();const key=scenario.domain+':'+(scenario.domain==='train'?this.$('[data-f217-model]').value:'SR');const token=++this.generation;
   if(this.model)this.model.root.visible=false;if(this.effects)this.effects.root.visible=false;this.$('[data-f217-play]').disabled=true;this.$('[data-f217-load]').textContent='Preparando modelo de contexto…';
@@ -47,7 +48,10 @@ export class FaultLab217{
   if(!this.stage225||!this.model)return;const boxes=[];
   if(this.scenario?.domain==='substation'){for(const g of this.model.targets.values())if(g.visible){const b=new T.Box3();g.updateMatrixWorld(true);g.traverseVisible(o=>{if(o.isMesh)b.union(new T.Box3().setFromObject(o));});if(!b.isEmpty())boxes.push(b);}}
   else boxes.push(this.effects?.bounds()||this.model.bounds());
-  this.stage225.fit(boxes,this.scenario?.domain==='substation'?this.model.bounds(this.scenario.target):null);this.dirty=true;
+  this.stage225.fit(boxes,this.scenario?.domain==='substation'?this.model.bounds(this.scenario.target):null);
+  // Fenómenos 226: real shadows on the reference floor.
+  if(this.key226&&this.renderer){const all=new T.Box3();for(const b of boxes)all.union(b);studyShadows226(this.renderer,this.key226,this.model.root,all);this.stage225.floor.receiveShadow=true;}
+  this.dirty=true;
  }
  frame(part,smooth=false){
   if(!this.model||!this.camera)return;const b=this.effects?.bounds(part)||this.model.bounds(part),center=b.getCenter(new T.Vector3());this.resize();

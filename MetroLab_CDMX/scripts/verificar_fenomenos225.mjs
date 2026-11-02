@@ -15,7 +15,7 @@ const rows=[{part:'transformer',material:resin,base:resin.color.clone()},{part:'
 const model={root,rows,targets:new Map([['transformer',group]]),tint(){},bounds(){return new T.Box3().setFromObject(root);}};
 const fx=new FaultAnimation218(model,'substation',scene),scenario=FAULT_CASES217.find(c=>c.id==='sr-cooling');
 const sample=(p,v='reference')=>({...sampleOutcome218('sr-cooling',p,v),scenario,progress:p});
-const state=()=>({fan:fx.fx225.fans[0].rotation.z,air:[...fx.fx225.air.geometry.attributes.position.array.slice(0,48)],glow:resin.emissiveIntensity,spark:fx.fx225.sparks.visible,flash:fx.fx225.flash.intensity});
+const state=()=>({fan:fx.fx225.fans[0].rotation.z,air:[...fx.fx225.air.geometry.attributes.position.array.slice(0,48)],glow:resin.userData.scorch226?.uScorch.value,spark:fx.fx225.sparks.visible,flash:fx.fx225.flash.intensity});
 
 assert.equal(fx.fx225.fans.length,2,'Dos ventiladores en la cara abierta');
 assert.equal(fx.fx225.coils.length,1,'Solo la resina de los devanados se calienta');
@@ -23,16 +23,18 @@ fx.apply(sample(.1));const early=state();
 fx.apply(sample(.5));fx.apply(sample(.1));assert.deepEqual(state(),early,'Mismo cuadro al regresar en la línea de tiempo');
 fx.apply(sample(.6));const slow=state();assert.equal(fx.apply(sample(.6)),undefined);assert.deepEqual(state(),slow,'Sin deriva al repetir el mismo avance');
 assert(Math.abs(fx.fx225.fans[0].rotation.z-sample(.6).outcome.fanAngle*1.6)<1e-9,'El giro del ventilador sigue al caudal integrado');
-fx.apply(sample(.1));assert(resin.emissiveIntensity<.05,'Con ventilación el devanado no brilla');
-fx.apply(sample(.95));const protectedGlow=resin.emissiveIntensity;
-fx.apply(sample(.95,'unprotected'));assert(resin.emissiveIntensity>protectedGlow*2,'Sin protección el devanado se pone incandescente');
+const scorch=()=>resin.userData.scorch226;
+fx.apply(sample(.1));assert(scorch().uScorch.value<.01,'Con ventilación la resina no cambia de color');
+fx.apply(sample(.95));const protectedScorch=scorch().uScorch.value;assert(protectedScorch>0&&protectedScorch<.5&&scorch().uEmber.value===0,'Con protección solo se decolora la parte alta, sin brasas');
+fx.apply(sample(.95,'unprotected'));assert(scorch().uScorch.value>protectedScorch*1.5&&scorch().uEmber.value>0,'Sin protección la resina se carboniza y aparecen brasas');assert(fx.fx225.smoke.group.visible,'Sale humo solo cuando se quema');
+fx.apply(sample(.95));assert(!fx.fx225.smoke.group.visible,'Con protección no hay humo');
 fx.apply(sample(.76));assert(fx.fx225.sparks.visible&&fx.fx225.flash.intensity>0,'Chispa y destello al abrir la protección');
 fx.apply(sample(.76,'unprotected'));assert(!fx.fx225.sparks.visible,'Sin apertura no hay chispa');
 fx.apply(sample(.9));assert(!fx.fx225.sparks.visible&&fx.fx225.flash.intensity===0,'La chispa dura un instante');
 fx.apply({...sampleOutcome218('sr-rectifier',.5),scenario:FAULT_CASES217.find(c=>c.id==='sr-rectifier'),progress:.5});
-assert(!fx.fx225.root.visible&&resin.emissive.getHex()===0&&resin.emissiveIntensity===1,'Otros escenarios no muestran estos efectos y restauran el material');
+assert(!fx.fx225.root.visible&&scorch().uScorch.value===0&&resin.emissiveIntensity===1,'Otros escenarios no muestran estos efectos y restauran el material');
 fx.apply(sample(.95,'unprotected'));fx.dispose();
-assert(resin.emissive.getHex()===0&&resin.emissiveIntensity===1,'Al cerrar se restaura el material');assert(!scene.getObjectByName('Fenómenos de ventilación225'),'Al cerrar se retiran los efectos');
+assert(scorch().uScorch.value===0&&scorch().uEmber.value===0&&resin.emissiveIntensity===1,'Al cerrar se restaura el material');assert(!scene.getObjectByName('Fenómenos de ventilación225'),'Al cerrar se retiran los efectos');
 // Piso de referencia y movimiento suave de cámara.
 {const room=new T.Scene(),stage=new FaultStage225(room),a=new T.Box3(new T.Vector3(-3,.08,0),new T.Vector3(-.3,2.9,3)),b=new T.Box3(new T.Vector3(1,.2,0),new T.Vector3(2,2,1));
  stage.fit([a,b],a);assert(Math.abs(stage.floor.position.y-.078)<1e-6,'El piso queda justo bajo el equipo más bajo');
@@ -44,4 +46,4 @@ assert(resin.emissive.getHex()===0&&resin.emissiveIntensity===1,'Al cerrar se re
  const tw=cameraTween225(camera,controls,new T.Vector3(10,0,0),new T.Vector3(1,1,1),1000,600);
  assert(tw.step(1300)&&Math.abs(camera.position.x-5)<1e-9,'A la mitad del tiempo, a la mitad del camino');assert(!tw.step(1700)&&camera.position.x===10&&controls.target.y===1,'Termina exactamente en el destino');}
 
-console.log('225 PASS: piso de referencia con sombras y línea de seguridad, cámara con transición suave; aire, dos ventiladores, calentamiento y chispa de apertura deterministas; variante sin protección incandescente; recursos restaurados. CPU/geometría.');
+console.log('225/226 PASS: resina que se oscurece desde arriba y se carboniza sin protección, humo solo al quemarse; piso de referencia con sombras y línea de seguridad, cámara con transición suave; aire, dos ventiladores, calentamiento y chispa de apertura deterministas; variante sin protección incandescente; recursos restaurados. CPU/geometría.');

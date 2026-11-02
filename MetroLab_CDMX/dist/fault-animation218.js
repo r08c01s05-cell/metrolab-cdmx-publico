@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {scorchMaterial226,releaseScorch226,puffTexture226,Smoke226} from './fault-realism226.js?v=229';
 
 // Only the isolated study clone is articulated. Shared GLB buffers stay intact.
 export class FaultAnimation218{
@@ -46,60 +47,73 @@ export class FaultAnimation218{
  // with a brief spark at the terminals. Everything is driven by the absolute sample, so seeking,
  // pausing and display rate give the same picture. Sober, study-scene effects; not a solver.
  cooling225(map){
-  const fx=this.fx225={root:new T.Group(),fans:[],coils:[]};fx.root.name='Fenómenos de ventilación225';this.root.add(fx.root);
-  // Winding materials heat up: dull red emissive, stronger only in the unprotected hypothesis.
+  const fx=this.fx225={root:new T.Group(),fans:[],blurs:[],coils:[]};fx.root.name='Fenómenos de ventilación225';this.root.add(fx.root);
   for(const row of this.model.rows)if(row.part==='transformer'&&/resina|devanado|bobina/i.test(row.material.name)&&row.material.emissive)fx.coils.push({material:row.material,emissive:row.material.emissive.clone(),intensity:row.material.emissiveIntensity});
   // Effects anchor to the windings themselves, not to the enclosure around them.
   const coilMaterials=new Set(fx.coils.map(c=>c.material)),box=new T.Box3();this.model.targets.get('transformer')?.traverse(o=>{if(o.isMesh&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>coilMaterials.has(m)))box.union(new T.Box3().setFromObject(o));});
   if(box.isEmpty())box.copy(this.model.bounds('transformer'));
   const size=box.getSize(new T.Vector3()),c=box.getCenter(new T.Vector3());Object.assign(fx,{box,size,center:c});
-  // The cabinet is open on its -z face (where the study camera looks from), and the winding block is wide along x and thin along z.
-  // Air: streaks rising through the winding ducts and just in front of them, drawn as thin
-  // instanced bars so they keep a visible width at any distance.
-  const count=300,seeds=[];for(let i=0;i<count;i++){const h=Math.sin(i*12.9898)*43758.5453,r=h-Math.floor(h),h2=Math.sin(i*78.233)*12345.678,r2=h2-Math.floor(h2),h3=Math.sin(i*39.425)*24634.6345,r3=h3-Math.floor(h3);seeds.push({x:r2-.5,depth:i%3?r3*.35:.35+r3*.65,phase:r});}
-  // Each seed is a soft trail of four glowing motes (additive, so dimmer motes read as thinner
-  // air): a light haze rather than solid bars.
-  const TRAIL=4,air=new T.BufferGeometry();air.setAttribute('position',new T.BufferAttribute(new Float32Array(count*TRAIL*3),3));air.setAttribute('color',new T.BufferAttribute(new Float32Array(count*TRAIL*3),3));this.geometry.add(air);
-  const airMaterial=new T.PointsMaterial({size:.13,map,vertexColors:true,transparent:true,opacity:1,depthWrite:false,blending:T.AdditiveBlending,sizeAttenuation:true});this.materials.add(airMaterial);
-  fx.air=new T.Points(air,airMaterial);fx.air.frustumCulled=false;fx.air.name='Aire de refrigeración225';fx.root.add(fx.air);fx.seeds=seeds;fx.trail=TRAIL;
-  // Two axial fans at the foot of the windings on the open side, blowing in under them; the
-  // air then turns and rises through the winding ducts.
-  const radius=Math.min(.26,size.x*.12),blade=new T.BoxGeometry(radius*.34,radius*.86,radius*.05);blade.translate(0,radius*.47,0);this.geometry.add(blade);
+  // Fenómenos 226: overheating shown on the resin itself (browning and charring from the top).
+  for(const coil of fx.coils)coil.scorch=scorchMaterial226(coil.material,box.min.y,box.max.y);
+  // The cabinet is open on its -z face (where the study camera looks from); the winding block is
+  // wide along x and thin along z. Air itself is invisible: what shows is the fine dust it
+  // carries, smeared into short streaks by its speed (motion blur) and settling into slow drifting
+  // specks once the fans stop. Normal blending, light grey, never glowing.
+  const count=420,seeds=[];for(let i=0;i<count;i++){const h=Math.sin(i*12.9898)*43758.5453,r=h-Math.floor(h),h2=Math.sin(i*78.233)*12345.678,r2=h2-Math.floor(h2),h3=Math.sin(i*39.425)*24634.6345,r3=h3-Math.floor(h3);seeds.push({x:r2-.5,depth:i%3?r3*.35:.35+r3*.65,phase:r,bright:.55+.45*((i*.618)%1)});}
+  const air=new T.BufferGeometry();air.setAttribute('position',new T.BufferAttribute(new Float32Array(count*6),3));air.setAttribute('color',new T.BufferAttribute(new Float32Array(count*8),4));this.geometry.add(air);
+  const airMaterial=new T.LineBasicMaterial({vertexColors:true,transparent:true,depthWrite:false});this.materials.add(airMaterial);
+  fx.air=new T.LineSegments(air,airMaterial);fx.air.frustumCulled=false;fx.air.name='Polvo arrastrado por el aire226';fx.root.add(fx.air);fx.seeds=seeds;
+  // Two axial fans with guard grilles at the foot of the windings on the open side.
+  const radius=Math.min(.26,size.x*.12),blade=new T.BoxGeometry(radius*.34,radius*.86,radius*.03);blade.translate(0,radius*.47,0);this.geometry.add(blade);
   for(const k of [-1,1]){const fan=new T.Group();fan.position.set(c.x+k*size.x*.27,box.min.y+radius*.55,box.min.z-.16);fx.root.add(fan);
-   this.mesh(new T.TorusGeometry(radius,radius*.08,8,28),'#2f3539',fan,{metalness:.4,roughness:.5});
-   this.mesh(new T.RingGeometry(radius*.2,radius,20,1),'#1d2124',fan,{transparent:true,opacity:.3,side:T.DoubleSide}).position.z=.02;
-   const rotor=new T.Group();fan.add(rotor);for(let j=0;j<5;j++){const m=this.mesh(blade,'#5d676f',rotor,{metalness:.3,roughness:.55});m.rotation.z=j*Math.PI*2/5;m.rotation.y=.4;}
-   this.mesh(new T.CylinderGeometry(radius*.17,radius*.17,radius*.16,16),'#1f2326',rotor).rotation.x=Math.PI/2;fx.fans.push(rotor);}
-  // Sparks and a flash at the terminals above the windings when the protection opens.
-  const sparkCount=48,spark=new T.BufferGeometry();spark.setAttribute('position',new T.BufferAttribute(new Float32Array(sparkCount*3),3));this.geometry.add(spark);
-  const sparkMaterial=new T.PointsMaterial({size:.09,map,color:'#ffd27a',transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending});this.materials.add(sparkMaterial);
-  fx.sparks=new T.Points(spark,sparkMaterial);fx.sparks.frustumCulled=false;fx.sparks.name='Chispa de apertura225';fx.root.add(fx.sparks);
-  fx.sparkSeeds=Array.from({length:sparkCount},(_,i)=>{const a=i*2.399,u=(i*.618)%1;return {dx:Math.cos(a)*(.3+u),dz:Math.sin(a)*(.3+u),up:.6+((i*.37)%1)};});
-  const top=this.model.bounds('transformer');fx.terminal=new T.Vector3(c.x+size.x*.25,box.max.y+.12,box.min.z-.05);
-  const coreMaterial=new T.SpriteMaterial({map,color:'#cfe6ff',transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending});this.materials.add(coreMaterial);fx.arc=new T.Sprite(coreMaterial);fx.arc.scale.setScalar(.45);fx.arc.position.copy(fx.terminal);fx.root.add(fx.arc);
-  fx.flash=new T.PointLight('#ffcf8a',0,4,1.5);fx.flash.position.copy(fx.terminal);fx.root.add(fx.flash);
+   this.mesh(new T.CylinderGeometry(radius*1.04,radius*1.04,radius*.32,40,1,true),'#30363a',fan,{metalness:.55,roughness:.45,side:T.DoubleSide}).rotation.x=Math.PI/2;
+   for(let g=1;g<=4;g++)this.mesh(new T.TorusGeometry(radius*g/4,radius*.012,4,48),'#25292c',fan,{metalness:.6,roughness:.4}).position.z=-radius*.17;
+   for(let g=0;g<4;g++){const spoke=this.mesh(new T.BoxGeometry(radius*2,radius*.02,radius*.02),'#25292c',fan,{metalness:.6,roughness:.4});spoke.rotation.z=g*Math.PI/4;spoke.position.z=-radius*.17;}
+   const rotor=new T.Group();fan.add(rotor);for(let j=0;j<5;j++){const m=this.mesh(blade,'#6b747a',rotor,{metalness:.35,roughness:.5,transparent:true});m.rotation.z=j*Math.PI*2/5;m.rotation.y=.42;}
+   this.mesh(new T.CylinderGeometry(radius*.18,radius*.18,radius*.2,20),'#1f2326',rotor).rotation.x=Math.PI/2;fx.fans.push(rotor);
+   // At speed the eye sees a translucent disc instead of separate blades.
+   const disc=this.mesh(new T.CircleGeometry(radius*.94,40),'#7b8489',fan,{transparent:true,opacity:0,depthWrite:false,side:T.DoubleSide});fx.blurs.push(disc);}
+  // Opening of the protection: a short blue-white arc flash that flickers, then hot sparks that fall.
+  const sparkCount=60,spark=new T.BufferGeometry();spark.setAttribute('position',new T.BufferAttribute(new Float32Array(sparkCount*6),3));spark.setAttribute('color',new T.BufferAttribute(new Float32Array(sparkCount*8),4));this.geometry.add(spark);
+  const sparkMaterial=new T.LineBasicMaterial({vertexColors:true,transparent:true,depthWrite:false,blending:T.AdditiveBlending});this.materials.add(sparkMaterial);
+  fx.sparks=new T.LineSegments(spark,sparkMaterial);fx.sparks.frustumCulled=false;fx.sparks.name='Chispas de apertura226';fx.root.add(fx.sparks);
+  fx.sparkSeeds=Array.from({length:sparkCount},(_,i)=>{const a=i*2.399,u=(i*.618)%1;return {vx:Math.cos(a)*(.6+u*1.4),vz:Math.sin(a)*(.6+u*1.4),vy:.4+((i*.37)%1)*1.6,life:.35+((i*.53)%1)*.5};});
+  fx.terminal=new T.Vector3(c.x+size.x*.25,box.max.y+.12,box.min.z-.05);
+  const coreMaterial=new T.SpriteMaterial({map,color:'#d6e8ff',transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending});this.materials.add(coreMaterial);fx.arc=new T.Sprite(coreMaterial);fx.arc.scale.setScalar(.3);fx.arc.position.copy(fx.terminal);fx.root.add(fx.arc);
+  fx.flash=new T.PointLight('#cfe0ff',0,5,1.5);fx.flash.position.copy(fx.terminal);fx.root.add(fx.flash);
+  // Smoke from the top of the windings, only when the resin actually burns.
+  const puff=puffTexture226();this.textures.add(puff);fx.smoke=new Smoke226(fx.root,puff,[-.3,0,.3].map(k=>new T.Vector3(c.x+k*size.x,box.max.y-.1,box.min.z+.05)),36,new T.Vector3(0,0,-1.1));
  }
  coolingApply225(sample){
   const fx=this.fx225;if(!fx)return;const active=sample.scenario?.id==='sr-cooling';fx.root.visible=active;
-  for(const coil of fx.coils){coil.material.emissive.copy(coil.emissive);coil.material.emissiveIntensity=coil.intensity;}
+  for(const coil of fx.coils){coil.material.emissive.copy(coil.emissive);coil.material.emissiveIntensity=coil.intensity;coil.scorch.uScorch.value=0;coil.scorch.uEmber.value=0;}
   if(!active)return;
-  // The physical effects now carry the heat; the flat amber false colour would wash them out.
-  this.model.tint('',0);
-  const a=sample.outcome,p=sample.progress,flow=sample.signals.flow??0,heat=sample.signals.heat??0,flowTravel=a.fanAngle/(Math.PI*64),{box,size,center}=fx;
-  for(const fan of fx.fans)fan.rotation.z=a.fanAngle*1.6;
-  // Forced air rises fast and cool; with the fans stopped only a slow warm draught remains.
-  const cool=new T.Color('#7fc1ff'),warm=new T.Color('#ff9a55'),tint=cool.clone().lerp(warm,T.MathUtils.smoothstep(heat,.3,.85)*(1-flow*.8));
-  const natural=.09*T.MathUtils.smoothstep(heat,.25,.9),climb=flowTravel*9+p*16*natural,len=size.y*(.05+.12*flow+.07*natural),y0=box.min.y-.05,span=size.y+.4;
-  const strength=.45+.85*Math.max(flow,.7*T.MathUtils.smoothstep(heat,.3,.8)),pos=fx.air.geometry.attributes.position,col=fx.air.geometry.attributes.color,n=fx.trail;
-  fx.seeds.forEach((s,i)=>{const t=(s.phase+climb)%1,fade=Math.sin(Math.PI*t)*strength;for(let k=0;k<n;k++){const back=k/(n-1),y=y0+span*t-len*back,sway=Math.sin((t-back*.02)*9+i)*.025*(1-flow),j=i*n+k,f=fade*(1-back*.75);pos.setXYZ(j,center.x+s.x*size.x*1.02+sway,y,box.min.z-.04+s.depth*size.z);col.setXYZ(j,tint.r*f,tint.g*f,tint.b*f);}});
+  // The physical effects carry the heat; the flat amber false colour and the old smoke cards go.
+  this.model.tint('',0);for(const s of this.smoke)s.o.visible=false;
+  const a=sample.outcome,p=sample.progress,flow=sample.signals.flow??0,heat=sample.signals.heat??0,flowTravel=a.fanAngle/(Math.PI*64),{box,size,center}=fx,time=p*16;
+  // Fans: blades blur into a disc at speed and reappear as they run down.
+  const speed=flow,blur=T.MathUtils.smoothstep(speed,.25,.8);
+  for(const fan of fx.fans){fan.rotation.z=a.fanAngle*1.6;fan.children.forEach(m=>{if(m.material?.transparent&&m.geometry?.type==='BoxGeometry')m.material.opacity=1-blur*.75;});}
+  for(const disc of fx.blurs)disc.material.opacity=blur*.45;
+  // Dust in the air stream: long faint streaks at speed, short specks drifting with convection.
+  const natural=.09*T.MathUtils.smoothstep(heat,.25,.9),climb=flowTravel*9+p*16*natural,streak=size.y*(.01+.16*flow+.012*natural),y0=box.min.y-.05,span=size.y+.4,visible=.18+.5*flow+.25*natural/.09;
+  const pos=fx.air.geometry.attributes.position,col=fx.air.geometry.attributes.color,grey=.86;
+  fx.seeds.forEach((s,i)=>{const t=(s.phase+climb)%1,fade=Math.sin(Math.PI*t)*visible*s.bright,sway=Math.sin(t*9+i)*.03*(1-flow),x=center.x+s.x*size.x*1.02+sway,z=box.min.z-.04+s.depth*size.z,y=y0+span*t;
+   pos.setXYZ(i*2,x,y-streak,z);pos.setXYZ(i*2+1,x,y,z);col.setXYZW(i*2,grey,grey,grey,0);col.setXYZW(i*2+1,grey,grey,grey,Math.min(1,fade*(flow>.2?.45:.9)));});
   pos.needsUpdate=true;col.needsUpdate=true;
-  // Heating: subtle under protection, glowing when the hypothesis says the protection does not act.
-  const glow=T.MathUtils.smoothstep(heat,.45,.95)*(a.unprotected?1.8:.45);
-  for(const coil of fx.coils){coil.material.emissive.set('#ff4d17');coil.material.emissiveIntensity=glow;}
-  // Opening: a half-second burst of sparks and a flash at the terminals (not in the unprotected case).
-  const burst=a.unprotected?0:T.MathUtils.clamp((p-.75)/.05,0,1),live=burst>0&&burst<1;
-  fx.sparks.visible=live;fx.arc.visible=live;fx.arc.material.opacity=live?Math.max(0,1-burst*2.6):0;fx.flash.intensity=live?Math.max(0,1-burst*1.4)*14:0;
-  if(live){const sp=fx.sparks.geometry.attributes.position,r=.35;fx.sparkSeeds.forEach((q,i)=>{const t=burst*(.6+(i%5)*.1);sp.setXYZ(i,fx.terminal.x+q.dx*r*t,fx.terminal.y+q.up*r*t-1.6*r*t*t,fx.terminal.z+q.dz*r*t);});sp.needsUpdate=true;fx.sparks.material.opacity=1-burst;}
+  // Resin: browning creeps down from the top as heat builds. Under protection it stops at a light
+  // discoloration of the upper turns; without protection it chars and small embers glow in cracks.
+  const scorch=a.unprotected?T.MathUtils.smoothstep(heat,.45,1)*.25+a.damage*.5:T.MathUtils.smoothstep(heat,.55,.9)*.42;
+  for(const coil of fx.coils){coil.scorch.uScorch.value=scorch;coil.scorch.uEmber.value=a.unprotected?T.MathUtils.smoothstep(a.damage,.45,1)*.7:0;}
+  fx.smoke.apply(time,a.unprotected?T.MathUtils.smoothstep(a.damage,.05,.6):0,size.y*1.6);
+  // Opening: about 0.4 s of flickering arc, sparks flying and falling under gravity.
+  const since=(p-.75)*16,live=!a.unprotected&&since>0&&since<1.1;
+  const flicker=live&&since<.4?(.55+.45*Math.abs(Math.sin(since*95)))*(1-since/.4):0;
+  fx.arc.visible=flicker>0;fx.arc.material.opacity=flicker;fx.arc.scale.setScalar(.18+.2*flicker);fx.flash.intensity=flicker*18;fx.sparks.visible=live;
+  if(live){const sp=fx.sparks.geometry.attributes.position,sc=fx.sparks.geometry.attributes.color,o=fx.terminal;
+   fx.sparkSeeds.forEach((q,i)=>{const t=Math.min(since,q.life),k=Math.max(0,1-since/q.life),x=o.x+q.vx*t*.6,y=o.y+q.vy*t*.6-4.9*t*t*.6,z=o.z+q.vz*t*.6,dt=.03;
+    sp.setXYZ(i*2,x-q.vx*dt*.6,y-(q.vy-9.8*t)*dt*.6,z-q.vz*dt*.6);sp.setXYZ(i*2+1,x,y,z);sc.setXYZW(i*2,1,.55,.15,0);sc.setXYZW(i*2+1,1,.8*k+.2,.35*k,k);});
+   sp.needsUpdate=true;sc.needsUpdate=true;}
  }
  apply(sample){
   const a=sample.outcome;this.model.root.position.copy(this.basePosition);if(this.domain==='train')this.model.root.position.x+=a.distance;
@@ -107,13 +121,14 @@ export class FaultAnimation218{
   for(const w of this.wheels)w.pivot.rotation.z=-a.wheelDistance/w.radius;
   for(const {o,x,y,z,i}of this.smoke){o.visible=a.damage>.02;const rise=(sample.progress*3+i/7)%1;o.position.set(x+Math.sin(i+sample.progress*9)*.15,y+rise*.85,z);o.scale.setScalar(.4+rise*.9);o.material.opacity=a.damage*(1-rise)*.55;}
   this.coolingApply225(sample);
-  if(a.damage)for(const row of this.model.rows)if(row.part==='transformer'&&row.base&&/resina|aislamiento/i.test(row.material.name))row.material.color.multiplyScalar(1-a.damage*.72);
+  if(a.damage&&sample.scenario?.id!=='sr-cooling')for(const row of this.model.rows)if(row.part==='transformer'&&row.base&&/resina|aislamiento/i.test(row.material.name))row.material.color.multiplyScalar(1-a.damage*.72);
   this.model.root.updateMatrixWorld(true);
  }
  bounds(part){if(part==='doors'&&this.doors.length){const box=new T.Box3();for(const d of this.doors)box.union(new T.Box3().setFromObject(d.pivot));return box;}return part?this.model.bounds(part):this.envelope.clone();}
  dispose(){
   this.model.root.position.copy(this.basePosition);for(const r of this.restore){r.parent.add(r.o);r.o.matrix.copy(r.matrix);}for(const p of this.pivots)p.removeFromParent();
-  for(const coil of this.fx225?.coils||[]){coil.material.emissive.copy(coil.emissive);coil.material.emissiveIntensity=coil.intensity;}
+  for(const coil of this.fx225?.coils||[]){coil.material.emissive.copy(coil.emissive);coil.material.emissiveIntensity=coil.intensity;releaseScorch226(coil.material);}
+  this.fx225?.smoke.dispose();
   for(const w of this.wheels)w.mark.removeFromParent();this.root.removeFromParent();for(const g of this.geometry)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();this.model.tint('',0);this.model.root.updateMatrixWorld(true);
  }
 }
