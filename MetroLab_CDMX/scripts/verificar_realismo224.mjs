@@ -8,6 +8,7 @@ import {passengerManifest145,PASSENGERS145} from '../dist/passenger-assets145.js
 import {prepareWardrobe} from '../dist/passenger-wardrobe.js';
 import {WALK_LANE224,platformWalk} from '../dist/passenger-flow.js';
 import {constrainPlatformActors169} from '../dist/platform-collision169.js';
+import {refinePassengers180,HAIR_CUTOFF225} from '../dist/passenger-realism180.js';
 
 // 1. Esqueleto sintético con los nombres de hueso de los modelos del proyecto.
 function rig(){
@@ -61,4 +62,10 @@ constrainPlatformActors169(flows,0,solids);
 for(const a of flows.filter(a=>a.z*a.z>16)){const r=a.modelType==='child'?.16:.22;assert(!solids.some(b=>a.x>b.minX-r+1e-9&&a.x<b.maxX+r-1e-9&&a.z>b.minZ-r+1e-9&&a.z<b.maxZ+r-1e-9),'Flujo '+a.id+' fuera de muros y pilares');assert(Math.abs(a.z)<=7.40-r+1e-9,'Flujo '+a.id+' delante del muro del fondo');}
 assert.deepEqual([flows[2].x,flows[2].z],[edge.x,edge.z],'El cruce entre el borde y el vagón no se altera');
 
-console.log('224 PASS: brazos que bajan y se balancean contra las piernas, pasos al ritmo de la velocidad (clip a '+speed.toFixed(2)+' m/s), pantalón largo holgado, catálogo sin el modelo retirado, carril de paseo sobre el andén y flujos que rodean muros y pilares. CPU/geometría.');
+// 5. Cabello 225: tarjetas de cabello y mechones como recorte sólido, no mezcla transparente.
+{const hair=new T.Group();for(const name of ['hair1_m','strand1_m','Hair','Face_m']){const m=new T.Mesh(new T.PlaneGeometry(),new T.MeshStandardMaterial({name,map:new T.Texture(),transparent:true,depthWrite:false,side:T.DoubleSide}));hair.add(m);}
+ refinePassengers180({scene:hair},{kind137:'woman'});const mat=n=>hair.children.find(o=>o.material.name===n).material;
+ for(const n of ['hair1_m','strand1_m','Hair'])assert(!mat(n).transparent&&mat(n).depthWrite&&[HAIR_CUTOFF225,.18].includes(mat(n).alphaTest)&&mat(n).alphaToCoverage,'Cabello '+n+' recortado y con profundidad');
+ assert(mat('Face_m').transparent,'Otros materiales no cambian');}
+
+console.log('224/225 PASS: cabello sólido recortado; brazos que bajan y se balancean contra las piernas, pasos al ritmo de la velocidad (clip a '+speed.toFixed(2)+' m/s), pantalón largo holgado, catálogo sin el modelo retirado, carril de paseo sobre el andén y flujos que rodean muros y pilares. CPU/geometría.');
