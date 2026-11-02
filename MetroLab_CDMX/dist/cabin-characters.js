@@ -1,13 +1,13 @@
 import {refinePassengers180} from './passenger-realism180.js?v=204';
-import {PASSENGERS145,passengerManifest145} from './passenger-assets145.js?v=180';
+import {PASSENGERS145,passengerManifest145} from './passenger-assets145.js?v=225';
 import {PassengerContacts122} from './world-contact122.js?v=222';
 import {prepareImported137,selectPassenger137,attachInfant138} from './passenger-cast137.js?v=144';
-import {InstancedPassengers121,selectDetailed121} from './instanced-passengers121.js?v=222';
+import {InstancedPassengers121,selectDetailed121} from './instanced-passengers121.js?v=225';
 import{avatarDetail119,applyCloth120}from'./passenger-cloth119.js?v=130';
 import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
 import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
-import {prepareWardrobe,applyWardrobe} from './passenger-wardrobe.js?v=144';
+import {prepareWardrobe,applyWardrobe} from './passenger-wardrobe.js?v=225';
 
 // Clone the hierarchy and rebind every skin to its own bones. Geometry and
 // materials stay shared; skeletons and animation state must never be shared
@@ -60,8 +60,41 @@ export function holdRail(item,target,blend=1){
  lower.updateWorldMatrix(true,false);item.gripPoint=wrist.applyMatrix4(lower.matrixWorld);item.gripTarget=goal;
 }
 
+// Realismo 224: natural speed of each walk clip (m/s), from how far a foot travels relative
+// to the hips during one cycle. Measured once per template on the first character posed.
+const naturalSpeed224=new WeakMap();
+function clipSpeed224(item){
+ const t=item.template;if(naturalSpeed224.has(t))return naturalSpeed224.get(t);
+ let speed=1.3;const {mixer,walk,bones}=item,foot=bones.Foot_L,hips=bones.Hips;
+ if(walk&&foot&&hips){
+  mixer.stopAllAction();mixer.clipAction(walk).reset().setEffectiveWeight(1).play();
+  const a=new THREE.Vector3(),b=new THREE.Vector3();let lo=Infinity,hi=-Infinity;
+  for(let i=0;i<24;i++){mixer.setTime(i/24*walk.duration);item.body.updateMatrixWorld(true);foot.getWorldPosition(a);hips.getWorldPosition(b);a.sub(b).applyQuaternion(item.body.getWorldQuaternion(new THREE.Quaternion()).invert());lo=Math.min(lo,a.z);hi=Math.max(hi,a.z);}
+  mixer.stopAllAction();for(const [bone,r]of item.rest){bone.position.copy(r.position);bone.quaternion.copy(r.quaternion);}
+  if(hi-lo>.1&&walk.duration>0)speed=2*(hi-lo)/walk.duration;
+ }
+ naturalSpeed224.set(t,speed);return speed;
+}
+function walkRate224(item,actor){
+ const speed=Number(actor.speed);if(!Number.isFinite(speed)||speed<=0)return 1;
+ const scale=actor.modelType==='child'?.72:1;
+ return THREE.MathUtils.clamp(speed/(clipSpeed224(item)*scale),.55,1.6);
+}
+// Realismo 224: the supplied walk clips keep the arms frozen and spread. Bring them alongside
+// the body and swing each arm against the leg on its side, with a slight elbow bend.
+function armSwing224(item,blend){
+ const {bones,rest}=item,down=item.template.newFemale119?1.3:.65;
+ for(const side of ['L','R']){
+  const arm=bones['UpperArm_'+side],fore=bones['LowerArm_'+side],leg=bones['UpperLeg_'+side];if(!arm||!leg)continue;
+  const legRest=new THREE.Euler().setFromQuaternion(rest.get(leg).quaternion).x,swing=THREE.MathUtils.clamp(-(leg.rotation.x-legRest)*.7,-.45,.45);
+  arm.rotation.z=THREE.MathUtils.lerp(arm.rotation.z,(side==='L'?-1:1)*down,blend);
+  arm.rotation.x+=swing*blend;
+  if(fore)fore.rotation.x+=(-.18-Math.max(0,-swing)*.35)*blend;
+ }
+}
 export function poseCharacter(item,actor,time){
  const {root,body,bones,rest,mixer}=item;
+ if(item.walk)clipSpeed224(item);
  // Restart sampling to avoid the mixer's cached values skipping a write after
  // the seated pose overrides bones, including when the simulation is paused.
  mixer.stopAllAction();
@@ -74,7 +107,10 @@ export function poseCharacter(item,actor,time){
  if(actor.pose==='seated')item.walkBlend116=0;
  if(item.idle)mixer.clipAction(item.idle).reset().setEffectiveWeight(item.walk?1-item.walkBlend116:1).play();
  if(item.walk&&item.walkBlend116>1e-5)mixer.clipAction(item.walk).reset().setEffectiveWeight(item.idle?item.walkBlend116:1).play();
- mixer.setTime(time);
+ // Realismo 224: the walk clip advances with the distance walked, so feet stop sliding when
+ // people speed up, slow down or are scaled down as children.
+ item.walkTime224=fresh||item.walkTime224===undefined?time:item.walkTime224+dt*walkRate224(item,actor);
+ mixer.setTime(moving||item.walkBlend116>1e-3?item.walkTime224:time);
  body.position.set(0,0,0);root.position.set(actor.x,actor.y,actor.z);root.rotation.set(0,actor.yaw||0,0);
  root.scale.setScalar(actor.modelType==='child'?.72:1);
  if(actor.pose==='seated'){
@@ -98,6 +134,7 @@ export function poseCharacter(item,actor,time){
   // The supplied bind poses spread the arms. Bring them alongside the body.
   for(const side of ['L','R'])bones['UpperArm_'+side].rotation.z=THREE.MathUtils.lerp(bones['UpperArm_'+side].rotation.z,(side==='L'?-1:1)*(item.template.newFemale119?1.3:.65),1-item.walkBlend116);
  }
+ if(moving&&item.walkBlend116>1e-3)armSwing224(item,item.walkBlend116);
  if(!moving){
   let phase=item.idlePhase121;
   if(phase===undefined||item.idleId121!==actor.id){let h=0;for(const c of actor.id||'')h=(Math.imul(h,31)+c.charCodeAt(0))>>>0;phase=item.idlePhase121=h%6283/1000;item.idleId121=actor.id;}

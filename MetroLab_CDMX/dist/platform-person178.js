@@ -1,8 +1,8 @@
-import {TrainBoarding200} from './train-boarding200.js?v=211';
+import {TrainBoarding200} from './train-boarding200.js?v=225';
 import {key181,installKeyHelp181} from './game-keys181.js?v=224';
 import {sweepPeople180,personPad180} from './person-navigation180.js?v=180';
 import * as T from 'three';
-import {sweepPlatform169} from './platform-collision169.js?v=210';
+import {sweepPlatform169} from './platform-collision169.js?v=225';
 // Mirada 223: radianes por píxel al arrastrar y con el cursor capturado (antes .0012 y .001, demasiado lentos).
 export const DRAG_SENSITIVITY223=.0032,LOCK_SENSITIVITY223=.0022;
 export class PlatformPerson178{

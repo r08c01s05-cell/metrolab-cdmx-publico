@@ -40,12 +40,6 @@
     "infant138": true
   },
   {
-    "name": "pasajero_hitman138",
-    "url": "./models/personajes/hitman_walk138.glb.gz",
-    "kind137": "man",
-    "imported137": true
-  },
-  {
     "name": "pasajera_kamala138",
     "url": "./models/personajes/kamala_walk138.glb.gz",
     "kind137": "woman",
