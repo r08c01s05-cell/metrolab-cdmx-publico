@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {trainAsset} from './depot86.js?v=212';
+import {trainAsset} from './depot86.js?v=222';
 import {partCategory} from './workshop-core.js?v=112';
 
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

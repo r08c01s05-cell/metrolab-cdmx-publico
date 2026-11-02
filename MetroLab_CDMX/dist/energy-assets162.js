@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {inheritSurfaceDetail205} from './surface-detail205.js?v=205';
-import {trainAsset} from './depot86.js?v=212';
+import {trainAsset} from './depot86.js?v=222';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {loadCompressedGLB} from './compressed-assets89.js?v=204';
 import {partCategory} from './workshop-core.js?v=112';

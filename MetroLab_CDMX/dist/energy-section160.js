@@ -1,6 +1,6 @@
-import{RenderBudget101}from'./render-budget101.js?v=204';
+import{RenderBudget101}from'./render-budget101.js?v=222';
 import * as T from 'three';
-import {detailedEnergy162} from './energy-assets162.js?v=216';
+import {detailedEnergy162} from './energy-assets162.js?v=222';
 import {OrbitControls} from './vendor/OrbitControls.js';
 const PARTS=[
  ['track','1 · Vía y retorno','Las pistas soportan los neumáticos. Los rieles de seguridad y las conexiones de retorno son elementos distintos de la barra de alimentación. En rodadura férrea, las ruedas de acero apoyan sobre los rieles.',[0,-.65,0]],
