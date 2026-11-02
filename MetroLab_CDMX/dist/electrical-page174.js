@@ -1,0 +1,10 @@
+import './local-doc174.js?v=174';
+import{svg173,mountInstallation173,save173}from'./installation173.js?v=219';
+import{dxf168}from'./substation-cad168.js?v=219';
+const host=document.querySelector('main'),paper=host.querySelector('.cad168-paper');paper.innerHTML=svg173();let box=[0,0,594,420],drag;
+const apply=()=>paper.querySelector('svg').setAttribute('viewBox',box.join(' '));
+const installation=mountInstallation173(host,()=>{host.querySelector('[data-status]').textContent='Para ubicar el equipo en 3D: Exploración de subestaciones → Unifilar CAD.';},state=>{paper.innerHTML=svg173(state);apply();});
+const zoom=f=>{const w=Math.min(1188,Math.max(100,box[2]/f)),h=w*420/594;box=[box[0]+(box[2]-w)/2,box[1]+(box[3]-h)/2,w,h];apply();};
+host.querySelector('[data-fit]').onclick=()=>{box=[0,0,594,420];apply();};for(const b of host.querySelectorAll('[data-zoom]'))b.onclick=()=>zoom(Number(b.dataset.zoom));
+host.querySelector('[data-dxf]').onclick=()=>save173(dxf168(installation.state),'application/dxf','MetroLab_Unifilar_Integrado.dxf');host.querySelector('[data-svg]').onclick=()=>save173(svg173(installation.state),'image/svg+xml','MetroLab_Unifilar_Integrado.svg');
+paper.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1.12:1/1.12);},{passive:false});paper.addEventListener('pointerdown',e=>{if(e.button!==0)return;drag={x:e.clientX,y:e.clientY,box:[...box]};paper.setPointerCapture(e.pointerId);});paper.addEventListener('pointermove',e=>{if(!drag)return;const r=paper.getBoundingClientRect(),scale=Math.min(r.width/drag.box[2],r.height/drag.box[3]);box=[drag.box[0]-(e.clientX-drag.x)/scale,drag.box[1]-(e.clientY-drag.y)/scale,...drag.box.slice(2)];apply();});for(const k of['pointerup','pointercancel'])paper.addEventListener(k,e=>{drag=null;if(paper.hasPointerCapture(e.pointerId))paper.releasePointerCapture(e.pointerId);});

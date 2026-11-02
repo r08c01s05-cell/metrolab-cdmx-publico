@@ -1,0 +1,9 @@
+{
+  "name": "MetroLab CDMX",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "forwardPorts": [8001],
+  "portsAttributes": {
+    "8001": {"label": "Simulador MetroLab", "onAutoForward": "openBrowser"}
+  },
+  "postStartCommand": "python3 MetroLab_CDMX/scripts/servicio_codespace.py"
+}

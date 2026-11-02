@@ -1,0 +1,18 @@
+{
+  "base_commit": "f0587b3",
+  "scope": "Movimiento, vias, bogies y contencion de pasajeros. Solo se excluyen versiones de cache y finales CRLF.",
+  "sha256": {
+    "station-layout208.js": "d6da4d077c786d518a9eedd25e265c0d8bd59ade938b206305d85bddefc19fff",
+    "car-support212.js": "1602eca814f8a05d97386567ad4e36728e0e9d83d0874de1914878d649a7e94d",
+    "bogie-batching212.js": "e6064d4742fbe366647f84f3983fa9f691e13419b9d1e5e14045c0d39acfe673",
+    "route-geometry97.js": "f122b50adf22266e1c65b74235da5327dd4bc99d877d5bb57c89963f63da06ec",
+    "passenger-car211.js": "bfc7b0a83087eb0ab43adaa40482bfcd8690c963897670d9e51efb3c098d4017",
+    "passenger-seats.js": "4c016de392d231bcdd0fdcc0e81644c9658166767ea09892dafe28a7eac7ae99",
+    "cab-camera118.js": "edc96b429c895febe698d454d3afc1adcd166f72589e5425ab812924abebf02d",
+    "platform-collision169.js": "adce4aff92448d6ccbdcf82fc8abf9dbcba3c44121e8cdefb3768b00639b4738",
+    "surface-crowd210.js": "afceb3f5af462801c3f8f790ed3d874ef190cd65464496f3914bb29879c04416",
+    "train-boarding200.js": "09a92aa29357d1ec5da67de70c3647437c2ba04ece4b5d8f5e37bd6faeea4654",
+    "track-details99.js": "5ebb8cd4a1cf3ab0a7085ddd0f753eb4dba58fbeda96cd981823860ece72c35e",
+    "engine.js": "0b857e3499e59366f53cc75552454a2825e30933f2aa2c09ec7cae292ba370ef"
+  }
+}

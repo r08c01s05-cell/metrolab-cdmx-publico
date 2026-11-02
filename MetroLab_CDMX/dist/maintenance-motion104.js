@@ -1,0 +1,8 @@
+import * as THREE from'three';
+export class BenchMotion104{
+ constructor(rig){this.rig=rig;this.jobs=new Map();}
+ snapshot(){return new Map(Object.values(this.rig.parts).filter(o=>o?.isObject3D&&!o.userData.tail143).map(o=>[o,{p:o.position.clone(),q:o.quaternion.clone(),z:o.rotation.z}]));}
+ transition(before,now=performance.now()){for(const[o,a]of before){const p=o.position.clone(),q=o.quaternion.clone(),z=o.rotation.z,scalar=o===this.rig.parts.newWheel||/^m103_(screw|bolt)/.test(o.name),old=this.jobs.get(o);if(old&&old.to.distanceToSquared(p)<1e-10&&(scalar?Math.abs(old.zTo-z)<1e-5:old.qTo.angleTo(q)<1e-5)){o.position.copy(a.p);o.quaternion.copy(a.q);continue;}const distance=a.p.distanceTo(p),angle=scalar?Math.abs(z-a.z):a.q.angleTo(q);if(distance<1e-5&&angle<1e-5){this.jobs.delete(o);continue;}this.jobs.set(o,{from:a.p,to:p,qFrom:a.q,qTo:q,zFrom:a.z,zTo:z,scalar,at:now,ms:distance>.15?Math.min(650,360+distance*110):240,arc:distance>.4?.12:0,clearance:distance>.4&&/cover|wheel|fuse|plug|obstacle/i.test(o.name)?.16:0});o.position.copy(a.p);o.quaternion.copy(a.q);}}
+ step(now=performance.now()){for(const[o,j]of this.jobs){const t=THREE.MathUtils.clamp((now-j.at)/j.ms,0,1),k=t*t*t*(10+t*(-15+6*t));o.position.lerpVectors(j.from,j.to,k);o.position.y+=Math.sin(Math.PI*k)*j.arc;o.position.z+=Math.sin(Math.PI*k)*(j.clearance||0);if(j.scalar)o.rotation.z=THREE.MathUtils.lerp(j.zFrom,j.zTo,k);else o.quaternion.slerpQuaternions(j.qFrom,j.qTo,k);if(t===1)this.jobs.delete(o);}}
+ finish(){for(const[o,j]of this.jobs){o.position.copy(j.to);if(j.scalar)o.rotation.z=j.zTo;else o.quaternion.copy(j.qTo);}this.jobs.clear();}
+}

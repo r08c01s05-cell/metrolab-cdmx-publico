@@ -1,0 +1,2 @@
+import fs from 'node:fs';import {makeSubstation94}from '../dist/substations94.js';
+const group=makeSubstation94();const parts=group.children.filter(o=>o.isMesh).map(o=>{let g=o.geometry.index?o.geometry.toNonIndexed():o.geometry;return {name:o.name,position:[...o.position],quaternion:[...o.quaternion],positionData:[...g.attributes.position.array],normalData:[...g.attributes.normal.array],color:[...o.material.color.toArray(),o.material.opacity],metalness:o.material.metalness,roughness:o.material.roughness};});fs.writeFileSync('/tmp/metro94/saf.json',JSON.stringify(parts));

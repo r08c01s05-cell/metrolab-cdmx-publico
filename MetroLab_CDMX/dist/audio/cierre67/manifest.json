@@ -1,0 +1,30 @@
+{
+  "source": "assets-source/audio/cierres_trenes_referencia.mp4",
+  "models": {
+    "NM-79": {
+      "url": "audio/cierre67/NM79.mp3",
+      "source_model": "NM-79",
+      "start": 69.45,
+      "end": 74.45,
+      "duration": 5,
+      "reference_only": false
+    },
+    "MP-82": {
+      "url": "audio/cierre67/MP82.mp3",
+      "source_model": "MP-82",
+      "start": 97.5,
+      "end": 102.5,
+      "duration": 5,
+      "reference_only": false
+    },
+    "NM-22": {
+      "url": "audio/cierre67/NM16_referencia.mp3",
+      "source_model": "NM-16",
+      "start": 201.35,
+      "end": 206.35,
+      "duration": 5,
+      "reference_only": true
+    }
+  },
+  "method": "Fragmentos continuos de cinco segundos de la grabación aportada; sin repetición ni síntesis."
+}

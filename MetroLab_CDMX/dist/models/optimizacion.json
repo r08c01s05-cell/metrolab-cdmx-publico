@@ -1,0 +1,17 @@
+[
+  {
+    "modelo": "NM22_cabina",
+    "meshes": 96,
+    "bytes": 9553256
+  },
+  {
+    "modelo": "NM22_intermedio",
+    "meshes": 83,
+    "bytes": 9351976
+  },
+  {
+    "modelo": "NM79_cabina",
+    "meshes": 95,
+    "bytes": 8291404
+  }
+]

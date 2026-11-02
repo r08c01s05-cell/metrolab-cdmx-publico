@@ -1,0 +1,32 @@
+[
+  {
+    "model": "NM79_cabina.glb.gz",
+    "sha256_uncompressed": "1e5901d902f178131facc7c7754d18edbd4cf6dc0f5992ec0fd568a702648719",
+    "bytes": 21538188
+  },
+  {
+    "model": "MP82_cabina.glb.gz",
+    "sha256_uncompressed": "2a6b6ef205de7bf3d2c0004454fe1da8940fec9be8d4a2268b351049807d089c",
+    "bytes": 21040952
+  },
+  {
+    "model": "NM22_intermedio.glb.gz",
+    "sha256_uncompressed": "e015f97800a728a1e3eae8d46d6469649d6e6f18148653cc8ee7adf8217d85b0",
+    "bytes": 12318552
+  },
+  {
+    "model": "NM79_intermedio.glb.gz",
+    "sha256_uncompressed": "dc09b243050a622c65a904f5420d74f8476b88583e1b88eea874fd73997dddbe",
+    "bytes": 21803160
+  },
+  {
+    "model": "NM22_cabina.glb.gz",
+    "sha256_uncompressed": "6d214dc29e7e8696479edd5ca4e52f9dc25c7b0d13007a3a0d0075b16620bf3c",
+    "bytes": 12283532
+  },
+  {
+    "model": "MP82_intermedio.glb.gz",
+    "sha256_uncompressed": "60dbb6ff332f55a7d480985e3435c844a087e976b2263d941776a09c55f3becf",
+    "bytes": 21091204
+  }
+]

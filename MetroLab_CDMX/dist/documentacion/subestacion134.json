@@ -1,0 +1,13 @@
+{
+  "revision": 134,
+  "alcance": "Modelo didáctico de inspección. Sin dictamen de conformidad ni dimensionado constructivo.",
+  "fuentes": [
+    {"norma":"NOM-001-SEDE-2012","apartado":"1.2.2(c)","criterio":"El campo de aplicación excluye la generación, transformación, transmisión y distribución dedicada exclusivamente al equipo rodante o a su señalización/comunicación. Se distingue la tracción de los servicios de utilización.","url":"https://dof.gob.mx/nota_detalle_popup.php?codigo=5280607"},
+    {"norma":"NOM-026-STPS-2008","apartado":"Apéndice C, C.7","criterio":"Advertencia eléctrica triangular amarilla con contorno y símbolo negro. No se usa esta referencia para sustituir señales ferroviarias.","url":"https://dof.gob.mx/normasOficiales/3541/stps.htm"},
+    {"norma":"NOM-025-STPS-2008","apartado":"7, 10 y 11","criterio":"Alumbrado general y de tarea, reducción de zonas oscuras y revisión del deslumbramiento. La exposición del render no constituye una medición de lux.","url":"https://dof.gob.mx/normasOficiales/3581/stps.htm"},
+    {"norma":"NOM-029-STPS-2011","apartado":"9.2 y 10.3","criterio":"Acceso controlado, zonas despejadas, resguardos y salida identificada. Los ejercicios se realizan sobre bancos virtuales aislados; no enseñan maniobras de la subestación en servicio.","url":"https://dof.gob.mx/normasOficiales/4589/STPS9a/STPS9a.htm"}
+  ],
+  "construccion": {"geometria":"Ilustrativa, en metros","pasillos":"Sin almacenamiento representado","resguardos":"Pantallas transparentes interiores y marcos","luminarias":"Seis difusores de techo adicionales","puesta_tierra":"PE y retorno de tracción representados por separado"},
+  "verificacion_lux": null,
+  "comprobacion_navegador": "Pendiente"
+}

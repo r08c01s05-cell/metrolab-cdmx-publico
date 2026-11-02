@@ -1,0 +1,7 @@
+import {inheritSurfaceDetail205} from './surface-detail205.js?v=205';
+import * as T from 'three';
+// Generated roughness maps already contain the intended absolute roughness.
+// Scaling them again made paint glossy and machined steel look mirror polished.
+const prepared=new WeakMap();
+const roughness=(m,fallback)=>m.roughnessMap?.userData.finish124?1:m.roughnessMap?m.roughness:fallback;
+export function industrialFinish176(root){root.traverse(o=>{if(!o.isMesh)return;const tune=m=>{if(!m?.isMeshStandardMaterial||m.userData.industrial176)return m;if(prepared.has(m))return prepared.get(m);const n=m.clone(),kind=m.userData.realism110,nm=m.name.toLowerCase();if(['mineral','floor'].includes(kind)||/concreto|hormigon|mortero|cemento/.test(nm)){n.normalScale?.multiplyScalar(.45);n.aoMapIntensity=Math.min(n.aoMapIntensity??.5,.15);n.roughness=roughness(m,.90);n.envMapIntensity=.35;}else if(['paint','panel'].includes(kind)){n.normalScale?.multiplyScalar(.6);n.roughness=roughness(m,.64);n.metalness=Math.min(n.metalness,.12);n.envMapIntensity=.65;if(n.clearcoat!==undefined)n.clearcoat=.08;}else if(['steel','brushed','polished'].includes(kind)){n.normalScale?.multiplyScalar(.65);n.roughness=roughness(m,Math.max(.28,m.roughness));n.envMapIntensity=.7;}n.userData={...n.userData,industrial176:true};inheritSurfaceDetail205(m,n);prepared.set(m,n);return n;};o.material=Array.isArray(o.material)?o.material.map(tune):tune(o.material);});return root;}

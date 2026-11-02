@@ -1,0 +1,4 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';import{loadCompressedGLB}from'../dist/compressed-assets89.js';
+const data=JSON.parse(fs.readFileSync('dist/datos.json','utf8')),net=fetch;let loaded=0;
+globalThis.fetch=async url=>{assert(!String(url).includes('.gz.gz'));const path='dist/'+String(url).split('?')[0];assert(fs.existsSync(path),path);return new Response(fs.readFileSync(path));};
+try{for(const station of data.estaciones){const url=station.geometria_3d?.url_glb;if(!url)continue;await loadCompressedGLB({parseAsync:async bytes=>{assert.equal(new DataView(bytes).getUint32(0,true),0x46546c67);loaded++;}},url);}assert.equal(loaded,39);console.log('197 PASS: all 39 actual station archives load, including pre-compressed Garibaldi, without doubled gzip extensions.');}finally{globalThis.fetch=net;}

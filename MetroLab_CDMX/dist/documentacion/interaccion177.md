@@ -1,0 +1,12 @@
+# Exhibición, brazos, mandos y mantenimiento · 177
+
+- El tren y la plataforma giran automáticamente al abrir el modelo. Pausar giro detiene la rotación. Una manipulación de cámara la pausa y permite reanudarla después de cuatro segundos de inactividad. Seleccionar un componente o abrir el despiece detiene el giro para inspeccionar.
+- La barra inferior que repetía Girar, Pan y Despiece queda plegada dentro de Ajustes de inspección. Se conservan sus controles originales. Las superficies del escenario, pedestal, encabezados y fichas tienen tonos separados y contraste de texto.
+- Se conserva la palma y los dedos del guante GLB, con su esqueleto y sus atributos. Se eliminan del índice de dibujo los triángulos de la manga rígida. Los nuevos brazos tienen dos segmentos de longitud fija (0.32 y 0.28 m), perfil elíptico, volumen de manga y codo. La solución de alcance retargetea el anclaje fuera de cámara cuando hace falta; no representa un cuerpo humano completo ni una captura de movimiento.
+- Los seis pulsadores de cabina muestran números. Las pantallas laterales relacionan 1–3 y 4–6 con las funciones; el panel central conserva velocidad y estado. Las teclas 1–6 accionan los mismos callbacks, con los interbloqueos existentes. La leyenda y los números son ayudas del simulador, no rotulación documentada del tren real.
+- El rack de baterías tiene un resguardo ventilado con dos puertas independientes del gabinete del cargador. Inicia cerrado y se puede abrir para inspeccionar. Al preparar la misión correspondiente se abre el acceso. Es un resguardo visual de este modelo didáctico, no un diseño constructivo certificado.
+- Mantenimiento dispone de Trabajar, Girar vista, Desplazar y Vista frontal. La orientación tiene sensibilidad moderada; girar o desplazar no activa las piezas. F devuelve el enfoque al trabajo. Las piezas permanecen instaladas.
+- La vista de la bolsa tiene mayor escala y un encuadre más cercano; se conservan extracción, preparación e incorporación antes de equipar.
+
+## Verificación
+Se comprueban el giro automático y su pausa, longitudes del brazo y flexión del codo, eliminación de la manga rígida, seis números y sus leyendas, las dos variantes de cabina, las puertas del resguardo, los modos de orientación, las seis misiones de subestación y las cuatro misiones de tren. Las pruebas utilizan geometría y eventos CPU/DOM. El navegador de pruebas tiene WebGL deshabilitado, por lo que queda pendiente la revisión visual 3D completa.

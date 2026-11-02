@@ -1,0 +1,48 @@
+{
+  "source": "https://metro.cdmx.gob.mx/storage/app/media/licitacion/2020/30102015_002_20/ANEX1/ACTUALIZADA/15-prescripciones-mr-25sept-cambios.pdf",
+  "scope": "Referencia general; geometría ilustrativa, no certificación de montaje por modelo.",
+  "assets": [
+    {
+      "asset": "NM22_cabina.glb.gz",
+      "positiveCollectors": 4,
+      "poweredOnly": true,
+      "sha256": "ab0c1e7d1ec543519f29ff75d0f74a35900b5c1fe0a73826ae2c9d7f46cea401",
+      "approximate": true
+    },
+    {
+      "asset": "NM22_intermedio.glb.gz",
+      "positiveCollectors": 4,
+      "poweredOnly": true,
+      "sha256": "6c14e124105f7560ad1449188c359cdb44b9804397ab2ffa8cd04e0134b6acf1",
+      "approximate": true
+    },
+    {
+      "asset": "NM79_cabina.glb.gz",
+      "positiveCollectors": 4,
+      "poweredOnly": true,
+      "sha256": "05e1e7805be03a30e9fe47707851877d9d05bfa13893ee6c3c4b7c220dc86695",
+      "approximate": true
+    },
+    {
+      "asset": "NM79_intermedio.glb.gz",
+      "positiveCollectors": 4,
+      "poweredOnly": true,
+      "sha256": "115f6d34d67efcecdb6495e9c4abb2452141e64280288c27b6d05b0718872cb4",
+      "approximate": true
+    },
+    {
+      "asset": "MP82_cabina.glb.gz",
+      "positiveCollectors": 4,
+      "poweredOnly": true,
+      "sha256": "d533171885590bce39b74c7fe3fcc15d714f06109880e1849921f77e43003242",
+      "approximate": true
+    },
+    {
+      "asset": "MP82_intermedio.glb.gz",
+      "positiveCollectors": 4,
+      "poweredOnly": true,
+      "sha256": "5fadf50f268fd98c0b3157f317f554311f5d089a20a227f0a187c87413f235e3",
+      "approximate": true
+    }
+  ]
+}

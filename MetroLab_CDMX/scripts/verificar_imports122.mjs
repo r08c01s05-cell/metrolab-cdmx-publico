@@ -1,0 +1,6 @@
+import {execFileSync} from 'node:child_process';
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+const base=path.resolve('dist'),html=fs.readFileSync(path.join(base,'index.html'),'utf8'),queue=[...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map(m=>({file:path.resolve(base,m[1].split('?')[0]),query:m[1].split('?')[1]||''})),seen=new Set(),versions=new Map();
+while(queue.length){const{file,query}=queue.pop(),key=file+'?'+query;assert(fs.existsSync(file),'Missing runtime module '+file);if(!versions.has(file))versions.set(file,new Set());versions.get(file).add(query);if(seen.has(key))continue;seen.add(key);const source=fs.readFileSync(file,'utf8');for(const match of source.matchAll(/(?:from\s*|import\s*\(?\s*)['"](\.\/[^'"]+\.js(?:\?v=\d+)?)['"]/g)){const[relative,q='']=match[1].split('?');queue.push({file:path.resolve(path.dirname(file),relative),query:q});}}
+for(const file of versions.keys())execFileSync(process.execPath,['--check',file],{stdio:'pipe'});
+for(const[file,queries]of versions)assert.equal(queries.size,1,'Duplicate runtime URL versions for '+path.basename(file));console.log('122:',versions.size,'runtime modules parse successfully, exist and share one URL version each.');

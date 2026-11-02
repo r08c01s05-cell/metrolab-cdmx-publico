@@ -1,0 +1,62 @@
+name: Publicar simulador en GitHub Pages
+
+on:
+  # Publicación voluntaria, separada de la validación de ramas y Pull Requests.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    defaults:
+      run:
+        working-directory: MetroLab_CDMX
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verificar sincronización automática conservadora
+        run: python3 scripts/verificar_servicio_codespace.py
+      - name: Verificar módulos y controles
+        run: |
+          node scripts/verificar_imports122.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_cargas197.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_frente_colaboracion.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_bolsa196.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_herrajes196.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_simbologia196.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_colision196.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_espacio192.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_transporte188.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_juego187.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_mezcla187.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_materiales194.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_controles181.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_anden181.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_tren_montado156.mjs
+          node --experimental-loader ./scripts/test-loader.mjs scripts/verificar_conduccion177.mjs
+          python3 scripts/verificar_servidor144.py
+      - name: Preparar GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Empaquetar solo el sitio web
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: MetroLab_CDMX/dist
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4

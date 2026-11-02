@@ -1,0 +1,10 @@
+/* The first-person desk replaces the large control dock; native actions remain available as fallback. */
+body[data-game-screen=simulation][data-driving=true][data-cockpit149=true] #drive107,
+body[data-game-screen=simulation][data-driving=true][data-cockpit149=true] #drive107-views,
+body[data-game-screen=simulation][data-driving=true][data-cockpit149=true] .sim106-bottom{display:none!important}
+#cockpit149-hud{position:absolute;inset:0;pointer-events:none;z-index:9;display:flex;align-items:flex-start;justify-content:flex-end;padding:18px 20px;gap:15px}
+#cockpit149-hud[hidden]{display:none}#cockpit149-hud>button{pointer-events:auto;background:#17312bcc;border:1px solid #719487;color:#d2e3d7;padding:9px 13px;min-height:35px;font:12px system-ui;border-radius:8px}
+.c149-hint{position:absolute;top:62px;bottom:auto;left:auto;right:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#142a25e6;border:1px solid #557367;border-radius:8px;padding:10px 15px;max-width:340px;color:#c4d8ca;font:12px/1.45 system-ui;pointer-events:none}
+.c149-hint b{font-size:9px;letter-spacing:.12em;color:#9bc8b3}.c149-hint span{flex:1;min-width:220px}.c149-hint output{display:block;width:100%;font-size:12px;color:#e3d9b4}
+body[data-game-screen=simulation][data-driving=true][data-cockpit149=true] .sim106-trip{transform:scale(.84);transform-origin:top left;max-width:42%}
+@media(max-width:760px){#cockpit149-hud{padding:9px}.c149-hint{left:auto;right:8px;top:51px;bottom:auto;max-width:42vw;padding:7px 10px;font-size:10px}.c149-hint b{display:none}.c149-hint span{min-width:100px}.c149-hint output{font-size:10px}body[data-game-screen=simulation][data-driving=true][data-cockpit149=true] .sim106-trip{transform:scale(.72);max-width:65%}}

@@ -1,0 +1,1 @@
+{"private":true,"type":"module","scripts":{"test:models":"node --loader ./scripts/test-loader.mjs scripts/verificar_glb18.mjs"}}

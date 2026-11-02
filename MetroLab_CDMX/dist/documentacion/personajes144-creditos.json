@@ -1,0 +1,65 @@
+[
+  {
+    "file": "joe_walk137.glb.gz",
+    "source_sha256": "e6d1f8377c5af242aea7cdded82e9bab753594df987fb71bbe6912e9dd3c01b4",
+    "metadata": {
+      "extras": {
+        "author": "Arjun P Krishna (https://sketchfab.com/arjunpkrishna)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/joe-realistic-human-3d-model-2a108401fe5547409a3ad666b9b7d6b3",
+        "title": "Joe | Realistic Human 3D Model",
+        "rig": "Rig basico 21 huesos (Hips/Spine/Chest/Neck/Head, brazos, piernas, Toes) + clip Walk 1.0 s en sitio"
+      },
+      "generator": "Sketchfab-16.15.0",
+      "version": "2.0",
+      "integration144": "Embedded textures capped at 512 px; Original topology, rig, UV layout and animation retained; vertex attributes rounded below visual precision."
+    },
+    "modifications": "Texturas hasta 512 px; atributos de vértices redondeados y pesos normalizados; accesores sin uso retirados. Topología, UV, rig y clips conservados."
+  },
+  {
+    "file": "child_walk138.glb.gz",
+    "source_sha256": "26801491929023dc4182e58976eab3a8a0597bd18a3d21d187995c1bd0c6153f",
+    "metadata": {
+      "version": "2.0",
+      "generator": "MetroLab 138: continuous textured child mesh with Joe Walk",
+      "integration144": "Embedded textures capped at 512 px; Original topology, rig, UV layout and animation retained; vertex attributes rounded below visual precision."
+    },
+    "modifications": "Texturas hasta 512 px; atributos de vértices redondeados y pesos normalizados; accesores sin uso retirados. Topología, UV, rig y clips conservados."
+  },
+  {
+    "file": "mujer_walk137.glb.gz",
+    "source_sha256": "d02aff48c978658ba1d6a2a3c623624f642261e895198957ce66291f74ad497a",
+    "metadata": {
+      "version": "2.0",
+      "generator": "Female review character; Joe Walk transferred to native female rig",
+      "integration144": "Embedded textures capped at 512 px; Original topology, rig, UV layout and animation retained; vertex attributes rounded below visual precision."
+    },
+    "modifications": "Texturas hasta 512 px; atributos de vértices redondeados y pesos normalizados; accesores sin uso retirados. Topología, UV, rig y clips conservados."
+  },
+  {
+    "file": "kamala_walk138.glb.gz",
+    "source_sha256": "ea89ca1caaa2c5273ec5a0849f283a53524db875ce9df5263590abb7b1ed486e",
+    "metadata": {
+      "generator": "MetroLab 138: normalized walking rig and embedded original textures",
+      "version": "2.0",
+      "integration144": "Embedded textures capped at 512 px; Original topology, rig, UV layout and animation retained; vertex attributes rounded below visual precision."
+    },
+    "modifications": "Texturas hasta 512 px; atributos de vértices redondeados y pesos normalizados; accesores sin uso retirados. Topología, UV, rig y clips conservados."
+  },
+  {
+    "file": "hitman_walk138.glb.gz",
+    "source_sha256": "dd6a7e60900af56783ca11e5d4ebce5eb79fd76097caf5586681ae00debe4915",
+    "metadata": {
+      "extras": {
+        "author": "Veterock (https://sketchfab.com/windofglass)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/hitman-game-rip-cc47e040505046daaaf7fab93e9960e9",
+        "title": "Hitman (game-rip)"
+      },
+      "generator": "MetroLab 138: normalized walking rig and embedded original textures",
+      "version": "2.0",
+      "integration144": "Embedded textures capped at 512 px; Original topology, rig, UV layout and animation retained; vertex attributes rounded below visual precision."
+    },
+    "modifications": "Texturas hasta 512 px; atributos de vértices redondeados y pesos normalizados; accesores sin uso retirados. Topología, UV, rig y clips conservados."
+  }
+]

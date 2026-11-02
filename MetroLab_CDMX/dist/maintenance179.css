@@ -1,0 +1,101 @@
+/* One equipment list + one real checklist. Keep the work area dominant. */
+#sr126-dialog[data-sr-play136=true] .sr126-panel{padding:16px!important;background:#17252e!important;scrollbar-width:thin}
+#sr126-dialog[data-sr-play136=true] .sr126-layout{grid-template-columns:320px minmax(0,1fr)!important}
+#sr126-dialog[data-sr-play136=true] .sr135-orders,#sr126-dialog[data-sr-play136=true] .sr136-objective,#sr126-dialog[data-sr-play136=true] .sr128-manual,#sr126-dialog[data-sr-play136=true] .sr128-actions,#sr126-dialog[data-sr-play136=true] .sr128-scope,#sr126-dialog[data-sr-play136=true] .sr146-dossier{display:none!important}
+.maint179-checklist[hidden],.maint179-pad[hidden]{display:none!important}.maint179-checklist header small,.maint179-current>small{font:10px/1.4 system-ui;letter-spacing:1.4px;color:#e9bf7a}.maint179-checklist h3{font:600 22px/1.2 system-ui;margin:6px 0 10px;color:#f2f5f4}.maint179-checklist header output{font:12px/1.4 system-ui;color:#b0c5ca}.maint179-checklist nav{display:grid;gap:7px;margin:18px 0}.maint179-checklist nav button{display:flex!important;align-items:center;gap:12px;text-align:left!important;padding:11px!important;width:100%;border:1px solid #47616d!important;background:#223640!important;color:#e6eeef!important;border-radius:7px!important;min-height:58px}.maint179-checklist nav button[aria-current=true]{border-color:#e3b56d!important;background:#334550!important;box-shadow:inset 3px 0 #e3b56d}.maint179-checklist nav button[data-state=done]>span:first-child{color:#a9ddbd}.maint179-checklist nav button>span:first-child{font:20px system-ui;color:#ddbd86}.maint179-checklist nav button small{display:block;color:#acbdc5;font:10px system-ui;margin-bottom:4px}.maint179-checklist nav button strong{display:block;font:500 13px/1.35 system-ui}.maint179-current{border-top:1px solid #47616d;padding-top:18px}.maint179-current h4{font:600 17px/1.4 system-ui;color:#f1f5f6;margin:7px 0}.maint179-current>p{color:#b4c8cd;font-size:12px}.maint179-current>button{width:100%;margin:5px 0 12px!important;background:#304b59!important;min-height:42px}.maint179-current ol{padding:0;margin:0;list-style:none;display:grid;gap:7px}.maint179-current li{display:flex;gap:10px;padding:10px;border:1px solid transparent;border-radius:6px;color:#a6b8c1;background:#1e303a}.maint179-current li>span{flex:0 0 23px;font:12px/1.8 monospace}.maint179-current li p{margin:0;font:12px/1.55 system-ui}.maint179-current li[data-state=current]{background:#354d58;color:#fff;border-color:#d7b47b}.maint179-current li[data-state=done]{color:#90c7a6;background:#1e3436}.maint177-navigation{min-height:46px;padding:8px 12px!important;background:#233945!important;gap:7px!important}.maint177-navigation button{font-size:12px!important;min-height:38px!important;padding:8px 11px!important}.maint177-navigation output{font-size:11px!important}.maint179-pad{position:absolute;bottom:18px;left:18px;z-index:5;display:grid;grid-template-columns:repeat(3,38px);gap:4px;padding:9px;background:#13242de8;border:1px solid #66808b;border-radius:10px;touch-action:none}.maint179-pad small{grid-column:1/4;text-align:center;letter-spacing:1px;font:9px system-ui;color:#c8d5dc}.maint179-pad button{height:36px!important;min-height:36px!important;padding:0!important;font-size:20px!important;background:#304956!important;border:1px solid #8397a1!important;border-radius:6px!important}.maint179-pad button:active{background:#d4b27c!important;color:#142532!important}.maint179-pad [data-walk179=w]{grid-column:2}.maint179-pad [data-walk179=a]{grid-column:1;grid-row:3}.maint179-pad [data-walk179=s]{grid-column:2;grid-row:3}.maint179-pad [data-walk179=d]{grid-column:3;grid-row:3}
+@media(max-width:800px){#sr126-dialog[data-sr-play136=true] .sr126-layout{grid-template-columns:260px minmax(0,1fr)!important}.maint177-navigation output{width:100%;margin:0}.maint179-pad{bottom:10px;left:10px}}
+@media(max-width:580px){#sr126-dialog[data-sr-play136=true] .sr126-layout{grid-template-columns:1fr!important;grid-template-rows:minmax(300px,65%) minmax(160px,35%)!important}.maint179-checklist nav{grid-template-columns:1fr 1fr}.maint179-checklist nav button{min-height:62px}.maint179-pad{grid-template-columns:repeat(3,32px);padding:5px}.maint179-current ol{max-height:240px;overflow:auto}}
+
+/* First person maintenance: the scene owns the screen; the plan is an optional overlay. */
+#sr126-dialog[data-sr-play136=true] .sr126-layout{position:relative;display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important}
+#sr126-dialog[data-sr-play136=true] .sr126-viewport{grid-column:1;grid-row:1;min-width:0;min-height:0;position:relative}
+#sr126-dialog[data-sr-play136=true] .sr126-panel{display:none!important}
+#sr126-dialog[data-sr-play136=true][data-journal182=true] .sr126-panel{display:block!important;position:absolute;left:12px;top:64px;bottom:16px;width:min(360px,calc(100% - 48px));box-sizing:border-box;z-index:12;border:1px solid #718995;border-radius:12px;box-shadow:0 12px 40px #0008;background:#17252ef5!important}
+#sr126-dialog[data-sr-play136=true] .maint177-navigation{display:none!important}
+#sr126-dialog[data-sr-play136=true] .sr136-toolbelt{padding:6px 14px!important}
+#sr126-dialog[data-sr-play136=true] .sr136-toolbelt-head,#sr126-dialog[data-sr-play136=true] .sr136-controls{display:none!important}
+#sr126-dialog[data-sr-play136=true] .bag156{margin:0!important}
+.maint182-enter,.maint182-journal-toggle{display:none}
+#sr126-dialog[data-sr-play136=true] .maint182-enter,#sr126-dialog[data-sr-play136=true] .maint182-journal-toggle{display:block;position:absolute;z-index:10;top:12px;min-height:38px;padding:8px 12px;background:#152b37eb;border:1px solid #829ba8;border-radius:6px;color:#edf4f5;font:12px system-ui;cursor:pointer}
+.maint182-journal-toggle{left:14px}.maint182-enter{left:172px}
+.maint182-objective{position:absolute;left:18px;bottom:18px;z-index:8;width:min(380px,calc(100% - 36px));box-sizing:border-box;padding:12px 16px;border-left:3px solid #dfbd83;border-radius:0 8px 8px 0;background:#142630e8;color:#f1f5f6;pointer-events:none;font:13px/1.5 system-ui}
+.maint182-objective[hidden]{display:none}.maint182-objective small{display:block;color:#dfbd83;letter-spacing:1px;font-size:10px}.maint182-objective strong{display:block;margin:4px 0;font-size:14px}.maint182-objective p{margin:5px 0}.maint182-objective output{display:block;font-size:11px;color:#b8ced6;max-height:3em;overflow:auto}
+#sr126-dialog[data-fps182=true] .sr126-stage:after{content:'';position:absolute;left:50%;top:50%;width:5px;height:5px;transform:translate(-50%,-50%);border:1px solid #fff;border-radius:50%;background:#e9c98d;box-shadow:0 0 3px #000;pointer-events:none;z-index:11}
+#sr126-dialog[data-fps182=true] .maint182-enter{display:none}
+#sr126-dialog[data-journal182=true] .maint182-objective{display:none}
+#sr126-dialog[data-sr-play136=true] .maint179-pad{left:auto;right:12px;bottom:12px}
+@media(max-width:700px){#sr126-dialog[data-sr-play136=true] .maint182-enter{top:58px;left:14px;font-size:11px}.maint182-objective{bottom:10px;left:10px;width:min(340px,calc(100% - 20px));padding:8px 12px;font-size:12px}#sr126-dialog[data-sr-play136=true][data-journal182=true] .sr126-panel{top:104px}.maint182-objective output{display:none}}
+
+.maint182-journal-toggle[hidden],.maint182-enter[hidden]{display:none!important}
+#sr126-dialog[data-sr-play136=true][data-journal182=true] .maint177-navigation{display:flex!important;position:absolute;right:14px;top:64px;z-index:12;max-width:min(360px,calc(100% - 28px));box-sizing:border-box;border:1px solid #718995;border-radius:8px;box-shadow:0 8px 24px #0006}
+@media(max-width:800px){#sr126-dialog[data-sr-play136=true][data-journal182=true] .maint177-navigation{top:auto;bottom:12px;right:12px}}
+
+/* Slide-away maintenance menu. Its contents remain scrollable without resizing the scene. */
+#sr126-dialog[data-sr-play136=true] .sr126-panel{display:block!important;visibility:hidden;pointer-events:none;transform:translateX(-105%);transition:transform .22s ease,visibility .22s;position:absolute;left:0;top:0!important;bottom:0;width:min(360px,calc(100% - 48px));box-sizing:border-box;z-index:12;border:0;border-right:1px solid #718995;border-radius:0;overflow:auto;overscroll-behavior:contain;background:#17252ef5!important;box-shadow:8px 0 28px #0006}
+#sr126-dialog[data-sr-play136=true][data-journal182=true] .sr126-panel{visibility:visible;pointer-events:auto;transform:translateX(0);left:0;bottom:0;border-radius:0}
+#sr126-dialog[data-sr-play136=true] .sr126-tools{display:none!important}
+#sr126-dialog[data-sr-play136=true][data-journal182=true] .maint177-navigation{position:static!important;display:flex!important;max-width:100%;margin-top:16px;box-shadow:none;padding:8px!important}
+.maint184-close{display:block;width:100%;margin:0 0 14px!important;text-align:right!important;color:#e9c78f!important}
+#sr126-dialog[data-sr-play136=true] .sr126-header{height:48px;padding:6px 16px}
+#sr126-dialog[data-sr-play136=true] .sr126-header small{display:none}
+#sr126-dialog[data-sr-play136=true] .sr126-header h2{font-size:16px}
+#sr126-dialog[data-sr-play136=true] .sr128-mode-tabs{height:44px;min-height:0;padding:4px 12px;gap:8px}
+#sr126-dialog[data-sr-play136=true] .sr128-mode-tabs button{min-height:34px;padding:6px 12px;font-size:12px}
+#sr126-dialog[data-sr-play136=true] .sr126-layout{height:calc(100% - 92px)}
+#sr126-dialog[data-sr-play136=true][data-fps182=true] .sr126-header,#sr126-dialog[data-sr-play136=true][data-fps182=true] .sr128-mode-tabs{display:none!important}
+#sr126-dialog[data-sr-play136=true][data-fps182=true] .sr126-layout{height:100%}
+#sr126-dialog[data-sr-play136=true][data-fps182=true] .maint182-journal-toggle,#sr126-dialog[data-sr-play136=true][data-fps182=true] .input181-help{opacity:.45}
+@media(prefers-reduced-motion:reduce){#sr126-dialog[data-sr-play136=true] .sr126-panel{transition:none}}
+
+/* Keep the menu handle reachable even after scrolling a long practice. */
+#sr126-dialog[data-sr-play136=true] .maint184-close{position:sticky;top:-16px;z-index:2;background:#17252e!important;border-bottom:1px solid #718995!important;border-radius:0!important}
+#sr126-dialog[data-sr-play136=true] .sr126-panel{width:min(320px,calc(100% - 48px))}
+
+.bag186-hud{position:absolute;right:16px;bottom:16px;z-index:16;width:min(320px,calc(100% - 32px));box-sizing:border-box;max-height:60%;overflow:auto;padding:14px;background:#172b35f5;border:1px solid #8b9a9f;border-radius:8px;color:#edf2f3;font:12px/1.5 system-ui}.bag186-hud[hidden]{display:none!important}.bag186-hud header{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.bag186-hud b{font-size:11px;letter-spacing:1px;color:#dfbd83}.bag186-hud nav{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.bag186-hud small{display:block;color:#b6cbd3;margin-top:10px}.bag186-hud button{min-height:36px!important;padding:7px 10px!important;font-size:12px!important}.bag186-hud button[hidden]{display:none!important}.bag186-hud button[aria-pressed=true]{border-color:#e1bd7a!important;background:#4a4c3e!important}
+
+#sr126-dialog[data-sr-play136=true] .maint182-enter{display:none!important}
+#sr126-dialog[data-sr-play136=true] .maint177-navigation output{max-width:100%}
+.student187-hint{position:absolute;top:12px;right:12px;z-index:6;padding:8px 12px;background:#162a34df;color:#deebef;border:1px solid #72899366;border-radius:6px;font:12px/1.5 system-ui;pointer-events:none}
+
+.student187-hint{top:72px;max-width:min(360px,46vw)}
+
+.carry188-panel{position:absolute;right:16px;bottom:18px;z-index:10;max-width:min(350px,calc(100% - 32px));padding:12px 16px;background:#142a35ed;border:1px solid #8aa29e88;border-radius:8px;color:#e3eff1;font:12px/1.5 system-ui}.carry188-panel[hidden]{display:none!important}.carry188-panel strong{color:#e9c58c;font-size:11px;letter-spacing:1px}.carry188-panel p{margin:7px 0}.carry188-panel progress{width:100%;accent-color:#b8d5ae}.carry188-panel button{display:block;width:100%;margin:7px 0;min-height:38px!important;font-size:12px!important}.carry188-panel progress[hidden]{display:none!important}#sr126-dialog[data-physical188=true] .sr135-assist,#sr126-dialog[data-physical188=true] .instrument180-place{display:none!important}
+
+#sr126-dialog[data-physical188=true] .instrument142-card,#sr126-dialog[data-physical188=true] .maint177-navigation{display:none!important}
+/* Keep the carry instructions away from the hand and instrument at the bottom. */
+.carry188-panel{top:68px;bottom:auto}
+
+.carry189-guide{position:absolute;z-index:8;transform:translate(-50%,-50%);pointer-events:none;text-align:center;color:#f1d49b;max-width:220px;text-shadow:0 1px 3px #000}.carry189-guide[hidden]{display:none}.carry189-guide>span{display:block;font-size:24px;line-height:28px}.carry189-guide>small{display:block;font-size:12px;padding:4px 7px;background:#14262cdb;border-radius:5px;line-height:1.35}
+
+.person190-help{top:auto!important;bottom:82px;right:18px}.person190-help section{top:auto!important;bottom:48px}
+/* Let the scene fill the dialog instead of reserving the legacy toolbar height. */
+#sr126-dialog[open][data-sr-play136=true]{display:flex;flex-direction:column;padding:0!important;border:0!important}
+#sr126-dialog[data-sr-play136=true]>.sr126-header,#sr126-dialog[data-sr-play136=true]>.sr128-mode-tabs{flex:none}
+#sr126-dialog[data-sr-play136=true]>.sr126-layout{flex:1;min-height:0;height:auto!important}
+#sr126-dialog[data-sr-play136=true] .sr126-stage{position:absolute;inset:0;min-height:0!important}
+#sr126-dialog[data-sr-play136=true] .sr126-stage canvas{min-height:0!important;width:100%!important;height:100%!important;min-width:0!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;border:0!important;outline:none}
+#sr126-dialog[data-sr-play136=true] .sr126-viewport>p{display:none!important}
+
+/* Fill the viewport regardless of Pointer Lock state; no reserved toolbar rows. */
+#sr126-dialog[open][data-sr-play136=true]{width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;margin:0!important;inset:0!important;box-sizing:border-box}
+#sr126-dialog[data-sr-play136=true] .sr126-viewport{overflow:hidden;align-self:stretch}
+#sr126-dialog[data-sr-play136=true] .sr126-stage{flex:none!important;max-height:none!important}
+
+/* A single heading stays clear of the depot and its three train selectors. */
+.game105[data-game-screen=depot]>header,.game105[data-game-screen=depot] #g105-context{display:none!important}
+.game105[data-game-screen=depot] #game-depot-ui{inset:0!important;padding:30px clamp(20px,4vw,70px)!important}
+#game-depot-ui .game-depot-heading{align-items:center;gap:22px;width:max-content;max-width:100%;padding:12px 18px;background:#14272fe8;border:1px solid #b9cbd044;border-radius:10px;box-sizing:border-box}
+#game-depot-ui .game-depot-heading h1{font:600 clamp(28px,3vw,42px)/1.15 system-ui;margin:0;letter-spacing:-.025em;color:#f4f6f1}
+#game-depot-ui .game-depot-heading>div{min-width:0}#game-depot-ui #game-depot-back{margin:0;min-height:44px;font-size:13px;border-color:#9cb4bc;background:#203942}
+.game105[data-game-screen=depot] #game-environment:after{display:none!important}
+#game-depot-status:empty{display:none}
+/* Fixed model choices remain reachable when the scene is rotated, without overlapping. */
+.game105 #game-train-labels{position:absolute;inset:auto auto 28px 50%;transform:translateX(-50%);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;width:min(660px,calc(100% - 40px));height:auto}
+.game105 #game-train-labels [data-bay-label],.game105 #game-train-labels [data-bay-label]:hover,.game105 #game-train-labels [data-bay-label].hovered{position:static;transform:none;min-width:0;padding:15px 20px;border-radius:8px;letter-spacing:.04em;font-size:22px;border-top:3px solid #2dbb8b;box-shadow:0 5px 20px #10212d3b}
+.game105 #game-train-labels [data-bay-label=NM22]{border-top-color:#ed4f98}
+.game105 #game-train-labels [data-bay-label] small{font-size:10px;letter-spacing:.03em;color:#c4d6db}
+@media(max-width:560px){.game105 #game-train-labels{bottom:22px;gap:8px;width:calc(100% - 28px)}.game105 #game-train-labels [data-bay-label],.game105 #game-train-labels [data-bay-label]:hover,.game105 #game-train-labels [data-bay-label].hovered{padding:13px 5px;font-size:18px}.game105 #game-train-labels [data-bay-label] small{font-size:9px;letter-spacing:0}}
+body[data-workshop-mode=explore] .workshop-grid{grid-template-columns:180px minmax(0,1fr)!important}body[data-workshop-mode=explore] .workshop-center{min-width:0;grid-column:2/-1}body[data-workshop-mode=explore] #workshop-stage{height:78dvh!important;min-height:480px!important}body[data-workshop-mode=explore] .workshop-info{grid-column:1/-1}body[data-workshop-mode=explore] #workshop-canvas{background:#e3e8e6!important}body[data-workshop-mode=explore] #workshop-stage:after{display:none!important}
+@media(max-width:760px){#game-depot-ui .game-depot-heading{gap:14px;padding:10px 12px}#game-depot-ui .game-depot-heading h1{font-size:28px}body[data-workshop-mode=explore] .workshop-grid{grid-template-columns:1fr!important}body[data-workshop-mode=explore] .workshop-center{grid-column:1}body[data-workshop-mode=explore] #workshop-stage{min-height:360px!important;height:74dvh!important}}
+
+.game-depot-load:has(#game-depot-retry[hidden]){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}

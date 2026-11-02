@@ -1,0 +1,30 @@
+import fs from 'node:fs';
+import zlib from 'node:zlib';
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import {GLTFLoader} from '../dist/vendor/GLTFLoader.js';
+import {createCharacter,CabinCharacters} from '../dist/cabin-characters.js';
+import {wardrobeFor,applyWardrobe} from '../dist/passenger-wardrobe.js';
+const signature=id=>Object.entries(wardrobeFor(id)).map(([k,c])=>k+':'+c.getHexString()).join('|');
+const ids=Array.from({length:320},(_,i)=>'wait:200:'+i);
+assert.equal(new Set(ids.map(signature)).size,320);
+const templates=[];
+for(const file of fs.readdirSync('dist/models/personajes').filter(f=>f.endsWith('.gz'))){
+ const b=zlib.gunzipSync(fs.readFileSync('dist/models/personajes/'+file));
+ const template=await new GLTFLoader().parseAsync(b.buffer.slice(b.byteOffset,b.byteOffset+b.byteLength),'');template.name=file.replace('.glb.gz','');templates.push(template);
+ const originals=new Map();template.scene.traverse(o=>{if(o.isMesh)for(const m of Array.isArray(o.material)?o.material:[o.material])originals.set(m,m.color.getHexString());});
+ const one=createCharacter(template),two=createCharacter(template);
+ applyWardrobe(one,'person:1');applyWardrobe(two,'person:2');
+ assert(one.wardrobeMaterials.length>=(template.name==='personaje_femenino119'?4:6));
+ assert(one.wardrobeMaterials.every(m=>!originals.has(m)&&!two.wardrobeMaterials.includes(m)));
+ const before=one.wardrobeMaterials.map(m=>m.color.getHexString());applyWardrobe(two,'person:3');assert.deepEqual(one.wardrobeMaterials.map(m=>m.color.getHexString()),before);
+ for(const [m,c]of originals)assert.equal(m.color.getHexString(),c);
+ for(const item of [one,two])item.body.traverse(o=>{if(o.isMesh)for(const m of Array.isArray(o.material)?o.material:[o.material])if(['skin','hair','eye','mouth','brow','dark','kidhair'].includes(m.name))assert(originals.has(m));});
+}
+const bank=Object.create(CabinCharacters.prototype);Object.assign(bank,{ready:true,templates,pool:[],group:new THREE.Group()});
+const actors=ids.map((id,i)=>({id,x:i,y:1.21,z:5,carryingBaby:i%9===3,moving:false}));bank.update(actors,3);
+const outfits=new Map(bank.pool.filter(p=>p.root.visible).map(p=>[p.actorId,p.wardrobeMaterials.map(m=>m.name+':'+m.color.getHexString()).join('|')]));
+assert.equal(new Set(outfits.values()).size,320);
+bank.update([...actors].reverse(),4);for(const p of bank.pool.filter(p=>p.root.visible))assert.equal(p.wardrobeMaterials.map(m=>m.name+':'+m.color.getHexString()).join('|'),outfits.get(p.actorId));
+bank.update(actors.slice(0,8),4,false);bank.update(actors,5);for(const p of bank.pool.filter(p=>p.root.visible))assert.equal(p.wardrobeMaterials.map(m=>m.name+':'+m.color.getHexString()).join('|'),outfits.get(p.actorId));
+console.log('320 combinaciones distintas; colores estables al reordenar y reutilizar; modelos activos con materiales independientes; piel, cara, cabello y originales intactos.');

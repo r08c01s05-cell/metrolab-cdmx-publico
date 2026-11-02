@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import {createRectifier126,SR_PARTS126} from '../dist/rectifier-model126.js';
+const model=createRectifier126(),parts=model.userData.parts;
+assert.equal(parts.size,12);assert.equal(SR_PARTS126.length,12);assert.equal(model.userData.primaryType,'dry');assert.equal(model.userData.secondaryCount,2);assert.equal(model.userData.tractionReturnBondedToPE,false);
+const count=(id,key)=>parts.get(id).userData.detailCounts[key]||0;
+assert.equal(count('rectifier','Diodo_potencia'),12);assert.equal(count('rectifier','Nucleo_reactor_equilibrio'),1);assert.equal(count('transformer','Bobina_secundaria_0'),3);assert.equal(count('transformer','Bobina_secundaria_1'),3);assert.equal(count('dc','Interruptor_ultrarrapido_CD'),2);assert.equal(count('battery','Celda_bateria'),16);assert(count('control','Modulo_DIN')>=20);assert(count('earth','Enlace_equipotencial')>=7);assert.equal(count('civil','Losa'),1);assert.equal(count('fire','Extintor'),2);assert(!parts.get('roof').visible);assert(!model.userData.frontWall.visible);
+let meshes=0,triangles=0,finished=0;
+model.traverse(o=>{if(!o.isMesh)return;meshes++;const g=o.geometry,p=g.attributes.position,n=g.attributes.normal;assert(p&&n);assert.equal(p.count,n.count);for(const a of Object.values(g.attributes))for(const x of a.array)assert(Number.isFinite(x),o.name+' contains non-finite geometry');assert(g.index);for(const i of g.index.array)assert(i<p.count);triangles+=g.index.count/3;if(o.material.normalMap){finished++;assert(g.attributes.uv);if(o.material.normalMap.channel===3)assert(g.attributes.uv3);}g.computeBoundingBox();assert(!g.boundingBox.isEmpty());});
+assert(meshes<150,'Bounded draw-call geometry');assert(finished>30,'PBR surface finishes');assert(triangles<180000);const b=new THREE.Box3().setFromObject(model),size=b.getSize(new THREE.Vector3());assert(size.x>=16&&size.x<17);assert(size.z>=10&&size.z<11);
+// Every independently selectable part survives batching and transforms as one assembly.
+for(const g of parts.values()){assert(g.children.length>0);const before=new THREE.Box3().setFromObject(g).getCenter(new THREE.Vector3());g.position.x+=2;g.updateMatrixWorld(true);const after=new THREE.Box3().setFromObject(g).getCenter(new THREE.Vector3());assert(Math.abs(after.x-before.x-2)<1e-5);g.position.x-=2;g.updateMatrixWorld(true);}
+console.log(JSON.stringify({assemblies:parts.size,meshes,triangles,finishedMeshes:finished,dimensions:size.toArray(),diodes:count('rectifier','Diodo_potencia'),status:'PASS CPU geometry, independent assemblies, equipment counts and surface maps; no GPU rendering measured'}));

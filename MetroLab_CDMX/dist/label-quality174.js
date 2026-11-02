@@ -1,0 +1,13 @@
+import * as T from 'three';
+const cache=new Map();
+const names=['Pantitlán','Zaragoza','Gómez Farías','Boulevard Puerto Aéreo','Balbuena','Moctezuma','San Lázaro','Candelaria','Merced','Pino Suárez','Isabel la Católica','Salto del Agua','Balderas','Cuauhtémoc','Insurgentes','Sevilla','Chapultepec','Juanacatlán','Tacubaya','Observatorio'];
+function canvasTexture(key,width,height,paint){if(cache.has(key))return cache.get(key);const c=document.createElement('canvas');if(!c.getContext)return null;c.width=width;c.height=height;const x=c.getContext('2d');if(!x?.fillText)return null;x.fillStyle='#f6f5ef';x.fillRect(0,0,width,height);paint(x,width,height);const map=new T.CanvasTexture(c);map.name='Impresión nítida174 '+key;map.colorSpace=T.SRGBColorSpace;map.minFilter=T.LinearMipmapLinearFilter;map.magFilter=T.LinearFilter;map.anisotropy=8;map.userData.quality100Shared=true;cache.set(key,map);return map;}
+export function improveLabels174(root){
+ if(root.userData.labels174||typeof document==='undefined')return;root.userData.labels174=true;const mats=new Map();
+ root.traverse(o=>{if(!o.isMesh||Array.isArray(o.material))return;const original=o.material,n=original.name||'';if(!/mapa movilidad interior53|recorrido superior L153|asientos preferentes53|rotulo interfono53|panel lateral mapa53/i.test(n+' '+o.name))return;
+ let m=mats.get(original);if(!m){m=original.clone();m.name=/panel lateral mapa53/i.test(o.name)?'Marco mate de cartel174':n;m.metalness=0;m.roughness=.74;m.polygonOffset=true;m.polygonOffsetFactor=-1;m.polygonOffsetUnits=-1;
+ if(/Recorrido superior L153/.test(n))m.map=canvasTexture('linea1',2560,320,(x,w,h)=>{x.fillStyle='#242b2d';x.font='500 32px Arial';x.fillText('LÍNEA 1   PANTITLÁN — OBSERVATORIO',55,40);x.strokeStyle='#d92d8b';x.lineWidth=12;x.beginPath();x.moveTo(65,90);x.lineTo(w-215,90);x.stroke();names.forEach((s,i)=>{const px=65+i*(w-280)/(names.length-1);x.fillStyle='#d92d8b';x.beginPath();x.arc(px,90,10,0,Math.PI*2);x.fill();x.save();x.translate(px-3,117);x.rotate(Math.PI*.29);x.fillStyle='#202426';x.font='500 22px Arial';x.fillText(s,0,0);x.restore();});})||m.map;
+ if(/Mapa movilidad interior53/.test(n)&&m.map?.image){const image=m.map.image;m.map=canvasTexture('mapa-red',1024,1224,(x,w,h)=>{const margin=28,scale=Math.min((w-2*margin)/image.width,(h-2*margin)/image.height),iw=image.width*scale,ih=image.height*scale;x.drawImage(image,(w-iw)/2,(h-ih)/2,iw,ih);x.strokeStyle='#b5b8b5';x.lineWidth=2;x.strokeRect(2,2,w-4,h-4);})||m.map;}
+ if(m.map){m.map.anisotropy=8;m.map.minFilter=T.LinearMipmapLinearFilter;m.map.magFilter=T.LinearFilter;m.map.colorSpace=T.SRGBColorSpace;}m.userData.print174=true;mats.set(original,m);}o.material=m;
+ });
+}

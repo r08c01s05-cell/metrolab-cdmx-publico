@@ -1,0 +1,9 @@
+# Interiores detallados de ambas líneas
+
+Los seis GLB de NM22, NM79 y MP82 (cabina e intermedio) incorporan materiales PBR con texturas integradas de color, normal y rugosidad: piso con grano antideslizante, plástico moldeado, panel marfil y acero cepillado. Se suavizan las normales de los asientos redondeados de Línea 8 y se añade una reflexión moderada al plástico, conservando los colores y la distribución aprobados.
+
+Se agregan tornillos y juntas, perfiles laterales de los accesos, umbrales estriados, marcos y lamas de ventilación, difusores de luz y pequeños encuentros del piso. Los detalles se agrupan en siete lotes de geometría por coche para limitar las llamadas de dibujo. Los elementos del techo participan en el corte de techo existente. Las texturas son procedurales y los detalles tienen medidas aproximadas; no son un levantamiento exacto del fabricante. Los difusores son emisivos, sin simular ópticamente una luminaria completa.
+
+Las coordenadas de puertas y destinos de pasajeros permanecen iguales. Los perfiles laterales están fuera del hueco; los perfiles superiores se sitúan por encima de las hojas. Se mantiene la ocultación de las hojas durante la apertura. La base anterior de cada coche está en `assets-source/trenes/base41/`; `scripts/interiores41.py` reproduce los seis archivos nuevos desde ella. Los GLB editables están en `assets-source/trenes/`. Los de Línea 8 se sirven comprimidos sin pérdida.
+
+Validación: `verificar_interiores41.mjs`, `verificar_trenes34.mjs`, `verificar_puertas29.mjs` y `verificar_recorridos39.mjs`, mediante `scripts/test-loader.mjs`; la carga de trenes requiere `--import ./scripts/node-textures40.mjs` para las pruebas de imágenes en Node. Se comprobaron mapas y UV, valores finitos, integridad de imágenes, puertas sin cambios y recorridos continuos. No se realizó inspección visual en navegador ni medición de FPS. No se generaron archivos .blend; los GLB se importan en Blender.

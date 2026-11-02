@@ -1,0 +1,11 @@
+# Revisión 40
+
+Los cinco GLB individuales suministrados con sufijo `_fotorrealista` sustituyen íntegramente los personajes activos de ambas líneas: rig, adolescente, estudiante, madre con niño y v2. Se conservan sus texturas JPEG integradas, mapas de normal y rugosidad, esqueletos y clips Walk/Idle. Los vestuarios se varían mediante materiales independientes conservando los mapas originales. No se afirma que el nombre del archivo certifique un nivel de realismo.
+
+`Usuarios_anden_variantes_fotorrealista.glb` contiene una colección de figuras unida en una sola malla, sin esqueleto ni animaciones. Se conserva como fuente en `assets-source/personajes/`, pero no se utiliza como sustituto de pasajeros que deben caminar o sentarse. Para usarla como individuos móviles es necesario separar y articular las figuras; esta adaptación está pendiente.
+
+El defecto mostrado en la captura era un panel superior marfil continuo que cruzaba las puertas y tapaba parte del vidrio. Los cuatro interiores de Línea 8 ahora tienen paneles superiores segmentados entre puertas, por encima del vidrio. Se conservan las hojas móviles y la ocultación solicitada durante la apertura. Las medidas de los interiores siguen siendo una interpretación aproximada de las fotografías.
+
+Los cuatro trenes de Línea 8 y los personajes se distribuyen como GLB con gzip sin pérdida, descomprimidos al cargar. Los trenes originales editables se encuentran en `assets-source/trenes/`; los seis personajes aportados, en `assets-source/personajes/`. `scripts/preparar_modelos40.py` regenera la distribución. Tras regenerar interiores con `scripts/interiores39.py`, copiar los cuatro GLB resultantes a `assets-source/trenes/`, ejecutar la preparación gzip y eliminar los GLB sin comprimir de `dist/models/`.
+
+Verificación: carga de trenes en ambos sentidos, 9 coches y 144 hojas; independencia de esqueletos, postura sentada y escala; 320 vestuarios estables; continuidad del embarque; integridad de las imágenes incrustadas y ausencia de paneles superiores dentro de los huecos de puertas. Las pruebas de GLTFLoader en Node simulan la decodificación de imagen y comprueban los mapas cargados, sin renderizar. No hubo revisión visual en navegador ni medición de rendimiento en el dispositivo del usuario.

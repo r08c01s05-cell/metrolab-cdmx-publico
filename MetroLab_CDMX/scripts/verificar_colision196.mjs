@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {view,ui,THREE as T} from './fixture-substation188.mjs';
+const player=view.walk176,filter=ui.bench.targets.get('filter'),box=new T.Box3().setFromObject(filter),center=box.getCenter(new T.Vector3());
+view.camera.position.set(center.x,.98,box.min.z-.8);view.controls.target.copy(center);view.camera.lookAt(center);player.resume178();player.keys.add('w');player.keys.add('control');
+for(let i=0;i<50;i++)player.update(.05);
+player.keys.clear();
+assert(view.camera.position.z<=box.min.z-.23,'The player cannot walk into the installed filter');
+assert(view.camera.position.z>box.min.z-.5,'The student can approach within a human working distance');
+const immutable=player.benchSolids196.map(b=>b.clone());filter.position.x+=3;player.buildObstacles179();
+assert(player.benchSolids196.every((b,i)=>b.equals(immutable[i])),'Transported filter does not turn into a moving collision around the player');
+ui.setActive(false);
+console.log('196 PASS: actual walking stops in front of the installed filter; carried parts do not trap the camera.');

@@ -1,0 +1,44 @@
+[
+  {
+    "model": "NM22_cabina",
+    "seats": 0,
+    "floors": 1,
+    "doors": 16,
+    "screens": 1
+  },
+  {
+    "model": "NM22_intermedio",
+    "seats": 0,
+    "floors": 1,
+    "doors": 16,
+    "screens": 0
+  },
+  {
+    "model": "NM79_cabina",
+    "seats": 26,
+    "floors": 1,
+    "doors": 16,
+    "screens": 1
+  },
+  {
+    "model": "NM79_intermedio",
+    "seats": 28,
+    "floors": 1,
+    "doors": 16,
+    "screens": 0
+  },
+  {
+    "model": "MP82_cabina",
+    "seats": 26,
+    "floors": 1,
+    "doors": 16,
+    "screens": 1
+  },
+  {
+    "model": "MP82_intermedio",
+    "seats": 28,
+    "floors": 1,
+    "doors": 16,
+    "screens": 0
+  }
+]

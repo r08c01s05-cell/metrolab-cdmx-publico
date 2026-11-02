@@ -1,0 +1,338 @@
+[
+  {
+    "id": "PDF-L1",
+    "titulo": "Prescripciones de material rodante de Línea 1, documento proporcionado por el usuario",
+    "url": "15-prescripciones-mr-25sept-cambios.pdf",
+    "fecha_documento": "2020-09-25",
+    "acceso": "Lectura del texto de 168 páginas; comprobación visual de tabla de cargas, página 31",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "RED-L1",
+    "titulo": "STC: Línea 1",
+    "url": "https://www.metro.cdmx.gob.mx/la-red/linea-1",
+    "fecha_documento": null,
+    "acceso": "Contenido recuperado mediante buscador; acceso directo no disponible",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "RED-L8",
+    "titulo": "STC: Línea 8",
+    "url": "https://www.metro.cdmx.gob.mx/la-red/linea-8",
+    "fecha_documento": null,
+    "acceso": "Contenido recuperado mediante buscador; acceso directo no disponible",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "DIST",
+    "titulo": "STC: Longitud de estación a estación",
+    "url": "https://metro.cdmx.gob.mx/longitud-de-estacion",
+    "fecha_documento": null,
+    "acceso": "Tablas de las líneas 1 y 8 recuperadas mediante buscador",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "LIC-L1",
+    "titulo": "STC: Licitación pública internacional 30102015-002-20",
+    "url": "https://www.metro.cdmx.gob.mx/licitacion_linea1",
+    "fecha_documento": "2020",
+    "acceso": "Página de licitación leída; los vínculos de fichas y planos no se pudieron recuperar",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "CFE",
+    "titulo": "CFE: Proyecto Metro-Energía",
+    "url": "https://app.cfe.mx/Aplicaciones/OTROS/Boletines/boletin?i=3775",
+    "fecha_documento": "2023",
+    "acceso": "Extracto oficial recuperado; acceso directo con error",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "SR17",
+    "titulo": "Jefatura de Gobierno: conferencia La Nueva L1 del Metro",
+    "url": "https://www.jefaturadegobierno.cdmx.gob.mx/comunicacion/nota/mensaje-de-la-jefa-de-gobierno-claudia-sheinbaum-pardo-del-director-general-del-stcmetro-guillermo-calderon-aguilera-y-del-secretario-de-movilidad-andres-lajous-loaeza-durante-conferencia-de-prensa-la-nueva-l1-del-metro",
+    "fecha_documento": "2022",
+    "acceso": "Extracto oficial recuperado: 17 rectificadoras previstas para sustitución",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "FIMETRO",
+    "titulo": "STC: Cuarto informe trimestral 2024",
+    "url": "https://metro.cdmx.gob.mx/storage/app/media/FIMETRO/INFORME-TRIMESTRAL-FIMETRO/2025/Cuarto%20Informe%20Trimestral%202024.pdf",
+    "fecha_documento": "2024",
+    "acceso": "Extractos de flota NM-22 y talleres recuperados; no lectura íntegra",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "MANUAL24",
+    "titulo": "STC: Manual administrativo, Gaceta 26 de noviembre de 2024",
+    "url": "https://www.metro.cdmx.gob.mx/storage/app/media/Metro%20Acerca%20de/Manualadministrativo/MANUAL%20ADMON%20STC_noviembre%202024.pdf",
+    "fecha_documento": "2024-11-26",
+    "acceso": "Extracto recuperado de control de energía SEAT Estrella, L8 y L12",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "PM18",
+    "titulo": "STC: Plan Maestro 2018-2030",
+    "url": "https://metro.cdmx.gob.mx/storage/app/media/Metro%20Acerca%20de/Mas%20informacion/planmaestro18_30.pdf",
+    "fecha_documento": "2018",
+    "acceso": "Extracto recuperado que menciona pilotaje SACEM en Línea 8",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "MP82",
+    "titulo": "STC: Notas a estados financieros, marzo 2019",
+    "url": "https://metro.cdmx.gob.mx/storage/app/media/cumplimientos/ldfefym_gc/notas_edos/nota_est_financ_mzo19.pdf",
+    "fecha_documento": "2019-03-31",
+    "acceso": "Extracto sobre modernización de lote de 25 MP-82 de L8",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "NM79",
+    "titulo": "STC: Informe de los 11 compromisos del Fideicomiso",
+    "url": "https://www.metro.cdmx.gob.mx/storage/app/media/Fideicomiso/informe11compromisos.pdf",
+    "fecha_documento": "2015",
+    "acceso": "Extracto de intervención en motoventiladores NM-79, incluyendo Línea 8",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "AF",
+    "titulo": "STC: Afluencia de estación por línea",
+    "url": "https://metro.cdmx.gob.mx/operacion/mas-informacion/afluencia-de-estacion-por-linea",
+    "fecha_documento": null,
+    "acceso": "Extractos de trimestres 2025; no importación completa de la tabla",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "DA",
+    "titulo": "CDMX: Afluencia diaria del Metro",
+    "url": "https://datos.cdmx.gob.mx/dataset/afluencia-diaria-del-metro-cdmx?activity_id=4fababf2-e504-4dc1-8fc5-ed4f9f91f6aa",
+    "fecha_documento": null,
+    "acceso": "Conjunto localizado; recursos CSV todavía no descargados",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "ACC",
+    "titulo": "STC: Accesibilidad en estaciones",
+    "url": "https://www.metro.cdmx.gob.mx/tramites-y-servicios/accesibilidad-en-estaciones",
+    "fecha_documento": null,
+    "acceso": "Extractos de ubicación de elevadores y escaleras; estados temporales no incorporados",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "REA",
+    "titulo": "SEGOB: Reapertura tramo Observatorio-Juanacatlán",
+    "url": "https://www.gob.mx/segob/galerias/reapertura-de-la-linea-1-del-metro-cdmx-en-el-tramo-observatorio-juanacatlan",
+    "fecha_documento": "2025-11-16",
+    "acceso": "Fecha recuperada mediante buscador",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "BAL",
+    "titulo": "STC: Balderas",
+    "url": "https://metro.cdmx.gob.mx/la-red/linea-1/balderas",
+    "fecha_documento": null,
+    "acceso": "Extracto de accesos recuperado",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "GAR",
+    "titulo": "STC: Garibaldi/Lagunilla",
+    "url": "https://www.metro.cdmx.gob.mx/la-red/linea-8/garibaldi",
+    "fecha_documento": null,
+    "acceso": "Extracto de accesos recuperado",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "CON",
+    "titulo": "STC: Constitución de 1917",
+    "url": "https://metro.cdmx.gob.mx/la-red/linea-8/constitucion-de-1917",
+    "fecha_documento": null,
+    "acceso": "Extracto de accesos y horarios recuperado",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "IZT",
+    "titulo": "STC: Iztapalapa",
+    "url": "https://metro.cdmx.gob.mx/la-red/linea-8/iztapalapa",
+    "fecha_documento": null,
+    "acceso": "Extracto de accesos y mural recuperado",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "ADI",
+    "titulo": "STC: Anexo técnico 17 septiembre 2020",
+    "url": "https://metro.cdmx.gob.mx/storage/app/media/Banners/aclaraciones170920/bases/anexo%20I/anexo-i-17-sept.pdf",
+    "fecha_documento": "2020",
+    "acceso": "Extracto de configuración histórica de estaciones L1",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "PLAN",
+    "titulo": "STC: Anexo técnico 25 septiembre 2020",
+    "url": "https://metro.cdmx.gob.mx/storage/app/media/licitacion/2020/30102015_002_20/Anexo%20I.%2025%20sept.pdf",
+    "fecha_documento": "2020",
+    "acceso": "Relación parcial de planos de vías recuperada mediante buscador",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "OP",
+    "titulo": "STC: Modelo operacional para modernización de L1",
+    "url": "https://metro.cdmx.gob.mx/storage/app/media/Banners/aclaraciones170920/bases/anexo%20I/Doc_Act/Documento%201.8%20Modelo%20Operativo.pdf",
+    "fecha_documento": "2020",
+    "acceso": "Documento localizado; no extracción íntegra",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "TC",
+    "titulo": "STC: Telecomunicaciones e información al usuario A5.5",
+    "url": "https://metro.cdmx.gob.mx/storage/app/media/Banners/aclaraciones170920/bases/anexo%20I/Doc_Act/a55-telecomunicaciones-e-informacion-al-usuario.pdf",
+    "fecha_documento": "2020-08-25",
+    "acceso": "Documento localizado; no extracción íntegra",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "ACLA",
+    "titulo": "STC: Primer concentrado de preguntas de licitación",
+    "url": "https://metro.cdmx.gob.mx/storage/app/media/Banners/aclaraciones170920/bases/preguntas/PRIMER%20CONCENTRADO%20DE%20PREGUNTAS%20LPI%20PPS.pdf",
+    "fecha_documento": "2020",
+    "acceso": "Extractos sobre planos faltantes, tierras, drenaje y control",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "VIDEO",
+    "titulo": "STC: Sistema de videovigilancia",
+    "url": "https://metro.cdmx.gob.mx/storage/app/media/licitacion/2020/30102015_002_20/ANEX1/ADICIONALES/VIDEO/ANEXO%20Sistema%20de%20Videovigilancia.pdf",
+    "fecha_documento": "2020",
+    "acceso": "Extracto identifica Constitución de 1917 como terminal y garaje",
+    "fecha_consulta": "2026-10-06"
+  },
+  {
+    "id": "CSV-DIARIA",
+    "titulo": "Afluencia diaria aportada por el usuario",
+    "archivo": "0e8ffe58-28bb-4dde-afcd-e5f5b4de4ccb.csv",
+    "library_file_id": "libfile_a93db20d204481918abcbdd5e0e221e2",
+    "fecha_consulta": "2026-10-06",
+    "sha256": "2d328ec615ae1249f3f6fa2896d66647409225b7d4419e78c6f78cccd4b9f78a",
+    "acceso": "Archivo aportado; lectura directa completa del CSV o inspección visual de imagen.",
+    "procedencia_publicador": "Por confirmar documentalmente; nombres y contenido compatibles con la afluencia diaria del Metro."
+  },
+  {
+    "id": "CSV-PAGOS",
+    "titulo": "Afluencia por tipo de pago aportada por el usuario",
+    "archivo": "cce544e1-dc6b-42b4-bc27-0d8e6eb3ed72.csv",
+    "library_file_id": "libfile_deec20aabcd481919de2b6b0bf542503",
+    "fecha_consulta": "2026-10-06",
+    "sha256": "6a7c9030b3f87912c43a6aca9d14bd36f4307647289c35e9d5248b14f7ef4405",
+    "acceso": "Archivo aportado; lectura directa completa del CSV o inspección visual de imagen.",
+    "procedencia_publicador": "Por confirmar documentalmente; nombres y contenido compatibles con la afluencia diaria del Metro."
+  },
+  {
+    "id": "DIC-DIARIA",
+    "titulo": "Diccionario de afluencia aportado por el usuario",
+    "archivo": "7abf61db-a045-4b72-b5cd-c22ea0de6467.csv",
+    "library_file_id": "libfile_8afc2755dd508191bbc888e5a05ad66a",
+    "fecha_consulta": "2026-10-06",
+    "sha256": "62f4ce5279609082289043293ae9195c5149fb81c0ea3d6793aeb1d402e7854e",
+    "acceso": "Archivo aportado; lectura directa completa del CSV o inspección visual de imagen.",
+    "procedencia_publicador": "Por confirmar documentalmente; nombres y contenido compatibles con la afluencia diaria del Metro."
+  },
+  {
+    "id": "DIC-PAGOS",
+    "titulo": "Segundo diccionario de afluencia aportado por el usuario",
+    "archivo": "b1b48bbf-1c80-4988-8856-883b140d3fc7.csv",
+    "library_file_id": "libfile_02b2ab4ef48c8191af9b2d1e715120e3",
+    "fecha_consulta": "2026-10-06",
+    "sha256": "701db5be5b5d5b1ea689842b721e125f8e6100b2d9b90dcb35e201f5990d6834",
+    "acceso": "Archivo aportado; lectura directa completa del CSV o inspección visual de imagen.",
+    "procedencia_publicador": "Por confirmar documentalmente; nombres y contenido compatibles con la afluencia diaria del Metro."
+  },
+  {
+    "id": "MAPA-L1",
+    "titulo": "Imagen de esquema y mapa Línea 1",
+    "archivo": "image(20261007-054449).png",
+    "library_file_id": "libfile_873067bb642c819199815d7cc98f6c0b",
+    "fecha_consulta": "2026-10-06",
+    "sha256": "6ebe27213e0a361286c12ea0f84b12092700342a1a3dbbfcd8e0588f470e89f0",
+    "acceso": "Archivo aportado; lectura directa completa del CSV o inspección visual de imagen.",
+    "procedencia_publicador": "Por confirmar documentalmente; nombres y contenido compatibles con la afluencia diaria del Metro."
+  },
+  {
+    "id": "MAPA-L8",
+    "titulo": "Imagen de esquema y mapa Línea 8",
+    "archivo": "image(20261007-054540).png",
+    "library_file_id": "libfile_fbfff91616fc8191a0c6eeb6ba61755d",
+    "fecha_consulta": "2026-10-06",
+    "sha256": "b8fcac663ccc598ac5dad7545f9bf4563b241f489364b29b64a240cbb25dd925",
+    "acceso": "Archivo aportado; lectura directa completa del CSV o inspección visual de imagen.",
+    "procedencia_publicador": "Por confirmar documentalmente; nombres y contenido compatibles con la afluencia diaria del Metro."
+  },
+  {
+    "id": "USUARIO-FLOTA-L8",
+    "titulo": "Confirmación del usuario: modelos vigentes de L8",
+    "fecha_consulta": "2026-10-06",
+    "contenido": "NM-79 y MP-82 de rodadura neumática",
+    "estado": "Información aportada por usuario; cantidades y ficha final no proporcionadas."
+  },
+  {
+    "id": "MANUAL-MI",
+    "titulo": "Manual de integración gráfica y visual para el sistema integrado de transporte",
+    "archivo": "senaletica/Manual_MI_original.pdf",
+    "library_file_id": "libfile_9c3ae08c476c819194c5515d2ce3d776",
+    "fecha_documento": "2022",
+    "paginas": 483,
+    "acceso": "Archivo aportado por el usuario; extracción completa y revisión visual selectiva",
+    "fecha_consulta": "2026-10-07",
+    "sha256": "d1104453b6a6f833bc807a6b14f0b5f7434cd33e554d39a117272db792b2aee1"
+  },
+  {
+    "id": "PDF-AFLUENCIA-LABORABLE",
+    "titulo": "Afluencia del metro.pdf: Estaciones de mayor afluencia",
+    "url": "https://metro.cdmx.gob.mx/operacion/mas-informacion/estaciones-de-mayor-afluencia",
+    "origen": "Archivo aportado por el usuario; impresión del sitio, no consulta web nueva",
+    "library_file_id": "libfile_fafe996df2f0819182d71afdfaff2706",
+    "fecha_consulta": "2026-10-07",
+    "paginas": 20,
+    "sha256": "718d167ae211b42d607d5be5b001032c0809c3083864f93d3cc41f0229acbfc0",
+    "acceso": "Inspección de 20 páginas, OCR completo y transcripción visual de ocho registros L1/L8 de 2026"
+  },
+  {
+    "id": "ICA-90",
+    "titulo": "Revista ICA número 90: construcción de Línea 8",
+    "url": "https://almacenfica.blob.core.windows.net/imagenes-fundacion-ica-org-mx/FICA-IMAGENES/Libro_Digitales/Revista%20ICA/REVISTA_NUM%2090.pdf",
+    "fecha_consulta": "2026-10-07",
+    "nota": "Identifica Coyuya, Iztacalco, Apatlaco, Aculco y Constitución de 1917 como superficiales. Referencia histórica; no levantamiento actual."
+  },
+  {
+    "id": "VIDEO-L1-USUARIO",
+    "titulo": "Video aportado de Línea 1",
+    "tipo": "Video de referencia del usuario",
+    "fecha_grabacion": "No confirmada",
+    "uso": "Reconstrucción visual de andenes; dimensiones provisionales"
+  },
+  {
+    "id": "VIDEO-L8-USUARIO",
+    "titulo": "Video aportado de Línea 8",
+    "tipo": "Video de referencia del usuario",
+    "fecha_grabacion": "No confirmada",
+    "uso": "Reconstrucción visual de andenes; dimensiones provisionales"
+  },
+  {
+    "id": "VIDEO-L8-USUARIO-2",
+    "titulo": "Línea 8: segunda perspectiva desde cabina, video proporcionado por el usuario",
+    "url": null,
+    "fecha_documento": "No confirmada",
+    "fecha_consulta": "2026-10-08",
+    "acceso": "Video local de 25:44.73, 640 × 360. Revisión de recorrido y fotogramas de las 19 estaciones; algunas vistas parciales o sobreexpuestas.",
+    "limitaciones": "Reconstrucción visual aproximada; no aporta planos ni cotas certificadas."
+  },
+  {
+    "id": "VIDEO-L1-USUARIO-2",
+    "titulo": "Línea 1: segunda perspectiva desde cabina, video proporcionado por el usuario",
+    "url": null,
+    "fecha_documento": "No confirmada",
+    "fecha_consulta": "2026-10-08",
+    "acceso": "Video local de 28:25.09, 640 × 360. Revisión de recorrido y fotogramas de las 20 estaciones; algunas vistas parciales o sobreexpuestas.",
+    "limitaciones": "Reconstrucción visual aproximada; no aporta planos ni cotas certificadas."
+  }
+]

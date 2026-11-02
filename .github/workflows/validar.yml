@@ -1,0 +1,70 @@
+name: Validar ramas y Pull Requests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, 'mejora/**', 'correccion/**', 'feat/**', 'fix/**', 'chore/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validar-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    name: Verificaciones del simulador
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: MetroLab_CDMX
+    steps:
+      - name: Descargar código de esta rama
+        uses: actions/checkout@v4
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verificar módulos, modelos y controles
+        run: node scripts/verificar_colaboracion.mjs
+      - name: Verificar integración automática sin publicar
+        working-directory: .
+        run: python3 .github/scripts/test_integrar.py
+
+  integrar:
+    name: Integrar cambios verificados en main
+    needs: verificar
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write
+    concurrency:
+      group: integrar-main
+      cancel-in-progress: false
+    steps:
+      - name: Descargar la revisión verificada
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Combinar, verificar y publicar sin forzar
+        env:
+          METROLAB_SOURCE_SHA: ${{ github.sha }}
+        run: bash .github/scripts/integrar.sh
+

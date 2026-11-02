@@ -1,0 +1,18 @@
+.info-tabs139{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 16px;padding-bottom:12px;border-bottom:1px solid #3a5265}.info-tabs139 button{background:#1e3040;color:#d9e7f1;border:1px solid #4b6477;border-radius:10px;padding:10px 16px}.info-tabs139 button[aria-selected=true]{background:#d97730;color:#fff;border-color:#ecaa78}.info-tabs139 button:focus-visible{outline:3px solid #79d0e1;outline-offset:3px}.info-frame139{display:block;border:0;border-radius:12px;width:100%;height:72vh;min-height:420px;background:#0f172a}#info-portal139[hidden],#info-guide139[hidden]{display:none}#documents-dialog{width:min(1480px,96vw);max-width:96vw}#documents-status{color:#b8ccda;margin-bottom:10px}@media(max-width:600px){.info-tabs139{gap:7px}.info-tabs139 button{font-size:13px;padding:9px 11px}.info-frame139{height:70vh;min-height:360px}}
+/* The decorative depot inherits pointer-events:none from the home screen. */
+.home114-top{pointer-events:auto}
+
+#documents-heading{color:#eef5f8}
+
+#documents-dialog>.dialog-head{position:sticky;top:0;z-index:5;background:#101d2a;padding-bottom:12px}#documents-dialog .info-tabs139 button[aria-selected=true]{background:#d97730;color:#fff;border-color:#ecaa78}
+
+#info-documents144[hidden]{display:none}.sr144-spread{display:grid;gap:6px;max-width:220px;font-size:12px}[data-sr-details144]{font-size:12px;color:#b6d6cb}
+
+/* Keep library tabs below the heading, with one bounded content viewport. */
+#documents-dialog[open]{display:flex;flex-direction:column;overflow:hidden;max-height:94dvh}#documents-dialog>.dialog-head{position:static;flex-shrink:0}#documents-status{flex-shrink:0;margin:8px 0}#documents-content{min-height:0;overflow:auto;flex:1}#documents-content>.info-tabs139{position:static;margin-top:0}#documents-content>section{padding:0;border:0}.info-frame139{height:62dvh;min-height:280px}
+
+#info-original200[hidden]{display:none}#info-original200>p{margin:10px 0}.home180-utils:empty{display:none}
+
+.idle201-guide{position:absolute;z-index:14;left:18px;bottom:100px;width:min(360px,calc(100% - 36px));padding:14px 16px;background:#10252bf2;color:#eef4ef;border:1px solid #b7c9af;border-radius:10px;box-shadow:0 8px 24px #0005;pointer-events:auto;font:14px/1.5 Arial,sans-serif}.idle201-guide[hidden]{display:none!important}.idle201-guide>strong{color:#f3ca8b}.idle201-guide p{margin:6px 0 10px!important;color:#edf4ef!important}.idle201-guide>div{display:flex;gap:6px;flex-wrap:wrap}.idle201-guide button{font-size:12px;padding:7px 10px}.idle201-guide button:focus-visible{outline:3px solid #f3ca8b}@media(max-width:620px){.idle201-guide{left:10px;bottom:90px;width:calc(100% - 20px);font-size:12px;padding:10px}}
+
+#maintenance-hands-panel>.idle201-guide{left:auto;right:18px;bottom:160px;background:#10252bf5!important;color:#eef4ef!important}#sr126-dialog .idle201-guide{background:#10252bf5!important;color:#eef4ef!important}.idle201-guide{background:#10252bf5!important;color:#eef4ef!important}@media(max-width:620px){#maintenance-hands-panel>.idle201-guide{right:10px;bottom:150px}}

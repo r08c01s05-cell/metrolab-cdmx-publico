@@ -1,0 +1,7 @@
+#sr126-dialog .sr146-dossier{margin:12px 0;border:1px solid #536465;border-radius:8px;background:#17282d;color:#d8e1dc;padding:12px;font-size:12px;line-height:1.5}
+#sr126-dialog .sr146-dossier summary{cursor:pointer;font-weight:650;display:flex;flex-wrap:wrap;gap:7px;justify-content:space-between;color:#f2dfbd}
+#sr126-dialog .sr146-dossier summary span{font:500 10px system-ui;letter-spacing:.05em;color:#b8c9c1}
+#sr126-dialog .sr146-dossier dl{margin:12px 0}#sr126-dialog .sr146-dossier dt{font-weight:650;color:#e5c08c;margin-top:9px}#sr126-dialog .sr146-dossier dd{margin:3px 0}
+#sr126-dialog .sr146-dossier ol{padding-left:19px;max-height:200px;overflow:auto}#sr126-dialog .sr146-dossier li{margin:8px 0}
+#sr126-dialog .sr146-dossier small{display:block;color:#a7b9b4;margin-top:12px;line-height:1.5}
+#sr126-dialog .sr146-dossier button{padding:9px 12px!important;background:#304745;border-color:#748d7e;color:#e5f1e9;border-radius:6px}

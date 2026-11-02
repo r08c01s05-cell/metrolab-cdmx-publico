@@ -1,0 +1,5 @@
+export const RESERVED_ZONE91=Object.freeze({cars:3,firstIndex:6,boundary:25.05,scope:'Configuración de referencia; ubicación por estación aproximada.'});
+export const eligibleForReserved91=actor=>actor.modelType==='woman'||actor.modelType==='child'&&(actor.age==null||actor.age<12);
+export const reservedCar91=car=>car>=RESERVED_ZONE91.firstIndex&&car<9;
+export function allocateRoster91(people){const used=new Set(),result=[];for(const actor of [...people].sort((a,b)=>Number(eligibleForReserved91(a))-Number(eligibleForReserved91(b)))){const candidates=Array.from({length:144},(_,i)=>i).filter(slot=>!used.has(slot)&&(eligibleForReserved91(actor)||!reservedCar91(slot%9)));candidates.sort((a,b)=>eligibleForReserved91(actor)?Number(reservedCar91(b%9))-Number(reservedCar91(a%9))||a-b:a-b);if(candidates.length){const slot=candidates[0];used.add(slot);result.push({...actor,slot});}}return result;}
+export function portalAllowed91(portal,train,actor){const car=Math.max(0,Math.min(8,Math.round((portal.x-train.position)/train.direction/16.7)+4));return eligibleForReserved91(actor)||!reservedCar91(car);}

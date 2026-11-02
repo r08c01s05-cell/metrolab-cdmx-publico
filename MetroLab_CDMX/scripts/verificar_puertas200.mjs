@@ -1,0 +1,26 @@
+import './node-textures40.mjs';
+import fs from 'node:fs';import assert from 'node:assert/strict';import * as T from 'three';
+import {loadRectifier127} from '../dist/rectifier-assets127.js';
+import {Walk176} from '../dist/walk176.js';
+import {SubstationMaintenanceUI128} from '../dist/substation-maintenance128.js';
+import {SubstationHand134} from '../dist/substation-hand134.js';
+import {CabinetInteraction135} from '../dist/cabinet-interaction135.js';
+const fetch0=fetch;globalThis.fetch=async u=>String(u).startsWith('./models/')?new Response(fs.readFileSync('dist/'+String(u).slice(2).split('?')[0])):fetch0(u);
+const el=()=>({hidden:false,style:{},append(){},addEventListener(){},setAttribute(){},querySelector(){return null;}}),doc={createElement:el},canvas={parentElement:el(),style:{},addEventListener(){},getBoundingClientRect:()=>({left:0,top:0,width:1000,height:700})},scene=new T.Scene(),model=await loadRectifier127(),camera=new T.PerspectiveCamera(65,1000/700,.01,100);scene.add(model,camera);let grasps=0;const v={model,camera,scene,canvas,dialog:{ownerDocument:doc,querySelector:s=>s==='[data-sr-doors]'?el():null},navigation:{mode:'orbit'},walk176:{enabled:true,locked182:()=>true},pointer:new T.Vector2(),ray:new T.Raycaster(),service128:{active:true,busy:false,carry188:{held:null,message(){}},hand134:null},status:{},renderer:{shadowMap:{}},select(){}};
+v.service128.state={};v.service128.panel=el();v.bagBrowser157={phase:'closed'};const real=new SubstationHand134(v);await real.ready;v.service128.hand134=real;const grasp=real.hand.grasp196.bind(real.hand);real.hand.grasp196=(...args)=>{grasps++;return grasp(...args);};const doors=new CabinetInteraction135(v);v.cabinets=doors;
+let leaves=0;
+for(const row of doors.rows){
+ function aim(){model.updateMatrixWorld(true);const grip=row.handle200.getWorldPosition(new T.Vector3());camera.position.copy(grip).add(new T.Vector3(.12,.1,-.38));camera.lookAt(grip);camera.updateMatrixWorld(true);assert.equal(doors.pick({clientX:500,clientY:350}),row,'The visible exterior handle can be selected: '+row.label);}
+ real.hide();aim();let visibleOpen=0,visibleClose=0;const before=grasps;assert(doors.interact200());for(let i=0;i<25;i++){scene.updateMatrixWorld(true);doors.update(.05);real.update(.05);if(real.glove.root.visible&&real.hand.arm177.root.visible)visibleOpen++;}assert(row.open);assert(visibleOpen>0,"Native hand and arm visible while opening "+row.label);assert(grasps>before,'Hand follows handle while opening');assert(row.door.quaternion.angleTo(row.opened)<.001);
+ aim();const beforeClose=grasps;assert(doors.interact200());for(let i=0;i<25;i++){scene.updateMatrixWorld(true);doors.update(.05);real.update(.05);if(real.glove.root.visible&&real.hand.arm177.root.visible)visibleClose++;}assert(!row.open);assert(visibleClose>0,"Native hand and arm visible while closing "+row.label);assert(grasps>beforeClose,'Hand follows handle while closing '+row.label);assert(row.door.quaternion.angleTo(row.closed)<.001);
+ aim();v.service128.carry188.held={};assert(doors.interact200());assert(!row.open,'Carrying a component prevents door operation');v.service128.carry188.held=null;
+ camera.position.z-=2;camera.updateMatrixWorld(true);assert(!doors.interact200(),'No remote operation beyond arm reach');leaves++;
+}
+// Picking respects the actual leaf rather than reaching through a closed cabinet.
+const row=doors.rows.find(r=>r.id==='mt'),b=new T.Box3().setFromObject(row.door),center=b.getCenter(new T.Vector3());
+const origin=new T.Vector3(center.x,1.2,b.min.z-.5),ray=new T.Raycaster(origin,new T.Vector3(0,0,1)),face=ray.intersectObject(row.door,true)[0];assert(face,'Native closed metal leaf blocks the sightline');
+const target=new T.Mesh(new T.SphereGeometry(.03),new T.MeshBasicMaterial());target.position.copy(face.point).add(new T.Vector3(0,0,.10));target.userData.srTarget128='fan';const bench=new T.Group();bench.add(target);scene.add(bench);scene.updateMatrixWorld(true);const ui={active:true,bench:{group:bench,targets:new Map([['fan',target]])},view:v,state:{step:{target:'fan'},leads:{}}};
+assert.equal(SubstationMaintenanceUI128.prototype.pick135.call(ui,ray),null,'Closed leaf occludes the mounted target');row.door.quaternion.copy(row.opened);scene.updateMatrixWorld(true);assert.equal(SubstationMaintenanceUI128.prototype.pick135.call(ui,ray)?.id,'fan','Opening the native leaf exposes the same target');
+const walk=Object.create(Walk176.prototype);walk.view={model,parts:model.userData.parts,service128:{active:false}};walk.buildObstacles179();const solid=walk.doorSolids200.find(r=>r.door===row.door);walk.near183({x:0,z:0});const openedBox=solid.box.clone();row.door.quaternion.copy(row.closed);walk.near183({x:0,z:0});assert(!solid.box.equals(openedBox),'Moving leaves refresh their own collision without rebuilding the whole model');
+assert.equal(leaves,13);assert.equal(model.userData.finish200.terminations,6);assert.equal(model.userData.finish200.motorLeads,2);
+console.log('200 PASS: all 13 exterior handles open and close during maintenance, native hand/arm follow each leaf, hands must be free, remote activation and interaction through closed leaves rejected; door collisions follow the moving geometry; six phase terminations and two motor leads remain installed.');

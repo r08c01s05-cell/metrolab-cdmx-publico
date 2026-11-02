@@ -1,0 +1,1 @@
+{"scope":"CPU isolated pose test; not browser GPU or FPS","poses":120,"v100":{"cpuMs":42.6,"fullHierarchyUpdates":7920},"v101":{"cpuMs":9.1,"fullHierarchyUpdates":120,"handTargetErrorM":0.0009232632441213495},"graphicsMaxHz":30,"defaultPixelRatio":1,"minimumAdaptivePixelRatio":0.7,"physicsRates":[1,2,5]}

@@ -1,0 +1,55 @@
+{
+  "sources": [
+    {
+      "name": "Grabación 2026-10-14 233343.mp4",
+      "sha256": "9cce2f7237083a2709f65545a04e2c6bd81c0e3862d76c9b4f40f19b70815965",
+      "bytes": 15617126,
+      "use": "Referencia visual; originales conservados en los adjuntos del usuario"
+    },
+    {
+      "name": "Grabación 2026-10-14 233933.mp4",
+      "sha256": "c01be59b28b0a1031aa617ea12e9d1ecd757913c1e006488ebc2847833c7ff93",
+      "bytes": 18340980,
+      "use": "Referencia visual; originales conservados en los adjuntos del usuario"
+    },
+    {
+      "name": "WhatsApp Video 2026-10-14 at 23.43.46.mp4",
+      "sha256": "1aacdb3088de9af9583096c19ad767c96e5beac3562a3afb80ac8bb01f59349b",
+      "bytes": 35445725,
+      "use": "Referencia visual; originales conservados en los adjuntos del usuario"
+    },
+    {
+      "name": "image(20261015-054202).png",
+      "sha256": "baeeb6484fda1e249b95bded04c52137f1c43b185d7545d5731ce3d35818d89b",
+      "bytes": 2075077,
+      "use": "Referencia visual; originales conservados en los adjuntos del usuario"
+    },
+    {
+      "name": "15-prescripciones-mr-25sept-cambios (1).pdf",
+      "sha256": "007219ceb9b4a5eb8f737925c206ce131feffe1c5f3064c5b86bafd44cb4a9dd",
+      "bytes": 2420963,
+      "use": "Documento completo consultable"
+    }
+  ],
+  "pdfPages": {
+    "bogie_and_coupling": 57,
+    "VVVF": 108,
+    "squirrel_cage": 114,
+    "construction": 115
+  },
+  "saf": {
+    "line": 1,
+    "total": 40,
+    "stations": 20,
+    "source": "https://metro.cdmx.gob.mx/storage/app/media/FIMETRO/INFORME-TRIMESTRAL-FIMETRO/2025/Cuarto%20Informe%20Trimestral%202024.pdf",
+    "page": 100,
+    "printedPage": 99,
+    "allocation": "Dos por estación es una distribución ilustrativa acorde con el total agregado; no levantamiento de cada local.",
+    "position": "Zona central de cada interestación; separación de referencia de ±22 m alrededor del punto medio, y locales terminales a ±55 m en el tramo contiguo. Posiciones ilustrativas."
+  },
+  "motors": {
+    "NM22": "Requisito del proyecto L1 2020, no ficha as-built",
+    "NM79": "Familia visual con colector de video; asignación provisional",
+    "MP82": "Familia visual con colector de video; asignación provisional"
+  }
+}

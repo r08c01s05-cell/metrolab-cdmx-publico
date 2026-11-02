@@ -1,0 +1,10 @@
+/* Evidence occupies the instrument rail, never the workpiece. */
+body[data-design147=true] .sr128-reading{font:500 clamp(18px,1.7vw,25px)/1.3 ui-monospace,monospace;min-height:38px;padding:12px 14px;border-radius:7px;color:#d6e8cb;background:#142720}
+body[data-design147=true] .instrument142-card{border:1px solid #607b74;border-radius:10px;padding:15px;background:linear-gradient(145deg,#263d40,#192d31);box-shadow:inset 0 1px #ffffff10}
+body[data-design147=true] .instrument142-card>small{font:600 10px/1.5 system-ui;letter-spacing:.12em;color:#9dc9b7}
+body[data-design147=true] [data-sr128-feedback]{border-left:3px solid #96bfaa;padding:10px 13px;font:13px/1.55 system-ui;color:#d4e3d8;background:#243a3d;border-radius:0 8px 8px 0}
+body[data-design147=true] .sr129-choices{display:grid;gap:9px}body[data-design147=true] .sr129-choices button{text-align:left;line-height:1.4;padding:13px;background:#294244;border:1px solid #6f8880}
+body[data-design147=true] .sr136-toolbelt button{transition:background .12s,border-color .12s,transform .12s}body[data-design147=true] .sr136-toolbelt button:active{transform:translateY(2px)}
+body[data-design147=true] .sr146-dossier{border:1px solid #45605b;border-radius:9px;background:#182d31;padding:12px;margin-top:14px}body[data-design147=true] .sr146-dossier summary{cursor:pointer;color:#b7d4be;font-weight:600}
+.sr148-evidence{font:12px/1.5 system-ui;color:#b7cebe;margin:8px 0}.sr148-evidence svg{display:block;width:100%;height:auto;background:#11251f;border-radius:6px}.sr148-evidence path{fill:none;stroke:#617c70;stroke-width:1}.sr148-evidence polyline{fill:none;stroke:#b1d7ae;stroke-width:2}.sr148-evidence text{font:10px system-ui;fill:#9db7a6}
+@media(prefers-reduced-motion:reduce){body[data-design147=true] .sr136-toolbelt button{transition:none}}

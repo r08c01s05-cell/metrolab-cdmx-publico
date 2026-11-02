@@ -1,0 +1,48 @@
+{
+  "reference": "Fotografías aportadas image(20261015-140352).png e image(20261015-135431).png",
+  "scope": "Disposición visual aproximada, adaptada a los tres modelos; foto sin identificación técnica suficiente para certificar cada versión.",
+  "assets": [
+    {
+      "asset": "NM22_cabina.glb.gz",
+      "guards": 4,
+      "horizontalGuideWheels": 8,
+      "sha256": "c6b85dc8e901c6e342c9509293cdaf3f64539b33bb635a2e0cdd9057a5fbad2e",
+      "approximate": true
+    },
+    {
+      "asset": "NM22_intermedio.glb.gz",
+      "guards": 4,
+      "horizontalGuideWheels": 8,
+      "sha256": "a07a8c07fb572f5cc8415005aeea4fc1ecf84e09536795940e3bd972a56af79c",
+      "approximate": true
+    },
+    {
+      "asset": "NM79_cabina.glb.gz",
+      "guards": 4,
+      "horizontalGuideWheels": 8,
+      "sha256": "ef1a511df5332eb9b4980214a3aca5630382dfd476586588f5760595737fcc34",
+      "approximate": true
+    },
+    {
+      "asset": "NM79_intermedio.glb.gz",
+      "guards": 4,
+      "horizontalGuideWheels": 8,
+      "sha256": "a0aad2abb5e1bac5886738aca8a717271bb0149b6840eeedff5d7663e0286131",
+      "approximate": true
+    },
+    {
+      "asset": "MP82_cabina.glb.gz",
+      "guards": 4,
+      "horizontalGuideWheels": 8,
+      "sha256": "d91993266e94b4ebf9b8e8f656be5cd7374f8f11480c7c951c6627676bc0fe57",
+      "approximate": true
+    },
+    {
+      "asset": "MP82_intermedio.glb.gz",
+      "guards": 4,
+      "horizontalGuideWheels": 8,
+      "sha256": "8b8c86bf38379da01ac3622b643b5153d95a32e75aae8e64caa56c23621e98a4",
+      "approximate": true
+    }
+  ]
+}

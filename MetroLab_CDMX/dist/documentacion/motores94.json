@@ -1,0 +1,38 @@
+[
+  {
+    "file": "models/NM22_cabina.glb.gz",
+    "sha256": "5ece8ed2ba66c201b418721e176dbab33e1b937c579e94943ce84e3d8c014f94",
+    "basis": "requisito_proyecto_L1_2020",
+    "motors": 4
+  },
+  {
+    "file": "models/NM22_intermedio.glb.gz",
+    "sha256": "6bc268324245b6aa2007c8e1949851600c6ab27e48633e316c3c5fa612a9fabd",
+    "basis": "requisito_proyecto_L1_2020",
+    "motors": 4
+  },
+  {
+    "file": "models/NM79_cabina.glb.gz",
+    "sha256": "a4c613efc3274638f655bc84e4a8f7d96810143b8ecce2ee4ab3235d802d003a",
+    "basis": "visual_colector_no_ficha_modelo",
+    "motors": 4
+  },
+  {
+    "file": "models/NM79_intermedio.glb.gz",
+    "sha256": "9935ebeadeba7887850cfebeaf511e8e9bfc05d359f47fa42f452947fc4e7c78",
+    "basis": "visual_colector_no_ficha_modelo",
+    "motors": 4
+  },
+  {
+    "file": "models/MP82_cabina.glb.gz",
+    "sha256": "054aec5411397c71db450c94c7ea784ed50b50fa6073a4bfa67090f1a8fb1fc4",
+    "basis": "visual_colector_no_ficha_modelo",
+    "motors": 4
+  },
+  {
+    "file": "models/MP82_intermedio.glb.gz",
+    "sha256": "cdc1ba59a3762bd60a3e7fb51d2a14a61b7cde2ec1348f3ea360fd107e1048b4",
+    "basis": "visual_colector_no_ficha_modelo",
+    "motors": 4
+  }
+]

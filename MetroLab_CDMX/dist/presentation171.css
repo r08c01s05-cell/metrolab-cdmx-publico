@@ -1,0 +1,13 @@
+/* Technical documentation is exclusively black on white, including selection. */
+.cad168,.cad168 header,.cad168 footer,.cad168-tools,.cad168-paper,.cad168-info,.schedule171{background:#fff!important;color:#000!important}
+.cad168 button,.cad168 select{background:#fff!important;color:#000!important;border:1px solid #000!important;box-shadow:none!important}
+.cad168 small,.cad168 a,.cad168 p,.cad168 h3,.cad168 h4{color:#000!important}
+.cad168 header,.cad168 footer,.cad168-tools{border-color:#000!important}
+.cad168-paper svg{background:#fff!important}
+.cad168-info{border-left:1px solid #000;overflow:auto}
+.schedule171{width:min(490px,44vw);min-width:280px;overflow:auto;padding:16px;box-sizing:border-box;border-left:1px solid #000;font:13px/1.45 Arial}
+.schedule171[hidden]{display:none}.schedule171 header{padding:0 0 10px!important}.schedule171 h3{font-size:18px}.schedule171 select{width:100%;padding:8px;margin:6px 0 12px}.schedule171 table{width:100%;border-collapse:collapse;table-layout:fixed}.schedule171 th,.schedule171 td{padding:8px 6px;border:1px solid #000;text-align:left;vertical-align:top;overflow-wrap:anywhere}.schedule171 th{width:43%;font-weight:normal}.schedule171 button{padding:8px;margin:8px 5px 8px 0}.schedule171 details{margin-top:12px}.schedule171 summary{cursor:pointer;font-weight:bold}
+@media(max-width:800px){.schedule171{position:absolute;inset:135px 0 60px auto;width:min(490px,96%);z-index:3}.cad168-info{background:#fff!important;box-shadow:none!important}}
+@media print{.cad168-tools,.cad168 header button,.cad168 footer,.schedule171 button{display:none!important}.cad168{position:static!important}.cad168-paper{min-height:190mm}.schedule171{overflow:visible;width:100%;border:0}.cad168-body{display:block}}
+
+@media screen{.cad168,.cad168 header,.cad168 footer,.cad168-tools,.cad168-info,.schedule171{background:#dce1d9!important;color:#182528!important}.cad168-paper,.cad168-paper svg{background:#c5cdc7!important}.cad168 button,.cad168 select{background:#e6e9e1!important;color:#182528!important;border-color:#66756d!important}.cad168-paper svg>rect:first-of-type{fill:#dce1d9}.cad168-paper svg text{font-weight:600;fill:#182528}}

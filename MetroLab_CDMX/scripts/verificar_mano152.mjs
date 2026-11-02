@@ -1,0 +1,37 @@
+import './node-textures40.mjs';import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';import * as THREE from 'three';import {SubstationMaintenanceUI128} from '../dist/substation-maintenance128.js';import {GLTFLoader} from '../dist/vendor/GLTFLoader.js';import zlib from 'node:zlib';
+const fragment=fs.readFileSync('scripts/verificar_arranque95.mjs','utf8'),scope={assert};vm.createContext(scope);vm.runInContext(fragment.slice(fragment.indexOf('const voidTags='),fragment.indexOf('const html='))+';globalThis.parseDOM=parse;globalThis.DOMElement=Element;',scope);const{parseDOM,DOMElement}=scope;for(const key of['id','type'])Object.defineProperty(DOMElement.prototype,key,{get(){return this.attrs[key];},set(v){this.attrs[key]=v;}});DOMElement.prototype.addEventListener=function(k,f){this.events??={};(this.events[k]??=[]).push(f);};DOMElement.prototype.click=function(){if(!this.disabled)for(const f of this.events?.click||[])f({target:this,currentTarget:this});};const oldSetter=Object.getOwnPropertyDescriptor(DOMElement.prototype,'innerHTML').set;Object.defineProperty(DOMElement.prototype,'innerHTML',{set(s){oldSetter.call(this,s.replace(/\b(data-[\w-]+)(?=[\s>])/g,'$1=""'));}});
+const doc=parseDOM('<body><dialog></dialog></body>');globalThis.requestAnimationFrame=f=>setTimeout(f,0);globalThis.document=doc;doc.body=doc.querySelector('body');doc.createElement=tag=>new DOMElement(tag);const dialog=doc.querySelector('dialog');dialog.ownerDocument=doc;dialog.innerHTML='<button data-sr-explore-mode></button><button data-sr-maintain-mode></button><div data-sr-explore></div><div class="sr126-layout"><div class="sr126-viewport"><div class="sr126-stage"><canvas></canvas></div></div><aside><section data-sr-maintenance-root></section></aside></div>'+['interior','explode','isolate','doors','home','entry'].map(k=>'<button data-sr-'+k+'></button>').join('');const canvas=doc.querySelector('canvas');canvas.getBoundingClientRect=()=>({left:170,top:80,width:1000,height:680});let capture=null;canvas.setPointerCapture=id=>capture=id;canvas.hasPointerCapture=id=>capture===id;canvas.releasePointerCapture=()=>capture=null;
+const native=fetch;globalThis.fetch=async u=>String(u).startsWith('./models/')?new Response(fs.readFileSync('dist/'+String(u).slice(2).split('?')[0])):native(u);
+const {loadRectifier127}=await import('../dist/rectifier-assets127.js');const model150=await loadRectifier127();const scene=new THREE.Scene(),parts=model150.userData.parts;scene.add(model150);const camera=new THREE.PerspectiveCamera(42,1000/680,.05,100),controls={enabled:true,enableRotate:true,mouseButtons:{LEFT:THREE.MOUSE.ROTATE},target:new THREE.Vector3(),update(){camera.lookAt(this.target);camera.updateMatrixWorld(true);}},view={canvas,dialog,scene,parts,camera,controls,pointer:new THREE.Vector2(),ray:new THREE.Raycaster(),model:model150,status:{},selected:'transformer',interior:true,isolated:false,exploded:false,doorsVisible:true,select(id){this.selected=id;},focus(g){const c=new THREE.Box3().setFromObject(g).getCenter(new THREE.Vector3());camera.position.copy(c).add(new THREE.Vector3(0,0,-3));controls.target.copy(c);controls.update();},resize(){}};
+view.renderer={compileAsync:async()=>{},render(){}};
+const ui=new SubstationMaintenanceUI128(view,null);ui.setActive(true);
+const eventAt=(world,canvas)=>{camera.updateMatrixWorld(true);const p=world.clone().project(camera),r=canvas.getBoundingClientRect();return{pointerId:31,button:0,buttons:0,clientX:r.left+(p.x+1)*r.width/2,clientY:r.top+(1-p.y)*r.height/2,target:canvas,preventDefault(){},stopImmediatePropagation(){}};};
+const fire=(name,e)=>{const r=canvas.getBoundingClientRect();assert(e.clientX>=r.left&&e.clientX<=r.left+r.width&&e.clientY>=r.top&&e.clientY<=r.top+r.height,'Target must be inside the visible canvas');canvas.events[name].at(-1)(e);};
+await ui.start('ventilation');const beforeButton143=ui.state.index;ui.panel.querySelector('[data-sr128-target="fan"]').click();assert.equal(ui.state.index,beforeButton143+1,'Guided named actions must equip the required tool too');let mouseActions=0;
+for(const id of ['ventilation','control','battery','diodes','insulation','relay']){
+ await ui.start(id);let guard=200;
+ while(!ui.state.done&&guard--){
+  const step=ui.state.step;
+  if(step.choices){const button=ui.panel.querySelector('[data-sr129-choice="'+step.target+'"]');assert(button);button.click();continue;}
+  const target=ui.bench.targets.get(step.target);assert(target,id+' '+step.target);ui.bench.group.updateMatrixWorld(true);const point=new THREE.Box3().setFromObject(target).getCenter(new THREE.Vector3()),e=eventAt(point,canvas),before=ui.state.index;
+  const hit=ui.play135.pick(e);assert.equal(hit?.id,step.target,id+' actual ray at step '+before+' '+step.target);
+  fire('pointerdown',e);
+  if(ui.play135.drag){const to=eventAt(ui.play135.drag.destination,canvas);fire('pointermove',{...to,buttons:1});fire('pointerup',to);}else fire('pointerup',e);
+  for(let n=0;n<30;n++)ui.update(.04);let clock148=0;while(ui.state.pending148&&clock148++<200)ui.update(.05);assert(clock148<200,'Measurement timer resolves');mouseActions++;
+ }
+ assert(ui.state.done,id+' stalled at '+ui.state.step?.text);
+ assert(ui.bench.installed150);assert(!ui.room132);assert([...parts.values()].filter(p=>p.visible).length>=10,'Installation remains visible');assert(ui.bench.mounted150);const fixed=ui.bench.group.position.clone();for(let j=0;j<30;j++)ui.update(.04);assert(ui.bench.group.position.distanceTo(fixed)<1e-9,'Mounted equipment remains fixed');console.log('150 installed mouse PASS',id);
+}
+ui.setActive(false);
+
+console.log('150 PASS:',mouseActions,'projected pointer actions, all six installed missions; original installation visible; no separate workshop; stable equipment mounts. DOM/CPU.');
+
+ui.setActive(true);await ui.start('ventilation');
+const hand152=dialog.querySelector('[data-sr128-tool="hand"]'),inspect152=dialog.querySelector('[data-sr128-tool="inspect"]');
+assert(hand152&&!hand152.hidden,'Gloved hand is an independent visible tool');assert(inspect152&&!inspect152.hidden);assert(hand152.textContent.includes('Mano con guante'));assert(inspect152.textContent.includes('Inspección visual'));
+hand152.click();assert.equal(ui.state.tool,'hand');assert(!ui.play135.guided,'Explicit selection disables auto tool');assert(ui.play135.dock.querySelector('[data-tool152-help]').textContent.includes('Mano con guante'));
+while(ui.state.step.effect!=='remove'){ui.state.choose(ui.state.step.tool);assert(ui.act(ui.state.step.target).ok);}
+assert.equal(ui.state.step.tool,'hand');ui.state.choose('inspect');const before152=ui.state.index;assert(!ui.act('filter').ok);assert.equal(ui.state.index,before152,'Inspection cannot remove the filter');hand152.click();assert(ui.act('filter').ok);assert.equal(ui.state.index,before152+1,'Gloved hand removes the filter through native callback');
+let hidden152=0,shown152=0;ui.hand134={hide(){hidden152++;},show(target,tool){assert.equal(tool,'hand');shown152++;}};
+SubstationMaintenanceUI128.prototype.showHand135.call(ui,ui.bench.targets.get('filter'),'inspect');SubstationMaintenanceUI128.prototype.showHand135.call(ui,ui.bench.targets.get('filter'),'hand');assert.equal(hidden152,1);assert.equal(shown152,1);
+console.log('152 PASS: visible separate hand/eye tools, manual selection, contextual help, inspection cannot manipulate, hand action advances the real mission, observation hides the glove.');

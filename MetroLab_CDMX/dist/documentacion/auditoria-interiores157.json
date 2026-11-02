@@ -1,0 +1,82 @@
+[
+  {
+    "asset": "NM22_cabina",
+    "replacementSeats": 0,
+    "doorLeavesPreserved": 64,
+    "animationsPreserved": 0,
+    "materials": [
+      "Cristal azul gris transparente",
+      "Piso gris antideslizante PBR41",
+      "Banca marfil53",
+      "Borde naranja asiento53"
+    ],
+    "floorTileMetres": 0.5,
+    "bytes": 3519447
+  },
+  {
+    "asset": "NM22_intermedio",
+    "replacementSeats": 0,
+    "doorLeavesPreserved": 64,
+    "animationsPreserved": 0,
+    "materials": [
+      "Cristal azul gris transparente",
+      "Piso gris antideslizante PBR41",
+      "Banca marfil53",
+      "Borde naranja asiento53"
+    ],
+    "floorTileMetres": 0.5,
+    "bytes": 3514335
+  },
+  {
+    "asset": "NM79_cabina",
+    "replacementSeats": 26,
+    "doorLeavesPreserved": 64,
+    "animationsPreserved": 0,
+    "materials": [
+      "Cristal azul gris transparente",
+      "Piso gris grano fino L8 referencia141",
+      "Asiento polimero verde moldeado157"
+    ],
+    "floorTileMetres": 0.5,
+    "bytes": 2698543
+  },
+  {
+    "asset": "NM79_intermedio",
+    "replacementSeats": 28,
+    "doorLeavesPreserved": 64,
+    "animationsPreserved": 0,
+    "materials": [
+      "Cristal azul gris transparente",
+      "Piso gris grano fino L8 referencia141",
+      "Asiento polimero verde moldeado157"
+    ],
+    "floorTileMetres": 0.5,
+    "bytes": 2594257
+  },
+  {
+    "asset": "MP82_cabina",
+    "replacementSeats": 26,
+    "doorLeavesPreserved": 64,
+    "animationsPreserved": 16,
+    "materials": [
+      "Cristal gris azul",
+      "Piso gris grano fino L8 referencia141",
+      "Asiento polimero verde moldeado157"
+    ],
+    "floorTileMetres": 0.5,
+    "bytes": 2388794
+  },
+  {
+    "asset": "MP82_intermedio",
+    "replacementSeats": 28,
+    "doorLeavesPreserved": 64,
+    "animationsPreserved": 16,
+    "materials": [
+      "Cristal gris azul",
+      "Piso gris grano fino L8 referencia141",
+      "Asiento polimero verde moldeado157"
+    ],
+    "floorTileMetres": 0.5,
+    "bytes": 2308405
+  }
+]

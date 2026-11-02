@@ -1,0 +1,313 @@
+{
+  "source": {
+    "1": "WhatsApp Video 2026-10-10 at 22.17.56.mp4 · anuncios NE-92",
+    "8": "WhatsApp Video 2026-10-10 at 22.17.57.mp4 · pruebas NE-92, según rótulo del video"
+  },
+  "stations": {
+    "L1-20": {
+      "url": "audio/revision30/L1-20.mp3",
+      "line": 1,
+      "name": "Observatorio",
+      "start": 0,
+      "end": 14.5,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-19": {
+      "url": "audio/revision30/L1-19.mp3",
+      "line": 1,
+      "name": "Tacubaya",
+      "start": 14.5,
+      "end": 30,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-18": {
+      "url": "audio/revision30/L1-18.mp3",
+      "line": 1,
+      "name": "Juanacatlán",
+      "start": 30,
+      "end": 36.5,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-17": {
+      "url": "audio/revision30/L1-17.mp3",
+      "line": 1,
+      "name": "Chapultepec",
+      "start": 36.5,
+      "end": 41.5,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-16": {
+      "url": "audio/revision30/L1-16.mp3",
+      "line": 1,
+      "name": "Sevilla",
+      "start": 41.5,
+      "end": 48,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-15": {
+      "url": "audio/revision30/L1-15.mp3",
+      "line": 1,
+      "name": "Insurgentes",
+      "start": 48,
+      "end": 54.75,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-14": {
+      "url": "audio/revision30/L1-14.mp3",
+      "line": 1,
+      "name": "Cuauhtémoc",
+      "start": 54.75,
+      "end": 59.75,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-13": {
+      "url": "audio/revision30/L1-13.mp3",
+      "line": 1,
+      "name": "Balderas",
+      "start": 59.75,
+      "end": 72.25,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-12": {
+      "url": "audio/revision30/L1-12.mp3",
+      "line": 1,
+      "name": "Salto del Agua",
+      "start": 72.25,
+      "end": 84.75,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-11": {
+      "url": "audio/revision30/L1-11.mp3",
+      "line": 1,
+      "name": "Isabel la Católica",
+      "start": 84.75,
+      "end": 92.5,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-10": {
+      "url": "audio/revision30/L1-10.mp3",
+      "line": 1,
+      "name": "Pino Suárez",
+      "start": 92.5,
+      "end": 103.5,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-09": {
+      "url": "audio/revision30/L1-09.mp3",
+      "line": 1,
+      "name": "Merced",
+      "start": 103.5,
+      "end": 110,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-08": {
+      "url": "audio/revision30/L1-08.mp3",
+      "line": 1,
+      "name": "Candelaria",
+      "start": 110,
+      "end": 122,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-07": {
+      "url": "audio/revision30/L1-07.mp3",
+      "line": 1,
+      "name": "San Lázaro",
+      "start": 122,
+      "end": 128.75,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-06": {
+      "url": "audio/revision30/L1-06.mp3",
+      "line": 1,
+      "name": "Moctezuma",
+      "start": 128.75,
+      "end": 134.75,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-05": {
+      "url": "audio/revision30/L1-05.mp3",
+      "line": 1,
+      "name": "Balbuena",
+      "start": 134.75,
+      "end": 140,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-04": {
+      "url": "audio/revision30/L1-04.mp3",
+      "line": 1,
+      "name": "Boulevard Puerto Aéreo",
+      "start": 140,
+      "end": 148.25,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-03": {
+      "url": "audio/revision30/L1-03.mp3",
+      "line": 1,
+      "name": "Gómez Farías",
+      "start": 148.25,
+      "end": 154.75,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-02": {
+      "url": "audio/revision30/L1-02.mp3",
+      "line": 1,
+      "name": "Zaragoza",
+      "start": 154.75,
+      "end": 160,
+      "reference": "NE-92 · aportado"
+    },
+    "L1-01": {
+      "url": "audio/revision30/L1-01.mp3",
+      "line": 1,
+      "name": "Pantitlán",
+      "start": 160,
+      "end": 172,
+      "reference": "NE-92 · aportado"
+    },
+    "L8-19": {
+      "url": "audio/revision30/L8-19.mp3",
+      "line": 8,
+      "name": "Constitución de 1917",
+      "start": 0,
+      "end": 14.75,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-15": {
+      "url": "audio/revision30/L8-15.mp3",
+      "line": 8,
+      "name": "Atlalilco",
+      "start": 14.75,
+      "end": 20.25,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-14": {
+      "url": "audio/revision30/L8-14.mp3",
+      "line": 8,
+      "name": "Escuadrón 201",
+      "start": 20.25,
+      "end": 25.75,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-13": {
+      "url": "audio/revision30/L8-13.mp3",
+      "line": 8,
+      "name": "Aculco",
+      "start": 25.75,
+      "end": 30.5,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-12": {
+      "url": "audio/revision30/L8-12.mp3",
+      "line": 8,
+      "name": "Apatlaco",
+      "start": 30.5,
+      "end": 36,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-11": {
+      "url": "audio/revision30/L8-11.mp3",
+      "line": 8,
+      "name": "Iztacalco",
+      "start": 36,
+      "end": 40.5,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-10": {
+      "url": "audio/revision30/L8-10.mp3",
+      "line": 8,
+      "name": "Coyuya",
+      "start": 40.5,
+      "end": 45.25,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-09": {
+      "url": "audio/revision30/L8-09.mp3",
+      "line": 8,
+      "name": "Santa Anita",
+      "start": 45.25,
+      "end": 55.5,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-08": {
+      "url": "audio/revision30/L8-08.mp3",
+      "line": 8,
+      "name": "La Viga",
+      "start": 55.5,
+      "end": 60,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-07": {
+      "url": "audio/revision30/L8-07.mp3",
+      "line": 8,
+      "name": "Chabacano",
+      "start": 60,
+      "end": 75,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-06": {
+      "url": "audio/revision30/L8-06.mp3",
+      "line": 8,
+      "name": "Obrera",
+      "start": 75,
+      "end": 79.5,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-05": {
+      "url": "audio/revision30/L8-05.mp3",
+      "line": 8,
+      "name": "Doctores",
+      "start": 79.5,
+      "end": 85,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-04": {
+      "url": "audio/revision30/L8-04.mp3",
+      "line": 8,
+      "name": "Salto del Agua",
+      "start": 85,
+      "end": 95.25,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-03": {
+      "url": "audio/revision30/L8-03.mp3",
+      "line": 8,
+      "name": "San Juan de Letrán",
+      "start": 95.25,
+      "end": 100.75,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-02": {
+      "url": "audio/revision30/L8-02.mp3",
+      "line": 8,
+      "name": "Bellas Artes",
+      "start": 100.75,
+      "end": 111,
+      "reference": "NE-92 · aportado · prueba"
+    },
+    "L8-01": {
+      "url": "audio/revision30/L8-01.mp3",
+      "line": 8,
+      "name": "Garibaldi",
+      "start": 111,
+      "end": 125,
+      "reference": "NE-92 · aportado · prueba"
+    }
+  },
+  "missing": [
+    {
+      "id": "L8-16",
+      "name": "Iztapalapa",
+      "line": 8
+    },
+    {
+      "id": "L8-17",
+      "name": "Cerro de la Estrella",
+      "line": 8
+    },
+    {
+      "id": "L8-18",
+      "name": "UAM-I",
+      "line": 8
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+/* Game-style work order and tool belt; never cover the work surface. */
+#sr126-dialog[data-sr-play136=true]{--sr145-gold:#efb56d;background:#111a20}
+#sr126-dialog[data-sr-play136=true] .sr126-header{background:linear-gradient(105deg,#25383d,#121c23);border-bottom:1px solid #6a7772}
+#sr126-dialog[data-sr-play136=true] .sr126-header small{letter-spacing:.2em;color:#e4ba83;font-size:10px}
+#sr126-dialog[data-sr-play136=true] .sr126-header h2{font-size:20px}
+#sr126-dialog .sr136-objective{background:linear-gradient(115deg,#233439,#14242b);border-left:4px solid #efb56d;border-radius:0 10px 10px 0;padding:16px 20px;box-shadow:0 8px 24px #0002}
+#sr126-dialog .sr136-objective-top{letter-spacing:.18em;color:#d6bc95;font:600 10px system-ui}
+#sr126-dialog .sr136-objective-top b{padding:5px 9px;border:1px solid #7a715f;border-radius:5px;letter-spacing:.06em;background:#101d23}
+#sr126-dialog .sr136-objective h3{font:600 20px/1.25 system-ui;margin:9px 0 7px;color:#f0f0e6}
+#sr126-dialog .sr136-objective p{font-size:14px;line-height:1.5;color:#d5e0dc;margin:0 0 12px}
+#sr126-dialog .sr136-track{height:5px;border-radius:5px;background:#0a161d;overflow:hidden}
+#sr126-dialog .sr136-track i{background:linear-gradient(90deg,#d5a764,#9bc7a8);height:100%;display:block;transition:width .3s}
+#sr126-dialog .sr136-toolbelt{background:#16242b;border:1px solid #3d555a;border-radius:12px;padding:12px 16px;box-shadow:0 -5px 25px #0002}
+#sr126-dialog .sr136-toolbelt-head{color:#d2ded8;letter-spacing:.1em;font:600 10px system-ui;gap:14px}
+#sr126-dialog .sr136-toolbelt-head label{letter-spacing:0;font-size:12px}
+#sr126-dialog .sr136-toolbelt .sr128-tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+#sr126-dialog .sr136-toolbelt button[data-sr128-tool]{flex:1 1 105px;min-height:48px;border-radius:7px;background:#23343c;border:1px solid #50646a;padding:10px!important;font:500 12px system-ui!important;transition:background .15s,border-color .15s}
+#sr126-dialog .sr136-toolbelt button[data-sr128-tool]:hover{border-color:#cdbb98;background:#30454c}
+#sr126-dialog .sr136-toolbelt button[data-sr128-tool][aria-pressed=true]{border-color:#e6ba7d;background:#4b493b;color:#fff0d4;box-shadow:inset 0 -3px #d8aa6e}
+#sr126-dialog .sr136-objective-actions button{border-radius:6px;background:#283e43;border-color:#607a7b;min-height:34px;font-size:12px}
+#sr126-dialog [data-use145]{display:block;color:#b6d9c9;font-size:12px;min-height:18px;margin-top:7px}
+#sr126-dialog [data-use145][data-working145=true]{color:#f1c789}
+#sr126-dialog .sr135-gesture progress{accent-color:#efb56d;height:8px}
+#sr126-dialog[data-sr-play136=true] [data-sr128-feedback]{background:#233a3b;color:#d7e8df;border-left:3px solid #9bc8b4;font-size:13px;line-height:1.5}
+#sr126-dialog[data-sr-play136=true] .sr128-reading{font:600 24px/1.3 ui-monospace,monospace;color:#b6e1bf;background:#101b20;padding:12px;border:1px solid #425c53;border-radius:8px;font-variant-numeric:tabular-nums}
+#sr126-dialog[data-sr-play136=true] .sr128-missions button{border-radius:7px;padding:11px!important;background:#1e3036;border-color:#455d60}
+#sr126-dialog[data-sr-play136=true] .sr128-missions button[aria-pressed=true]{border-color:#d9b17e;background:#3a453f}
+#sr126-dialog .sr136-controls{font-size:10px;color:#9eb2b2;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#sr126-dialog button:focus-visible{outline:3px solid #e9bc7f;outline-offset:3px}
+@media(max-width:800px){#sr126-dialog .sr136-objective{padding:12px 14px}#sr126-dialog .sr136-objective h3{font-size:16px}#sr126-dialog .sr136-objective p{font-size:12px}#sr126-dialog .sr136-toolbelt{padding:10px}#sr126-dialog .sr136-toolbelt button[data-sr128-tool]{flex-basis:95px;min-height:40px}}
+@media(prefers-reduced-motion:reduce){#sr126-dialog *{transition:none!important}}
+
+#sr126-dialog .sr136-toolbelt button[data-sr128-tool]{display:flex;align-items:center;gap:8px;text-align:left}#sr126-dialog .sr136-toolbelt button[data-sr128-tool] svg{width:27px;height:27px;flex:0 0 27px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}#sr126-dialog .sr136-toolbelt kbd{font:600 10px ui-monospace,monospace;background:#122329;border:1px solid #668078;border-radius:3px;padding:2px 4px}

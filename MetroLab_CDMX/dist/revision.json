@@ -1,0 +1,34 @@
+{
+  "revision": 17,
+  "modelos": [
+    {
+      "archivo": "models/MP82_cabina.glb",
+      "sha256": "b9741133252aac56b8512f1fcfe2310209e301d64298908e5e0fc4ab44dc8739"
+    },
+    {
+      "archivo": "models/MP82_intermedio.glb",
+      "sha256": "4cb1805dc63d7ced1e9ca9313a364c887dad7de2710c612c8faaa65a9f1cd48c"
+    },
+    {
+      "archivo": "models/NM22_cabina.glb",
+      "sha256": "1db607ea47c047be2b117a47d79d917dbeeaf983a40c388b1c736e1a6e9724e6"
+    },
+    {
+      "archivo": "models/NM22_intermedio.glb",
+      "sha256": "3706b798d0c68eede7177adcecf077aebcff2e169ea2b8ade017e4c6bd4358c9"
+    },
+    {
+      "archivo": "models/NM79_cabina.glb",
+      "sha256": "f6121ac640a7a1f7d23f76245a52cf2342900bfe2e893c0d1ec6b1cf993f7760"
+    },
+    {
+      "archivo": "models/NM79_intermedio.glb",
+      "sha256": "a0daff104c4016a2cc5577e0ec2b74b9962e659513b6e32b224ffd431667e86e"
+    }
+  ],
+  "estaciones": 39,
+  "nuevas_fotografias": 17,
+  "native_blend_actualizados": false,
+  "revision_estaciones": 18,
+  "mapa_linea_1": "Esquema aportado por el usuario"
+}

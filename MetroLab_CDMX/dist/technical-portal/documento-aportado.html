@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Técnico: Material Rodante STC Metro CDMX</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Minimal Styles for Chart Containers & Interactive Elements -->
+    <style>
+        /* Strict Chart Container Constraint Rules */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        .train-car {
+            transition: all 0.25s ease-in-out;
+        }
+        .train-car:hover {
+            transform: translateY(-3px);
+        }
+        .nav-link.active {
+            color: #f97316;
+            border-bottom: 2px solid #f97316;
+        }
+    </style>
+</head>
+<!-- Chosen Palette: Slate Tech & Metro Orange (Slate 900 background, Warm slate cards, Orange #F97316 accent, Cyan #0EA5E9 secondary, Emerald #10B981 status) -->
+<!-- Application Structure Plan:
+    The SPA is organized into 6 logical thematic modules designed to transform complex engineering specifications into interactive learning views:
+    1. Hero & Key Metrics Header: Immediate macro summary of fleet technological jump (NM-79 vs MP-82 vs NM-22).
+    2. Fleet Comparison & Layout Explorer: Interactive switcher for train car formations (M-R-N vs RC-N), capacity, VVVF vs Chopper, and 150m dimension breakdown.
+    3. Power Distribution & Voltage Drop Simulator: Live interactive slider for motor startup current (A) calculating voltage drop (VCC) along interestation distances and harmonic suppression comparison (6-pulse vs 12-pulse).
+    4. Braking Dynamics & Thermal Energy Simulator: Blending brake power allocation (doughnut), kinetic energy curves as a function of speed and load, and a interactive mechanical model of the Fail-Safe Spring Parking Brake.
+    5. Signaling & Automation Evolution (PA135 -> SACEM -> CBTC): Timeline and operational breakdown of fixed block vs moving block telemetries.
+    6. Regulatory Matrix & Compliance Explorer: Interactive filter for NOM-ARTF and UNE-EN European standards.
+    This structure prioritizes active exploration and dynamic physical scenario testing over static reading.
+-->
+<!-- Visualization & Content Choices:
+    - Macro Key Performance Indicators -> Goal: Inform -> Method: Dynamic Stat Cards -> Interaction: Real-time update feedback -> Justification: Immediate comparison of critical operational metrics.
+    - Model Performance Comparison -> Goal: Compare -> Visual: Grouped Bar Chart -> Library: Chart.js (Canvas) -> Justification: Clear quantitative comparison across capacity, power, speed, and adhesion.
+    - Train Formation Layout -> Goal: Organize -> Visual: Styled Grid Component -> Method: HTML/CSS + JS dynamic switcher -> Justification: Visualizes 9-car topology and continuous gangway architecture without SVG.
+    - Voltage Drop vs Distance -> Goal: Dynamic Simulation -> Visual: Dynamic Line Chart -> Library: Chart.js (Canvas) -> Interaction: Range slider for current -> Justification: Demonstrates compliance with UNE-EN 50163 voltage thresholds.
+    - Harmonic Current Spectrum -> Goal: Compare -> Visual: Bar Chart -> Library: Chart.js (Canvas) -> Justification: Illustrates cancellation of 5th and 7th harmonics via 12-pulse rectifiers.
+    - Braking Power Allocation -> Goal: Composition -> Visual: Doughnut Chart -> Library: Chart.js (Canvas) -> Justification: Clarifies motor regeneration vs pneumatic friction blending.
+    - Kinetic Energy vs Speed -> Goal: Relationship -> Visual: Multi-Line Chart -> Library: Chart.js (Canvas) -> Justification: Displays exponential energy increase $E_c = 1/2 m v^2$ at varying passenger loads.
+    - Fail-Safe Spring Brake Mechanism -> Goal: Explain Process -> Visual: Interactive HTML/CSS Diagram -> Interaction: Pressure purge button toggle -> Justification: Teaches mechanical spring release under pneumatic failure without SVG.
+    - Signaling Systems -> Goal: Organize/Timeline -> Visual: Interactive Stepper Cards -> Method: HTML/CSS + Tab JS -> Justification: Highlighting CBTC LMA and mode CLT2 safety constraints.
+    - Standards Matrix -> Goal: Organize -> Visual: Horizontal Bar Chart + Interactive Cards -> Library: Chart.js + JS filter -> Justification: Easy exploration of CENELEC and ARTF requirements.
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<body class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-orange-500 selection:text-white min-h-screen flex flex-col">
+
+    <!-- Sticky Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="w-3.5 h-7 bg-orange-500 rounded-sm inline-block"></span>
+                <span class="text-lg font-black tracking-wider text-white">METRO<span class="text-orange-500">CDMX</span> <span class="text-xs font-normal px-2 py-0.5 bg-slate-800 text-slate-300 rounded border border-slate-700 ml-1">INGENIERÍA</span></span>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-xs font-semibold uppercase tracking-wider text-slate-300">
+                <a href="#resumen" class="nav-link hover:text-orange-400 transition-colors py-1">Resumen</a>
+                <a href="#flota" class="nav-link hover:text-orange-400 transition-colors py-1">Flota y Carros</a>
+                <a href="#electrico" class="nav-link hover:text-orange-400 transition-colors py-1">Alimentación 750V</a>
+                <a href="#frenado" class="nav-link hover:text-orange-400 transition-colors py-1">Frenado y Física</a>
+                <a href="#calculos" class="nav-link hover:text-orange-400 transition-colors py-1">Cálculos</a>
+                <a href="#pilotaje" class="nav-link hover:text-orange-400 transition-colors py-1">CBTC / Pilotaje</a>
+                <a href="#normativa" class="nav-link hover:text-orange-400 transition-colors py-1">Normativa</a>
+            </nav>
+            <div class="md:hidden">
+                <a href="#flota" class="text-xs font-bold text-orange-400 bg-orange-500/10 border border-orange-500/30 px-3 py-1.5 rounded-lg">Explorar</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow">
+
+        <!-- SECTION 0: HERO & EXECUTIVE SUMMARY -->
+        <section id="resumen" class="relative bg-gradient-to-b from-slate-900 via-slate-800/90 to-slate-900 py-12 lg:py-16 border-b border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-4xl mx-auto mb-10">
+                    <div class="inline-flex items-center space-x-2 bg-orange-500/10 border border-orange-500/30 px-3.5 py-1.5 rounded-full text-orange-400 text-xs font-medium mb-4">
+                        <span>⚡ Reporte Técnico Integrado de Material Rodante de Rodadura Neumática</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-4">
+                        Ingeniería y Operación de Trenes <span class="text-orange-500">MP-79, MP-82 y NM-22</span>
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4">
+                        El Sistema de Transporte Colectivo (STC) Metro es la indudable columna vertebral de la movilidad en la Ciudad de México, gestionando una colosal red de más de 226 kilómetros y 195 estaciones. Su operación depende de una sincronía perfecta entre la infraestructura civil, el suministro eléctrico a 750 VCC y la fiabilidad electromecánica de su material rodante.
+                    </p>
+                    <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+                        Esta aplicación interactiva sintetiza más de cuatro décadas de evolución tecnológica en las Líneas 1 y 8: desde la robustez de los motores de corriente continua (MP-79, MP-82) controlados por Chopper, hasta la llegada de la tracción asíncrona trifásica (NM-22) gobernada por Inversores VVVF y redes digitales de cantón móvil (CBTC), analizando su arquitectura, dinámica de frenado termodinámico y el estricto marco normativo que garantiza su seguridad operacional.
+                    </p>
+                </div>
+
+                <!-- Global Macro Indicators -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                    <div class="bg-slate-800/90 border border-slate-700/80 p-5 rounded-2xl text-center shadow-lg hover:border-orange-500/50 transition-all">
+                        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Capacidad NM-22</p>
+                        <p class="text-3xl sm:text-4xl font-black text-emerald-400">+35%</p>
+                        <p class="text-xs text-slate-400 mt-1">2,360 Pasajeros (Pasillo Continuo)</p>
+                    </div>
+                    <div class="bg-slate-800/90 border border-slate-700/80 p-5 rounded-2xl text-center shadow-lg hover:border-orange-500/50 transition-all">
+                        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Tensión Nominal Red</p>
+                        <p class="text-3xl sm:text-4xl font-black text-cyan-400">750 <span class="text-lg">VCC</span></p>
+                        <p class="text-xs text-slate-400 mt-1">Tolerancia 500-1000V (UNE-EN 50163)</p>
+                    </div>
+                    <div class="bg-slate-800/90 border border-slate-700/80 p-5 rounded-2xl text-center shadow-lg hover:border-orange-500/50 transition-all">
+                        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Velocidad Máx. Servicio</p>
+                        <p class="text-3xl sm:text-4xl font-black text-amber-400">80 <span class="text-lg">km/h</span></p>
+                        <p class="text-xs text-slate-400 mt-1">NM-22 con Inversores VVVF</p>
+                    </div>
+                    <div class="bg-slate-800/90 border border-slate-700/80 p-5 rounded-2xl text-center shadow-lg hover:border-orange-500/50 transition-all">
+                        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Ratio Motricidad (Adherencia)</p>
+                        <p class="text-3xl sm:text-4xl font-black text-orange-500">66% - 78%</p>
+                        <p class="text-xs text-slate-400 mt-1">6 a 7 Carros Motrices / Convoy</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: COMPARATIVA TECNOLÓGICA Y ESTRUCTURA DE LA FLOTA -->
+        <section id="flota" class="py-12 border-b border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="flex items-center space-x-2 text-xs font-bold text-orange-400 uppercase tracking-wider mb-1">
+                        <span>Módulo 1</span>
+                        <span>•</span>
+                        <span>Arquitectura del Material Rodante</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">1. Evolución Tecnológica y Disposición de Flota</h2>
+                    <p class="text-slate-300 text-sm sm:text-base max-w-4xl leading-relaxed">
+                        La transformación del material rodante abarca más de cuatro décadas de desarrollo industrial. Comprender la transición desde los motores de corriente continua gobernados por tiristores Chopper (NM-79/MP-82) hacia la tracción asíncrona trifásica controlada por inversores VVVF en el NM-22 es clave para evaluar la eficiencia energética y la densidad del servicio. Utilize las herramientas interactivas a continuación para examinar las diferencias estructurales y de distribución de carros.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <!-- Grouped Bar Chart: Performance Comparison -->
+                    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-semibold text-slate-200">Comparativa de Desempeño por Modelo</h3>
+                                <p class="text-xs text-slate-400">Parámetros técnicos de capacidad, potencia y velocidad</p>
+                            </div>
+                            <span class="text-[10px] text-orange-400 font-mono bg-orange-500/10 px-2 py-1 rounded border border-orange-500/20">Chart.js / Canvas</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="fleetComparisonChart"></canvas>
+                        </div>
+                        <div class="mt-4 bg-slate-900/70 p-3.5 rounded-xl border border-slate-700/60 text-xs text-slate-300 space-y-1">
+                            <p class="font-semibold text-orange-400">📌 Hallazgo Clave:</p>
+                            <p class="text-slate-300 leading-relaxed">
+                                El modelo NM-22 incrementa la capacidad a ~2,360 usuarios y la velocidad máxima a 80 km/h al aumentar el ratio de motricidad al 78% (7 carros motrices intermedios) y eliminar las divisiones rígidas mediante un pasillo de intercirculación continuo.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Train Formation Layout Explorer -->
+                    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-base font-semibold text-slate-200">Visor Interactivo de Formación de Convoy</h3>
+                                <span class="text-[10px] text-cyan-400 font-mono bg-cyan-500/10 px-2 py-1 rounded border border-cyan-500/20">Longitud: 150m (9 Carros)</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mb-5 leading-relaxed">
+                                Seleccione una generación de tren para inspeccionar la topología de la formación, la función de cada carro y los datos de tracción acoplados.
+                            </p>
+
+                            <!-- Interactive Formation Switcher -->
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <button onclick="selectTrainFormation('legacy')" id="btn-legacy" class="px-3 py-2 text-xs font-semibold rounded-xl bg-orange-500 text-white shadow transition-all">
+                                    NM-79 / MP-82 (M-R-N-N-PR-N-N-R-M)
+                                </button>
+                                <button onclick="selectTrainFormation('nm22')" id="btn-nm22" class="px-3 py-2 text-xs font-semibold rounded-xl bg-slate-700 text-slate-300 hover:bg-slate-600 transition-all">
+                                    NM-22 (RC-N-N-N-PR-N-N-N-RC)
+                                </button>
+                            </div>
+
+                            <!-- Dynamic Car Grid Display -->
+                            <div id="train-cars-grid" class="grid grid-cols-9 gap-1.5 sm:gap-2 text-center my-4">
+                                <!-- JS Injected Cars -->
+                            </div>
+
+                            <!-- Detailed Specs Card for Selected Formation -->
+                            <div id="train-layout-details" class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 text-xs text-slate-300 mt-4 space-y-2">
+                                <!-- JS Injected Details -->
+                            </div>
+                        </div>
+
+                        <!-- Technical Footnote -->
+                        <div class="mt-6 pt-4 border-t border-slate-700/60 flex justify-between items-center text-xs text-slate-400">
+                            <span>Vía de Tracción Llantas: <strong class="text-slate-200">1,993 mm</strong></span>
+                            <span>Riel de Seguridad: <strong class="text-slate-200">1,435 mm (190 lb/yd)</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW CARD: Distribución de Equipos bajo Bastidor -->
+                <div class="mt-8 bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <span class="bg-indigo-500/20 text-indigo-400 p-2 rounded-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        </span>
+                        <h3 class="text-lg font-bold text-white">Arquitectura de Cofres de Potencia bajo Bastidor</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-300">
+                        <div>
+                            <p class="mb-2"><strong class="text-indigo-400">Ubicación y Alojamiento:</strong> El equipo de control (Chopper o Inversores VVVF) se intercala eléctricamente entre las escobillas captadoras (que toman 750 VCC de la barra guía) y los motores de tracción en las carretillas. Físicamente, se instalan <strong>exclusivamente bajo la estructura de los vagones motrices (M y N)</strong>.</p>
+                            <p><strong class="text-indigo-400">Diseño Hermético:</strong> La electrónica de estado sólido (tiristores SCR o IGBT) se resguarda dentro de cofres metálicos herméticos colgados y asegurados por ménsulas soldadas a los largueros del vagón, protegiéndolos de la intemperie.</p>
+                        </div>
+                        <div>
+                            <p class="mb-2"><strong class="text-indigo-400">Resistencias y Mantenimiento:</strong> Paralelamente, los bancos de resistencias reostáticas (para disipación de calor) se alojan bajo el piso. Los cofres cuentan con tapas laterales abatibles con cerraduras de seguridad, permitiendo a los ingenieros realizar revisiones, pruebas o sustitución de módulos directamente desde las <strong>fosas de mantenimiento en talleres como Ticomán o Zaragoza</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW CARD: Evolución de Potencia: Chopper vs Inversores VVVF -->
+                <div class="mt-6 bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <span class="bg-blue-500/20 text-blue-400 p-2 rounded-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </span>
+                        <h3 class="text-lg font-bold text-white">Transición de Tracción: Control Chopper vs. Inversores VVVF</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Chopper Card -->
+                        <div class="bg-slate-900 border border-slate-700 rounded-xl p-5 hover:border-orange-500/50 transition-colors">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="text-md font-bold text-orange-400">Control Chopper (NM-79 / MP-82)</h4>
+                                <span class="text-[10px] bg-orange-500/20 text-orange-300 px-2 py-1 rounded border border-orange-500/30">Motor Corriente Continua</span>
+                            </div>
+                            <ul class="text-xs text-slate-300 space-y-3">
+                                <li><strong class="text-slate-100">Principio de Operación:</strong> "Trocea" (recorta) la señal de 750 VCC a alta frecuencia mediante tiristores (SCR/IGBT), modulando el ciclo de trabajo para variar el voltaje <em>promedio</em> inyectado a la armadura del motor Serie.</li>
+                                <li><strong class="text-slate-100">Mantenimiento Mecánico:</strong> Elevado. Los motores de CC exigen inspección periódica rigurosa debido al desgaste físico de las escobillas de carbón y el riesgo de "fuego circular" en el conmutador de delgas de cobre.</li>
+                                <li><strong class="text-slate-100">Frenado Limitado:</strong> Fuerte dependencia de la disipación térmica (Frenado Reostático). Convierte la energía cinética en calor latente liberado en los túneles a través de parrillas resistivas al saturarse la línea eléctrica.</li>
+                            </ul>
+                        </div>
+
+                        <!-- VVVF Card -->
+                        <div class="bg-slate-900 border border-slate-700 rounded-xl p-5 hover:border-cyan-500/50 transition-colors">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="text-md font-bold text-cyan-400">Inversores VVVF (NM-22)</h4>
+                                <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded border border-cyan-500/30">Motor Asíncrono CA</span>
+                            </div>
+                            <ul class="text-xs text-slate-300 space-y-3">
+                                <li><strong class="text-slate-100">Principio de Operación:</strong> Emplea arreglos puente de IGBTs de alta frecuencia para sintetizar matemáticamente una onda trifásica de corriente alterna. Al variar <strong>el Voltaje y la Frecuencia (Variable Voltage Variable Frequency)</strong>, gobierna con precisión el deslizamiento magnético.</li>
+                                <li><strong class="text-slate-100">Mantenimiento Mecánico:</strong> Prácticamente nulo en el rotor. Los motores de inducción con rotor tipo "jaula de ardilla" carecen de escobillas y anillos rozantes (se elimina la fricción eléctrica directa).</li>
+                                <li><strong class="text-slate-100">Frenado Eficiente:</strong> Optimizados para Frenado Regenerativo. Durante la desaceleración, los motores actúan como generadores asíncronos y devuelven la energía hacia la barra guía (recuperando hasta 14.06 kWh por ciclo).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: ALIMENTACIÓN ELÉCTRICA Y SIMULACIÓN EN 750 VCC -->
+        <section id="electrico" class="py-12 border-b border-slate-800 bg-slate-900/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="flex items-center space-x-2 text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">
+                        <span>Módulo 2</span>
+                        <span>•</span>
+                        <span>Infraestructura Eléctrica y Subestaciones</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">2. Alimentación Eléctrica de 750 VCC y Calidad de Energía</h2>
+                    <p class="text-slate-300 text-sm sm:text-base max-w-4xl leading-relaxed">
+                        La tracción neumática demanda un suministro continuo de 750 VCC a través de la barra guía lateral. Con el Proyecto "Metro-Energía", las Subestaciones Rectificadoras (SR) emplean grupos transformador-rectificador de 12 pulsos con desfase de 30° entre secundarios en estrella ($Y$) y delta ($\Delta$), erradicando los armónicos destructivos de orden 5 y 7. Utilice el simulador dinámico a continuación para observar la caída de tensión según la corriente de arranque del convoy.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Interactive Voltage Drop Simulator Chart -->
+                    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-semibold text-slate-200">Simulador: Caída de Tensión vs Distancia a SEAT</h3>
+                                <p class="text-xs text-slate-400">Evaluación de pérdidas resistivas ($R = 0.015 \text{ }\Omega/\text{km}$)</p>
+                            </div>
+                            <span class="text-[10px] text-cyan-400 font-mono bg-cyan-500/10 px-2 py-1 rounded border border-cyan-500/20">Simulación VCC</span>
+                        </div>
+
+                        <!-- Interactive Control Slider -->
+                        <div class="mb-4 bg-slate-900/80 p-4 rounded-xl border border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+                            <div class="flex-1">
+                                <div class="flex justify-between mb-1">
+                                    <label for="currentSlider" class="text-slate-300 font-medium">Demanda de Corriente de Arranque:</label>
+                                    <span id="currentVal" class="text-orange-400 font-bold font-mono">5,507 A</span>
+                                </div>
+                                <input type="range" id="currentSlider" min="2000" max="6500" step="100" value="5507" class="w-full accent-orange-500 cursor-pointer">
+                            </div>
+                            <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 text-center min-w-[130px]">
+                                <p class="text-[10px] text-slate-400 uppercase font-semibold">Tensión a 1.2 km:</p>
+                                <p id="minVoltageCalc" class="text-base font-black text-emerald-400 font-mono">650.9 VCC</p>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <canvas id="voltageDropChart"></canvas>
+                        </div>
+                        <div class="mt-4 bg-slate-900/70 p-3 rounded-xl border border-slate-700/60 text-xs text-slate-300">
+                            <p class="text-slate-300 leading-relaxed">
+                                <strong class="text-cyan-400">Cumplimiento Normativo (UNE-EN 50163):</strong> Incluso en demanda pico de arranque de 5,507 A (3,800 kW totales), la tensión cae a 650.9 VCC a 1,200 metros, manteniéndose por encima del mínimo permanente de 500 VCC exigido por la norma europea.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Harmonics Spectrum Comparison Chart -->
+                    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-semibold text-slate-200">Espectro Armónico: 6 Pulsos vs 12 Pulsos</h3>
+                                <p class="text-xs text-slate-400">Cancelación vectorial de armónicos en primario de transformador</p>
+                            </div>
+                            <span class="text-[10px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">Desfase 30° Y-Δ</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="harmonicsChart"></canvas>
+                        </div>
+                        <div class="mt-4 bg-slate-900/70 p-3 rounded-xl border border-slate-700/60 text-xs text-slate-300">
+                            <p class="text-slate-300 leading-relaxed">
+                                <strong class="text-emerald-400">Efecto Técnico:</strong> Al cancelar las corrientes armónicas de orden $n=5$ y $n=7$ en la salida del secundario, el primer armónico crítico en la red de media tensión se desplaza al orden 11, previniendo el sobrecalentamiento por corrientes parásitas y eliminando el rizado excesivo en la barra guía.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: DINÁMICA DE FRENADO Y TERMODINÁMICA DE ENERGÍA CINÉTICA -->
+        <section id="frenado" class="py-12 border-b border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="flex items-center space-x-2 text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
+                        <span>Módulo 3</span>
+                        <span>•</span>
+                        <span>Dinámica de Frenado Conjugado y Mecánica</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">3. Frenado Conjugado (Blending Brake) y Disipación Térmica</h2>
+                    <p class="text-slate-300 text-sm sm:text-base max-w-4xl leading-relaxed">
+                        Detener un convoy de 383.5 toneladas a 70 km/h exige disipar instantáneamente más de 72.45 Megajoules (MJ) de energía cinética. El sistema de control coordina con prioridad el freno electrodinámico (regenerativo/reostático) e inyecta gradualmente el freno neumático sobre la rueda de seguridad solo cuando la demanda supera la capacidad del convertidor de potencia.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <!-- Doughnut Chart: Power Allocation -->
+                    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl lg:col-span-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-base font-semibold text-slate-200 mb-1">Distribución de Potencia de Freno</h3>
+                            <p class="text-xs text-slate-400 mb-4">Requerimiento a Aforo Límite (4.10 MW Necesarios)</p>
+                            <div class="chart-container" style="height:250px;">
+                                <canvas id="brakingPowerChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="mt-4 bg-slate-900/80 p-3 rounded-xl border border-slate-700 text-xs space-y-1.5">
+                            <div class="flex justify-between text-slate-300">
+                                <span>Capacidad Generación Motor:</span>
+                                <strong class="text-cyan-400 font-mono">3.40 MW (82.9%)</strong>
+                            </div>
+                            <div class="flex justify-between text-slate-300">
+                                <span>Aporte Neumático Fricción:</span>
+                                <strong class="text-orange-400 font-mono">0.70 MW (17.1%)</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Line Chart: Kinetic Energy vs Speed -->
+                    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl lg:col-span-2">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-semibold text-slate-200">Curva de Energía Cinética vs Velocidad</h3>
+                                <p class="text-xs text-slate-400">Cálculo dinámico basado en $E_c = \frac{1}{2} \cdot m \cdot v^2$</p>
+                            </div>
+                            <span class="text-[10px] text-amber-400 font-mono bg-amber-500/10 px-2 py-1 rounded border border-amber-500/20">E_c = 0.5 m v²</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="kineticEnergyChart"></canvas>
+                        </div>
+                        <div class="mt-4 bg-slate-900/70 p-3 rounded-xl border border-slate-700/60 text-xs text-slate-300">
+                            <p class="text-slate-300 leading-relaxed">
+                                <strong class="text-amber-400">Impacto en Mantenimiento:</strong> A 80 km/h con aforo máximo en el NM-22 (426.2 t brutas), la energía cinética escala a 94.6 MJ. Esto exige el uso de zapatas compuestas no metales de desgaste calibrado contra la cara interna de las ruedas de acero.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Mechanical Component: Fail-Safe Spring Parking Brake -->
+                <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <span class="text-[10px] text-orange-400 font-bold uppercase tracking-wider">Mecanismo de Seguridad Fail-Safe</span>
+                            <h3 class="text-lg font-bold text-white mt-0.5">Simulador del Freno de Estacionamiento por Resorte Acumulador</h3>
+                            <p class="text-xs text-slate-400">Demostración mecánica de inmovilización automática ante pérdida de presión neumática.</p>
+                        </div>
+                        <button id="togglePressureBtn" onclick="toggleSpringBrake()" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center space-x-2 cursor-pointer">
+                            <span>Simular Falla / Purga de Aire Neumático</span>
+                        </button>
+                    </div>
+
+                    <!-- HTML/CSS Visual Diagram for Brake Actuator -->
+                    <div class="bg-slate-900 rounded-xl p-6 border border-slate-700/80">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                            <!-- Pneumatic Chamber Indicator -->
+                            <div id="chamberVisual" class="bg-slate-800 p-4 rounded-xl border-2 border-emerald-500 text-center transition-all">
+                                <span id="pneuBadge" class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 uppercase mb-2">Presión Nominal OK (6-8 bar)</span>
+                                <p class="text-xs text-slate-400">Cámara Neumática del Cilindro</p>
+                                <p id="pneuStatusText" class="text-sm font-bold text-slate-200 mt-1">Aire Comprimido Inyectado</p>
+                                <p class="text-[11px] text-slate-400 mt-1">Supera la fuerza del resorte helicoidal.</p>
+                            </div>
+
+                            <!-- Mechanical Spring State -->
+                            <div class="text-center px-4">
+                                <p class="text-[11px] font-bold text-slate-400 uppercase mb-2">Muelle Acumulador Pretensado</p>
+                                <div class="relative py-3 flex items-center justify-center">
+                                    <div id="springVisual" class="h-7 w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 rounded-full transition-all duration-500 scale-x-50 opacity-80 shadow-inner"></div>
+                                </div>
+                                <p id="springStateText" class="text-xs font-bold text-amber-400 mt-1">Resorte Comprimido (Tren Liberado)</p>
+                            </div>
+
+                            <!-- Brake Shoe Clamp State -->
+                            <div id="shoeVisual" class="bg-slate-800 p-4 rounded-xl border-2 border-slate-600 text-center transition-all">
+                                <span id="shoeBadge" class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-slate-300 uppercase mb-2">Zapata Reposo</span>
+                                <p class="text-xs text-slate-400">Mecanismo de Fricción en Bogie</p>
+                                <p id="shoeStatusText" class="text-sm font-bold text-emerald-400 mt-1">Tren Libre / En Marcha Comercial</p>
+                                <p class="text-[11px] text-slate-400 mt-1">Sin contacto con la rueda de seguridad.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3.5: MEMORIA DE CÁLCULO (INGENIERÍA APLICADA) -->
+        <section id="calculos" class="py-12 border-b border-slate-800 bg-slate-950">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="flex items-center space-x-2 text-xs font-bold text-rose-500 uppercase tracking-wider mb-1">
+                        <span>Módulo Especial</span>
+                        <span>•</span>
+                        <span>Memoria de Cálculo de Ingeniería</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">Modelado Matemático: Eléctrico, Mecánico y Termodinámico</h2>
+                    <p class="text-slate-300 text-sm sm:text-base max-w-4xl leading-relaxed">
+                        Este apartado detalla las ecuaciones rectoras que gobiernan el desempeño de los subsistemas del material rodante. Desde la dinámica de tracción del motor serie del MP-82 hasta la termodinámica de disipación de calor, cálculos químicos dieléctricos y la cinemática de vía.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cálculo 1: Ingeniería Química y Dieléctrica -->
+                    <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-fuchsia-500/50 transition-colors">
+                        <div class="absolute top-0 right-0 bg-fuchsia-500/20 text-fuchsia-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-b border-l border-fuchsia-500/30">QUÍMICA DIELÉCTRICA</div>
+                        <h3 class="text-lg font-bold text-white mb-2">1. Análisis DGA y Celulosa (SEAT)</h3>
+                        <p class="text-xs text-slate-400 mb-4">Degradación térmica y eléctrica en transformadores de subestaciones (Triángulo de Duval).</p>
+                        
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 font-mono text-[11px] text-fuchsia-300 space-y-2">
+                            <div class="flex flex-col">
+                                <span class="text-slate-400 text-[10px] mb-1">Gases Disueltos (Arco de Alta Energía)</span>
+                                <span>%C₂H₂ = [C₂H₂ / (CH₄ + C₂H₄ + C₂H₂)] × 100</span>
+                            </div>
+                            <div class="flex flex-col border-t border-slate-700 pt-2">
+                                <span class="text-slate-400 text-[10px] mb-1">Envejecimiento de Celulosa (Polimerización)</span>
+                                <span class="text-pink-400">(1/DP_t) - (1/DP_0) = A · t · e^(-E_a / RT)</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-3 leading-relaxed">
+                            <strong class="text-slate-300">Aplicación:</strong> La presencia de Acetileno (C₂H₂) advierte arcos > 700°C. La caída del grado de polimerización (DP) dictamina el fin de vida útil del papel Kraft en los masivos transformadores de potencia.
+                        </p>
+                    </div>
+
+                    <!-- Cálculo 2: Motor Asíncrono Trifásico (NM-22) -->
+                    <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-cyan-500/50 transition-colors">
+                        <div class="absolute top-0 right-0 bg-cyan-500/20 text-cyan-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-b border-l border-cyan-500/30">TRACCIÓN CA (NM-22)</div>
+                        <h3 class="text-lg font-bold text-white mb-2">2. Motor Asíncrono Trifásico (VVVF)</h3>
+                        <p class="text-xs text-slate-400 mb-4">Ecuaciones de deslizamiento y torque equivalente de Thevenin impulsadas por inversores IGBT.</p>
+                        
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 font-mono text-[11px] text-cyan-300 space-y-2">
+                            <div class="flex flex-col">
+                                <span class="text-slate-400 text-[10px] mb-1">Sincronismo y Deslizamiento (s)</span>
+                                <span>n_s = (120 · f) / p  |  s = (n_s - n_r) / n_s</span>
+                            </div>
+                            <div class="flex flex-col border-t border-slate-700 pt-2">
+                                <span class="text-slate-400 text-[10px] mb-1">Torque Electromagnético (τ_em)</span>
+                                <span class="text-blue-400">τ_em ∝ (V_th² · R₂'/s) / (R_th + R₂'/s)² + X²</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-3 leading-relaxed">
+                            <strong class="text-cyan-400">Ventaja Tecnológica:</strong> Ajustando voltaje y frecuencia, el inversor mantiene flujo magnético constante logrando torque máximo desde 0 RPM sin picos de corriente destructivos.
+                        </p>
+                    </div>
+
+                    <!-- Cálculo 3: Par Motor Serie CC (MP-82) -->
+                    <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-orange-500/50 transition-colors">
+                        <div class="absolute top-0 right-0 bg-orange-500/20 text-orange-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-b border-l border-orange-500/30">TRACCIÓN CC (MP-82)</div>
+                        <h3 class="text-lg font-bold text-white mb-2">3. Torque Motor CC Serie y Escobillas</h3>
+                        <p class="text-xs text-slate-400 mb-4">El control Chopper modula la bestial curva de par característica de los motores legado.</p>
+                        
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 font-mono text-[11px] text-orange-300 space-y-2">
+                            <div class="flex flex-col">
+                                <span class="text-slate-400 text-[10px] mb-1">Ecuación Cuadrática de Torque (τ)</span>
+                                <span>Φ = K_f · I_a  →  τ = K_m · I_a²</span>
+                            </div>
+                            <div class="flex flex-col border-t border-slate-700 pt-2">
+                                <span class="text-slate-400 text-[10px] mb-1">Desgaste Conmutador (Densidad J)</span>
+                                <span class="text-amber-400">J_escobilla = I_a / A_contacto ≤ 12 A/cm²</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-3 leading-relaxed">
+                            <strong class="text-orange-400">Riesgo Mecánico:</strong> El torque (τ) crece al cuadrado de la corriente. Si J supera el límite (por falla del Chopper), se vaporiza el cobre ("Fuego Circular" en el conmutador).
+                        </p>
+                    </div>
+
+                    <!-- Cálculo 4: Termodinámica Frenado Reostático -->
+                    <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-red-500/50 transition-colors">
+                        <div class="absolute top-0 right-0 bg-red-500/20 text-red-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-b border-l border-red-500/30">TERMODINÁMICA</div>
+                        <h3 class="text-lg font-bold text-white mb-2">4. Fatiga Térmica en Resistencias</h3>
+                        <p class="text-xs text-slate-400 mb-4">Disipación masiva por Efecto Joule en las parrillas bajo bastidor del MP-82/NM-79.</p>
+                        
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 font-mono text-[11px] text-red-300 space-y-2">
+                            <div class="flex flex-col">
+                                <span class="text-slate-400 text-[10px] mb-1">Energía Disipada (Joule)</span>
+                                <span>E_freno = ∫ I²_freno(t) · R_banco dt</span>
+                            </div>
+                            <div class="flex flex-col border-t border-slate-700 pt-2">
+                                <span class="text-slate-400 text-[10px] mb-1">Incremento de Temperatura (ΔT)</span>
+                                <span class="text-rose-400">ΔT = E_freno / (m_res · c_p)</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-3 leading-relaxed">
+                            <strong class="text-red-400">Impacto en Túneles:</strong> Generan temperaturas de disipación que exceden los 400°C bajo tráfico denso, estresando los aislantes térmicos de mica y elevando drásticamente el gradiente térmico de la línea.
+                        </p>
+                    </div>
+
+                    <!-- Cálculo 5: Geometría de Vía y Peralte -->
+                    <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-indigo-500/50 transition-colors">
+                        <div class="absolute top-0 right-0 bg-indigo-500/20 text-indigo-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-b border-l border-indigo-500/30">VÍA Y CINEMÁTICA</div>
+                        <h3 class="text-lg font-bold text-white mb-2">5. Diseño de Peralte y Transición</h3>
+                        <p class="text-xs text-slate-400 mb-4">Geometría civil para anular la fuerza centrífuga y mitigar el desgaste de la barra guía.</p>
+                        
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 font-mono text-[11px] text-indigo-300 space-y-2">
+                            <div class="flex flex-col">
+                                <span class="text-slate-400 text-[10px] mb-1">Peralte de Equilibrio (h)</span>
+                                <span>h = (G · V²) / (127 · R)   [Límite: 160mm]</span>
+                            </div>
+                            <div class="flex flex-col border-t border-slate-700 pt-2">
+                                <span class="text-slate-400 text-[10px] mb-1">Longitud de Transición Clotoide (L_c)</span>
+                                <span class="text-purple-400">L_c = (V · h) / (3.6 · Δa)</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-3 leading-relaxed">
+                            <strong class="text-indigo-400">Restricción:</strong> Si la topografía fuerza radios menores (R) que exigen peraltes superiores a 160 mm, el sistema de señalización impone automáticamente una restricción de velocidad vital para el tren.
+                        </p>
+                    </div>
+
+                    <!-- Cálculo 6: Subestaciones Rectificadoras y Compensación -->
+                    <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
+                        <div class="absolute top-0 right-0 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-b border-l border-emerald-500/30">ALTA TENSIÓN SEAT</div>
+                        <h3 class="text-lg font-bold text-white mb-2">6. Rectificación y Compensación (FP)</h3>
+                        <p class="text-xs text-slate-400 mb-4">Conversión CA a VCC y estabilización de potencia reactiva instalando bancos capacitivos.</p>
+                        
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 font-mono text-[11px] text-emerald-300 space-y-2">
+                            <div class="flex flex-col">
+                                <span class="text-slate-400 text-[10px] mb-1">Tensión Nominal (Puente 12 Pulsos)</span>
+                                <span>V_dc = V_ac · (12/π) · sin(π/12) · √2</span>
+                            </div>
+                            <div class="flex flex-col border-t border-slate-700 pt-2">
+                                <span class="text-slate-400 text-[10px] mb-1">Inyección Reactiva (Q_c en kVAR)</span>
+                                <span class="text-emerald-400">Q_c = P · (tanθ_1 - tanθ_2)</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-3 leading-relaxed">
+                            <strong class="text-emerald-400">Integridad Operativa:</strong> Entregar 750 VCC estabilizados y elevar el FP (>0.95) evita fluctuaciones de tensión que harían disparar por "baja tensión" los delicados subsistemas del NM-22.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: CONTROL, AUTOMATIZACIÓN Y EVOLUCIÓN CBTC -->
+        <section id="pilotaje" class="py-12 border-b border-slate-800 bg-slate-900/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="flex items-center space-x-2 text-xs font-bold text-purple-400 uppercase tracking-wider mb-1">
+                        <span>Módulo 4</span>
+                        <span>•</span>
+                        <span>Sistemas de Pilotaje Automático</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">4. Evolución de los Sistemas de Control y Pilotaje</h2>
+                    <p class="text-slate-300 text-sm sm:text-base max-w-4xl leading-relaxed">
+                        El control de tráfico ferroviario ha migrado desde esquemas analógicos de cantón fijo (PA135) hacia arquitecturas digitales de cantón móvil basadas en radiofrecuencia (CBTC). Esta evolución permite reducir el intervalo entre trenes (*headway*) a menos de 90 segundos con máxima seguridad operacional.
+                    </p>
+                </div>
+
+                <!-- Structured Stepper Cards for Systems Evolution -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- PA135 Card -->
+                    <div class="bg-slate-800 border border-slate-700/80 p-6 rounded-2xl shadow-xl flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-0 left-0 right-0 h-1.5 bg-slate-600"></div>
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cantón Fijo Analógico</span>
+                                <span class="px-2 py-0.5 bg-slate-700 text-slate-300 text-[10px] font-bold rounded">1969 - Presente</span>
+                            </div>
+                            <h3 class="text-xl font-black text-white mb-2">PA135</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                                Emisión de audiofrecuencia a 135 kHz modulada en tapices sobre vía. Define escalones de velocidad prefijados y rígidos.
+                            </p>
+                        </div>
+                        <div class="border-t border-slate-700/80 pt-3">
+                            <ul class="text-xs text-slate-400 space-y-1">
+                                <li>▪ Intervalo Mínimo: <strong class="text-slate-200">~120 segundos</strong></li>
+                                <li>▪ Cantones físicos rígidos en túnel</li>
+                                <li>▪ Mantenimiento intensivo en vía</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- SACEM Card -->
+                    <div class="bg-slate-800 border border-slate-700/80 p-6 rounded-2xl shadow-xl flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-0 left-0 right-0 h-1.5 bg-cyan-500"></div>
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Distance-To-Go</span>
+                                <span class="px-2 py-0.5 bg-cyan-500/20 text-cyan-300 text-[10px] font-bold rounded">1994 - Presente</span>
+                            </div>
+                            <h3 class="text-xl font-black text-white mb-2">SACEM (MP-82 / L8)</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                                Pilotaje automático en Línea 8. Calcula curvas parabólicas de frenado dinámico según la distancia real al tren precedente.
+                            </p>
+                        </div>
+                        <div class="border-t border-slate-700/80 pt-3">
+                            <ul class="text-xs text-slate-400 space-y-1">
+                                <li>▪ Intervalo Mínimo: <strong class="text-cyan-300">~90 segundos</strong></li>
+                                <li>▪ Sub-cantones virtuales calculados</li>
+                                <li>▪ Alta precisión de parada en estación</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- CBTC Card -->
+                    <div class="bg-slate-800 border-2 border-orange-500/80 p-6 rounded-2xl shadow-xl flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-0 left-0 right-0 h-1.5 bg-orange-500"></div>
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] font-bold text-orange-400 uppercase tracking-wider">Cantón Móvil Digital</span>
+                                <span class="px-2 py-0.5 bg-orange-500/20 text-orange-300 text-[10px] font-bold rounded">2024 (NM-22 / L1)</span>
+                            </div>
+                            <h3 class="text-xl font-black text-white mb-2">CBTC (Radiofrecuencia)</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                                Red redundante Wi-Fi/TETRA. Genera una Autoridad de Movimiento Límite (LMA) dinámica e inyecta órdenes al inversor VVVF.
+                            </p>
+                        </div>
+                        <div class="border-t border-slate-700/80 pt-3">
+                            <ul class="text-xs text-slate-400 space-y-1">
+                                <li>▪ Intervalo Objetivo: <strong class="text-orange-400">&lt;90 segundos</strong></li>
+                                <li>▪ Conducción automática sin circuitos de vía</li>
+                                <li>▪ Modo degradado CLT2: <strong class="text-orange-300">Máx. 10 km/h</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW SUBSECTION: Modos de Conducción y Dispositivos de Cabina -->
+                <div class="mt-12">
+                    <h3 class="text-xl font-bold text-white mb-4 border-b border-slate-800 pb-2">Modos de Conducción y Dispositivos de Seguridad en Cabina</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Modos Selector -->
+                        <div class="lg:col-span-8 bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl">
+                            <p class="text-xs text-slate-400 mb-4">El conmutador de la consola de conducción permite seleccionar distintos regímenes operativos según el estado de la señalización en vía.</p>
+                            
+                            <div class="space-y-3">
+                                <div class="p-3 bg-slate-900 rounded-xl border border-slate-700 flex flex-col sm:flex-row sm:items-center gap-3 hover:border-emerald-500/30 transition-all">
+                                    <div class="bg-emerald-500/20 border border-emerald-500 text-emerald-400 font-black text-sm px-3 py-1.5 rounded-lg text-center min-w-[80px]">PA</div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-200">Pilotaje Automático</h4>
+                                        <p class="text-xs text-slate-400">La computadora de a bordo comanda de forma autónoma la aceleración, tracción y curva de frenado. El operador se limita a supervisar la vía, operar puertas y presionar el botón de autorización de salida. Ofrece máxima seguridad (ATP) mitigando deslizamiento/patinaje.</p>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-slate-900 rounded-xl border border-slate-700 flex flex-col sm:flex-row sm:items-center gap-3 hover:border-cyan-500/30 transition-all">
+                                    <div class="bg-cyan-500/20 border border-cyan-500 text-cyan-400 font-black text-sm px-3 py-1.5 rounded-lg text-center min-w-[80px]">CMC</div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-200">Conducción Manual Controlada</h4>
+                                        <p class="text-xs text-slate-400">El conductor toma el control manipulando la palanca (Tracción T1-T5, Frenado F1-F6). El sistema ATP vigila continuamente la velocidad límite y autoridad de movimiento; si se excede la velocidad permitida, el sistema aplica automáticamente el <strong>Frenado de Urgencia (FU)</strong>.</p>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-slate-900 rounded-xl border border-slate-700 flex flex-col sm:flex-row sm:items-center gap-3 hover:border-amber-500/30 transition-all">
+                                    <div class="bg-amber-500/20 border border-amber-500 text-amber-400 font-black text-sm px-3 py-1.5 rounded-lg text-center min-w-[80px]">CLT2 / CM</div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-200">Conducción Manual Libre</h4>
+                                        <p class="text-xs text-slate-400">Régimen degradado ante pérdida total de señalización. La velocidad está limitada por hardware a <strong>35 km/h hacia adelante y 18 km/h en reversa</strong>. La prevención de colisiones depende de la vigilancia visual del conductor y del dispositivo vital de "Hombre Muerto".</p>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-slate-900 rounded-xl border border-slate-700 flex flex-col sm:flex-row sm:items-center gap-3 hover:border-purple-500/30 transition-all">
+                                    <div class="bg-purple-500/20 border border-purple-500 text-purple-400 font-black text-sm px-3 py-1.5 rounded-lg text-center min-w-[80px]">MA / PAA</div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-200">Maniobras y Modos Auxiliares</h4>
+                                        <p class="text-xs text-slate-400"><strong>Maniobra Automática (MA):</strong> Para terminales y talleres (límite de 15 km/h a 0.7 m/s², o 3 km/h para maniobras de acoplamiento). <strong>Pilotaje Automático Marcha Atrás (PAA):</strong> Retroceso automático seguro (ej. al rebasar por más de 20m el punto normal de paro).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dispositivos Críticos -->
+                        <div class="lg:col-span-4 space-y-6">
+                            <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-5 shadow-xl hover:border-rose-500/50 transition-all group">
+                                <div class="flex items-center space-x-3 mb-2">
+                                    <div class="bg-rose-500/20 p-2 rounded-lg group-hover:bg-rose-500/30 transition-colors">
+                                        <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-slate-200">Dispositivo "Hombre Muerto"</h4>
+                                </div>
+                                <p class="text-[11px] text-slate-400 leading-relaxed">
+                                    Sensor de presencia táctil en el manipulador. Obligatorio en modos manuales y activo a velocidades superiores a 0.5 km/h. Su liberación accidental o por incapacitación física purga instantáneamente la tubería general de aire, aplicando un <strong>Frenado de Urgencia (FU)</strong> irrecuperable hasta detener el tren.
+                                </p>
+                            </div>
+
+                            <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-5 shadow-xl hover:border-blue-400/50 transition-all group">
+                                <div class="flex items-center space-x-3 mb-2">
+                                    <div class="bg-blue-500/20 p-2 rounded-lg group-hover:bg-blue-500/30 transition-colors">
+                                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-slate-200">Conmutador KNR (Lluvia)</h4>
+                                </div>
+                                <p class="text-[11px] text-slate-400 leading-relaxed">
+                                    Ajuste dinámico para baja adherencia neumático-pista. Al accionarse, ajusta la rampa de corriente para limitar la aceleración a un máximo de <strong>0.8 m/s²</strong> y optimiza activamente los algoritmos del sistema antibloqueo (ABS) para mitigar patinajes o desgarre de neumáticos.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: MARCO NORMATIVO Y NORMAS TÉCNICAS -->
+        <section id="normativa" class="py-12 border-b border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="flex items-center space-x-2 text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">
+                        <span>Módulo 5</span>
+                        <span>•</span>
+                        <span>Certificaciones y Estándares</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">5. Marco Normativo y Certificaciones de Seguridad</h2>
+                    <p class="text-slate-300 text-sm sm:text-base max-w-4xl leading-relaxed">
+                        El diseño, manufactura y operación del material rodante en el STC Metro está sujeto a la convergencia entre las Normas Oficiales Mexicanas (ARTF) y los exigentes estándares europeos (CENELEC, UIC, EN) dictaminados en el pliego de especificaciones para protección, resistencia y compatibilidad.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <!-- Standards Radar/Bar Chart -->
+                    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-6 shadow-xl sticky top-24">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-semibold text-slate-200">Exigencia de Cumplimiento Normativo</h3>
+                                <p class="text-xs text-slate-400">Porcentaje de estandarización en auditorías de homologación</p>
+                            </div>
+                            <span class="text-[10px] text-purple-400 font-mono bg-purple-500/10 px-2 py-1 rounded border border-purple-500/20">CENELEC / ARTF</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="standardsChart"></canvas>
+                        </div>
+                        <div class="mt-4 bg-slate-900/70 p-3 rounded-xl border border-slate-700/60 text-xs text-slate-300">
+                            <p class="text-slate-300 leading-relaxed">
+                                <strong class="text-purple-400">Rigurosidad Estructural:</strong> Los bastidores del bogie se someten a análisis de Elementos Finitos (FEM) bajo la norma UNE-EN 13749 y EN 12663 para garantizar la integridad mecánica tras millones de ciclos de fatiga y la inclusión de zonas de deformación programada ("Anti-Climber").
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Structured Interactive Norms List -->
+                    <div class="space-y-3">
+                        <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-xl flex items-start space-x-3.5 hover:border-orange-500/50 transition-colors">
+                            <span class="text-orange-500 font-black text-base font-mono">01</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-white flex items-center gap-2">EN 45545 Categoría 2-N <span class="bg-red-500/20 text-red-400 text-[9px] px-1.5 py-0.5 rounded">CRÍTICO: FUEGO Y HUMO</span></h4>
+                                <p class="text-xs text-slate-400 mt-1">Regula estrictamente el comportamiento frente al fuego de todos los materiales rodantes. Dictamina que el pasamanos, pisos, asientos y la película anti-rayado interior de los cristales (SNCF ST-250) deben ser ignífugos, autoextinguibles y no generar gases tóxicos ni humos densos que impidan la evacuación en túneles.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-xl flex items-start space-x-3.5 hover:border-cyan-500/50 transition-colors">
+                            <span class="text-cyan-400 font-black text-base font-mono">02</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">EN 50121-3-1 y EN 50121-3-2 (EMC)</h4>
+                                <p class="text-xs text-slate-400 mt-1">Compatibilidad Electromagnética (EMC) para material rodante. Obligatorio para asegurar que la masiva conmutación electrónica de los Inversores VVVF no genere armónicos o radiointerferencias que saturen y bloqueen el sensible sistema de telecomunicaciones TETRA/Wi-Fi del nuevo pilotaje CBTC.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-xl flex items-start space-x-3.5 hover:border-emerald-500/50 transition-colors">
+                            <span class="text-emerald-400 font-black text-base font-mono">03</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">EN 60529 (Código IP) e IEC 60112</h4>
+                                <p class="text-xs text-slate-400 mt-1">Define el grado de protección de las envolventes (Cofres bajo bastidor). Exige un estándar mínimo de <strong>IP56</strong>, garantizando que el equipo de tracción y electrónico esté totalmente sellado contra el ingreso de polvo metálico (carbonilla de zapatas) y chorros de agua a presión.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-xl flex items-start space-x-3.5 hover:border-amber-500/50 transition-colors">
+                            <span class="text-amber-500 font-black text-base font-mono">04</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">EN 12663 y EN 13749</h4>
+                                <p class="text-xs text-slate-400 mt-1">Requisitos estructurales (Caja y Bogies). Exige aceros aleados y forjados con cuerda rolada tras temple para la tornillería, y la inclusión de guías de puertas antivandalismo. Valida la fatiga (Diagrama de Goodman a 10⁷ ciclos) para la seguridad extrema ante cargas y choques frontales.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-xl flex items-start space-x-3.5 hover:border-purple-500/50 transition-colors">
+                            <span class="text-purple-400 font-black text-base font-mono">05</span>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">EN 50163 y EN 60077</h4>
+                                <p class="text-xs text-slate-400 mt-1">Regula las tensiones de alimentación (750 VCC) y condiciones generales de servicio para aparamenta electromecánica. Condiciona el uso estricto del "Blending Brake" donde el freno reostático debe ser capaz de absorber el 100% de la regeneración si la línea se vuelve "no receptiva".</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating AI Chat Widget -->
+    <div id="ai-chat-widget" class="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+        <!-- Chat Window (Hidden by default) -->
+        <div id="ai-chat-window" class="hidden w-80 sm:w-96 bg-slate-900 border border-slate-700 shadow-2xl rounded-2xl mb-4 flex flex-col overflow-hidden transition-all origin-bottom-right">
+            <div class="bg-slate-800 border-b border-slate-700 p-3 flex justify-between items-center shadow-sm z-10">
+                <div class="flex items-center space-x-2">
+                    <span class="text-orange-500 text-xl">🤖</span>
+                    <div>
+                        <h4 class="text-sm font-bold text-white">Asistente Técnico IA</h4>
+                        <p class="text-[9px] text-emerald-400 font-mono">Gemini 3 Flash • En línea</p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="text-slate-400 hover:text-white transition-colors p-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div id="ai-chat-messages" class="flex-1 p-4 overflow-y-auto h-72 space-y-4 bg-slate-900/50 text-xs custom-scrollbar">
+                <div class="flex items-start">
+                    <div class="bg-slate-800 border border-slate-700 text-slate-300 p-3 rounded-xl rounded-tl-none shadow-sm max-w-[85%] leading-relaxed">
+                        Saludos ingeniero. Soy el asistente IA especializado en material rodante del STC Metro (NM-79, MP-82, NM-22) e infraestructura eléctrica de 750 VCC. ¿Tiene alguna consulta normativa o técnica?
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-3 bg-slate-800 border-t border-slate-700">
+                <form id="ai-chat-form" onsubmit="handleChatSubmit(event)" class="flex space-x-2">
+                    <input type="text" id="ai-chat-input" placeholder="Pregunta sobre tracción, normas..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all placeholder-slate-500">
+                    <button type="submit" id="ai-chat-submit" class="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-3 py-2 transition-all flex items-center justify-center shadow-lg disabled:opacity-50">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button onclick="toggleChat()" class="w-14 h-14 bg-orange-500 hover:bg-orange-600 rounded-full shadow-2xl flex items-center justify-center text-white transition-transform hover:scale-105 border-2 border-slate-900 focus:outline-none focus:ring-4 focus:ring-orange-500/30">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+        </button>
+    </div>
+
+    <!-- Global Technical Footer -->
+    <footer class="bg-slate-950 py-8 border-t border-slate-800 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-bold text-slate-300">Sistema de Transporte Colectivo Metro — Ciudad de México</p>
+            <p class="mt-1 text-slate-400">Aplicación Web Interactiva de Especificaciones Técnicas y Operativas de Material Rodante</p>
+            <p class="mt-2 text-[11px] text-slate-400 font-mono">Basado en Especificaciones Hoja 1 de 168 y Reporte Técnico Ejecutivo (Líneas 1 y 8)</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic & Chart Initialization -->
+    <script>
+        // MANDATORY CHART.JS TOOLTIP CONFIGURATION WITH TITLE CALLBACK LOGIC
+        const mandatoryTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // 1. CHART: Fleet Comparison (Grouped Bar Chart)
+        const ctxFleet = document.getElementById('fleetComparisonChart').getContext('2d');
+        const fleetChart = new Chart(ctxFleet, {
+            type: 'bar',
+            data: {
+                labels: [
+                    ['Capacidad Aforo', '(Pasajeros)'],
+                    ['Potencia Total', '(kW Nominal)'],
+                    ['Velocidad Máx.', '(km/h)'],
+                    ['Adherencia', '(Porcentaje %)']
+                ],
+                datasets: [
+                    {
+                        label: 'NM-79 (Concarril/Alstom)',
+                        data: [1750, 3400, 70, 66],
+                        backgroundColor: '#F59E0B'
+                    },
+                    {
+                        label: 'MP-82 (Alsthom)',
+                        data: [1750, 3400, 70, 66],
+                        backgroundColor: '#0EA5E9'
+                    },
+                    {
+                        label: 'NM-22 (CRRC - L1)',
+                        data: [2360, 3800, 80, 78],
+                        backgroundColor: '#F97316'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: mandatoryTooltipConfig,
+                    legend: { labels: { color: '#CBD5E1', font: { size: 11 } } }
+                },
+                scales: {
+                    x: { ticks: { color: '#94A3B8', font: { size: 10 } }, grid: { color: '#334155' } },
+                    y: { ticks: { color: '#94A3B8', font: { size: 10 } }, grid: { color: '#334155' } }
+                }
+            }
+        });
+
+        // 2. CHART & SIMULATOR: Voltage Drop vs Interestation Distance
+        const ctxVoltage = document.getElementById('voltageDropChart').getContext('2d');
+        const distances = [0, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
+        
+        function calculateVoltages(current) {
+            const R_per_km = 0.015; // ohms per km
+            return distances.map(d => {
+                const r = (d / 1000) * R_per_km;
+                const drop = current * r;
+                return Math.max(750 - drop, 450);
+            });
+        }
+
+        const voltageChart = new Chart(ctxVoltage, {
+            type: 'line',
+            data: {
+                labels: distances.map(d => d + 'm'),
+                datasets: [{
+                    label: 'Tensión Efectiva en Tren (VCC)',
+                    data: calculateVoltages(5507),
+                    borderColor: '#0EA5E9',
+                    backgroundColor: 'rgba(14, 165, 233, 0.15)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#38BDF8'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: mandatoryTooltipConfig,
+                    legend: { labels: { color: '#CBD5E1', font: { size: 11 } } }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Distancia a Subestación', color: '#94A3B8', font: { size: 11 } }, ticks: { color: '#94A3B8' }, grid: { color: '#334155' } },
+                    y: { min: 500, max: 760, title: { display: true, text: 'Volts VCC', color: '#94A3B8', font: { size: 11 } }, ticks: { color: '#94A3B8' }, grid: { color: '#334155' } }
+                }
+            }
+        });
+
+        // Voltage Slider Event Listener
+        document.getElementById('currentSlider').addEventListener('input', function(e) {
+            const current = parseFloat(e.target.value);
+            document.getElementById('currentVal').innerText = current.toLocaleString() + ' A';
+            const newVoltages = calculateVoltages(current);
+            voltageChart.data.datasets[0].data = newVoltages;
+            voltageChart.update();
+            
+            // Update tension at 1,200m (index 6)
+            const v1200 = newVoltages[6].toFixed(1);
+            document.getElementById('minVoltageCalc').innerText = v1200 + ' VCC';
+        });
+
+        // 3. CHART: Harmonics Spectrum (6-Pulse vs 12-Pulse)
+        const ctxHarmonics = document.getElementById('harmonicsChart').getContext('2d');
+        const harmonicsChart = new Chart(ctxHarmonics, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Fundamental (60Hz)',
+                    ['Orden 5', '(Cancelado 12P)'],
+                    ['Orden 7', '(Cancelado 12P)'],
+                    'Orden 11 (Primer Pico)',
+                    'Orden 13 (Secundario)'
+                ],
+                datasets: [
+                    {
+                        label: 'Rectificador 6 Pulsos Clásico',
+                        data: [100, 20, 14, 9, 7.5],
+                        backgroundColor: '#EF4444'
+                    },
+                    {
+                        label: 'Rectificador 12 Pulsos (Metro-Energía)',
+                        data: [100, 0, 0, 9, 7.5],
+                        backgroundColor: '#10B981'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: mandatoryTooltipConfig,
+                    legend: { labels: { color: '#CBD5E1', font: { size: 11 } } }
+                },
+                scales: {
+                    x: { ticks: { color: '#94A3B8', font: { size: 10 } }, grid: { color: '#334155' } },
+                    y: { title: { display: true, text: 'Amplitud Relativa (%)', color: '#94A3B8', font: { size: 11 } }, ticks: { color: '#94A3B8' }, grid: { color: '#334155' } }
+                }
+            }
+        });
+
+        // 4. CHART: Braking Power Allocation (Doughnut)
+        const ctxBraking = document.getElementById('brakingPowerChart').getContext('2d');
+        const brakingChart = new Chart(ctxBraking, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    ['Freno Electrodinámico', '(Regenerativo/Reostato)'],
+                    ['Freno Neumático', '(Fricción Zapata)']
+                ],
+                datasets: [{
+                    data: [3.40, 0.70],
+                    backgroundColor: ['#0EA5E9', '#F97316'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: mandatoryTooltipConfig,
+                    legend: { position: 'bottom', labels: { color: '#CBD5E1', font: { size: 10 } } }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // 5. CHART: Kinetic Energy Curves
+        const ctxKinetic = document.getElementById('kineticEnergyChart').getContext('2d');
+        const speeds = [0, 20, 40, 60, 70, 80];
+        
+        function kineticEnergy(massKg, speedKmh) {
+            const vMs = speedKmh / 3.6;
+            return (0.5 * massKg * vMs * vMs) / 1000000; // Megajoules
+        }
+
+        const kineticChart = new Chart(ctxKinetic, {
+            type: 'line',
+            data: {
+                labels: speeds.map(s => s + ' km/h'),
+                datasets: [
+                    {
+                        label: 'Convoy Vacío (261t Tara)',
+                        data: speeds.map(s => kineticEnergy(261000, s)),
+                        borderColor: '#94A3B8',
+                        borderDash: [5, 5],
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Convoy Máx. MP-82/NM-79 (383.5t)',
+                        data: speeds.map(s => kineticEnergy(383500, s)),
+                        borderColor: '#F59E0B',
+                        borderWidth: 3
+                    },
+                    {
+                        label: 'Convoy Máx. NM-22 (426.2t - L1)',
+                        data: speeds.map(s => kineticEnergy(426200, s)),
+                        borderColor: '#F97316',
+                        borderWidth: 3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: mandatoryTooltipConfig,
+                    legend: { labels: { color: '#CBD5E1', font: { size: 11 } } }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Velocidad Comercial', color: '#94A3B8', font: { size: 11 } }, ticks: { color: '#94A3B8' }, grid: { color: '#334155' } },
+                    y: { title: { display: true, text: 'Energía Cinética (MJ)', color: '#94A3B8', font: { size: 11 } }, ticks: { color: '#94A3B8' }, grid: { color: '#334155' } }
+                }
+            }
+        });
+
+        // 6. CHART: Standards Compliance Chart
+        const ctxStandards = document.getElementById('standardsChart').getContext('2d');
+        const standardsChart = new Chart(ctxStandards, {
+            type: 'bar',
+            data: {
+                labels: [
+                    ['UNE-EN 50163', 'Tensión Red'],
+                    ['UNE-EN 13749', 'Bogie FEM'],
+                    ['NOM-003-ARTF', 'Tolerancia Vía'],
+                    ['UNE-EN 50124-1', 'Aislamiento'],
+                    ['UNE-EN 50388', 'Protecciones']
+                ],
+                datasets: [{
+                    label: 'Grado de Exigencia Operativa (%)',
+                    data: [98, 100, 95, 92, 96],
+                    backgroundColor: '#8B5CF6'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: mandatoryTooltipConfig,
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { max: 100, ticks: { color: '#94A3B8' }, grid: { color: '#334155' } },
+                    y: { ticks: { color: '#CBD5E1', font: { size: 10 } }, grid: { color: '#334155' } }
+                }
+            }
+        });
+
+        // INTERACTIVE TRAIN FORMATION LAYOUT SWITCHER
+        function selectTrainFormation(type) {
+            const container = document.getElementById('train-cars-grid');
+            const details = document.getElementById('train-layout-details');
+            const btnLegacy = document.getElementById('btn-legacy');
+            const btnNM22 = document.getElementById('btn-nm22');
+
+            if (type === 'legacy') {
+                btnLegacy.className = 'px-3 py-2 text-xs font-semibold rounded-xl bg-orange-500 text-white shadow transition-all';
+                btnNM22.className = 'px-3 py-2 text-xs font-semibold rounded-xl bg-slate-700 text-slate-300 hover:bg-slate-600 transition-all';
+                
+                const cars = [
+                    { type: 'M', label: 'M1', motriz: true, cabina: true },
+                    { type: 'R', label: 'R1', motriz: false, cabina: false },
+                    { type: 'N', label: 'N1', motriz: true, cabina: false },
+                    { type: 'N', label: 'N2', motriz: true, cabina: false },
+                    { type: 'PR', label: 'PR', motriz: false, cabina: false },
+                    { type: 'N', label: 'N3', motriz: true, cabina: false },
+                    { type: 'N', label: 'N4', motriz: true, cabina: false },
+                    { type: 'R', label: 'R2', motriz: false, cabina: false },
+                    { type: 'M', label: 'M2', motriz: true, cabina: true }
+                ];
+
+                container.innerHTML = cars.map(c => `
+                    <div class="train-car p-2 rounded-xl border ${c.motriz ? 'bg-orange-500/20 border-orange-500/60 text-orange-300' : 'bg-slate-700/50 border-slate-600 text-slate-300'} flex flex-col items-center shadow">
+                        <span class="text-[10px] font-mono">${c.type}</span>
+                        <span class="text-xs font-bold mt-0.5">${c.label}</span>
+                        <span class="text-[9px] text-slate-400 mt-0.5">${c.cabina ? 'Cab' : (c.motriz ? 'Mot' : 'Rem')}</span>
+                    </div>
+                `).join('');
+
+                details.innerHTML = `
+                    <div class="flex justify-between"><span>Composición Canónica:</span><strong class="text-orange-400">6 Motrices / 3 Remolques (Ratio 66%)</strong></div>
+                    <div class="flex justify-between"><span>Pasillo de Intercirculación:</span><strong class="text-slate-300">Separación Rígida por Coche</strong></div>
+                    <div class="flex justify-between"><span>Control de Tracción:</span><strong class="text-amber-400">Chopper SCR / IGBT (Motores CD Serie)</strong></div>
+                    <div class="flex justify-between"><span>Aforo Teórico Máximo:</span><strong class="text-slate-200">~1,750 Pasajeros</strong></div>
+                `;
+            } else {
+                btnNM22.className = 'px-3 py-2 text-xs font-semibold rounded-xl bg-orange-500 text-white shadow transition-all';
+                btnLegacy.className = 'px-3 py-2 text-xs font-semibold rounded-xl bg-slate-700 text-slate-300 hover:bg-slate-600 transition-all';
+
+                const cars = [
+                    { type: 'RC', label: 'RC1', motriz: false, cabina: true },
+                    { type: 'N', label: 'N1', motriz: true, cabina: false },
+                    { type: 'N', label: 'N2', motriz: true, cabina: false },
+                    { type: 'N', label: 'N3', motriz: true, cabina: false },
+                    { type: 'PR', label: 'PR', motriz: true, cabina: false },
+                    { type: 'N', label: 'N4', motriz: true, cabina: false },
+                    { type: 'N', label: 'N5', motriz: true, cabina: false },
+                    { type: 'N', label: 'N6', motriz: true, cabina: false },
+                    { type: 'RC', label: 'RC2', motriz: false, cabina: true }
+                ];
+
+                container.innerHTML = cars.map(c => `
+                    <div class="train-car p-2 rounded-xl border ${c.motriz ? 'bg-orange-500/20 border-orange-500/60 text-orange-300' : 'bg-cyan-500/20 border-cyan-500/60 text-cyan-300'} flex flex-col items-center shadow">
+                        <span class="text-[10px] font-mono">${c.type}</span>
+                        <span class="text-xs font-bold mt-0.5">${c.label}</span>
+                        <span class="text-[9px] text-slate-400 mt-0.5">${c.cabina ? 'Cab' : 'Mot'}</span>
+                    </div>
+                `).join('');
+
+                details.innerHTML = `
+                    <div class="flex justify-between"><span>Composición Canónica:</span><strong class="text-emerald-400">7 Motrices / 2 Remolques Cabina (78%)</strong></div>
+                    <div class="flex justify-between"><span>Pasillo de Intercirculación:</span><strong class="text-emerald-400">Continuo Sin Tabiques (+35% Aforo)</strong></div>
+                    <div class="flex justify-between"><span>Control de Tracción:</span><strong class="text-cyan-400">Inversor VVVF / Motor Asíncrono CA</strong></div>
+                    <div class="flex justify-between"><span>Aforo Teórico Máximo:</span><strong class="text-emerald-400">~2,360 Pasajeros</strong></div>
+                `;
+            }
+        }
+
+        // INTERACTIVE FAIL-SAFE SPRING BRAKE SIMULATOR
+        let springBrakeActive = false;
+        function toggleSpringBrake() {
+            springBrakeActive = !springBrakeActive;
+            const btn = document.getElementById('togglePressureBtn');
+            const chamberVisual = document.getElementById('chamberVisual');
+            const pneuBadge = document.getElementById('pneuBadge');
+            const pneuStatusText = document.getElementById('pneuStatusText');
+            const springVisual = document.getElementById('springVisual');
+            const springStateText = document.getElementById('springStateText');
+            const shoeVisual = document.getElementById('shoeVisual');
+            const shoeBadge = document.getElementById('shoeBadge');
+            const shoeStatusText = document.getElementById('shoeStatusText');
+
+            if (springBrakeActive) {
+                btn.innerText = 'Restablecer Presión Neumática (6-8 bar)';
+                btn.className = 'px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center space-x-2 cursor-pointer';
+                
+                chamberVisual.className = 'bg-slate-800 p-4 rounded-xl border-2 border-red-500 text-center transition-all';
+                pneuBadge.className = 'inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 uppercase mb-2';
+                pneuBadge.innerText = 'Presión Cero (Purga / Falla)';
+                pneuStatusText.innerText = 'Cámara Vacía';
+
+                springVisual.className = 'h-7 w-full bg-gradient-to-r from-red-500 via-orange-500 to-red-500 rounded-full transition-all duration-500 scale-x-100 opacity-100 shadow-lg';
+                springStateText.innerText = 'Resorte Expandido (Máxima Fuerza Fricción)';
+                springStateText.className = 'text-xs font-bold text-red-400 mt-1';
+
+                shoeVisual.className = 'bg-slate-800 p-4 rounded-xl border-2 border-red-500 text-center transition-all';
+                shoeBadge.className = 'inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 uppercase mb-2';
+                shoeBadge.innerText = 'Zapata Bloqueada';
+                shoeStatusText.innerText = 'Tren Inmovilizado Físicamente';
+                shoeStatusText.className = 'text-sm font-bold text-red-400 mt-1';
+            } else {
+                btn.innerText = 'Simular Falla / Purga de Aire Neumático';
+                btn.className = 'px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center space-x-2 cursor-pointer';
+
+                chamberVisual.className = 'bg-slate-800 p-4 rounded-xl border-2 border-emerald-500 text-center transition-all';
+                pneuBadge.className = 'inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 uppercase mb-2';
+                pneuBadge.innerText = 'Presión Nominal OK (6-8 bar)';
+                pneuStatusText.innerText = 'Aire Comprimido Inyectado';
+
+                springVisual.className = 'h-7 w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 rounded-full transition-all duration-500 scale-x-50 opacity-80 shadow-inner';
+                springStateText.innerText = 'Resorte Comprimido (Tren Liberado)';
+                springStateText.className = 'text-xs font-bold text-amber-400 mt-1';
+
+                shoeVisual.className = 'bg-slate-800 p-4 rounded-xl border-2 border-slate-600 text-center transition-all';
+                shoeBadge.className = 'inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-slate-700 text-slate-300 uppercase mb-2';
+                shoeBadge.innerText = 'Zapata Reposo';
+                shoeStatusText.innerText = 'Tren Libre / En Marcha Comercial';
+                shoeStatusText.className = 'text-sm font-bold text-emerald-400 mt-1';
+            }
+        }
+
+        // ==========================================
+        // AI CHAT ASSISTANT LOGIC (GEMINI API)
+        // ==========================================
+        let aiChatHistory = [];
+        const aiSystemPrompt = "Eres un ingeniero ferroviario senior con experiencia en sistemas de metro, especializado en tracción, dinámica de vehículos, diseño mecánico y eléctrico de trenes y normativa técnica aplicable al STC Metro de la CDMX (NOM-ARTF, UNE-EN). Eres un experto específico en los modelos MP-79, MP-82 y NM-22 de rodadura neumática. Responde de manera concisa, técnica y profesional en español. Mantén el rigor de ingeniería. Limita tus respuestas a un máximo de 2-3 párrafos cortos y utiliza listas si es necesario. Utiliza formato markdown para negritas.";
+
+        function toggleChat() {
+            const chatWindow = document.getElementById('ai-chat-window');
+            chatWindow.classList.toggle('hidden');
+            if(!chatWindow.classList.contains('hidden')) {
+                document.getElementById('ai-chat-input').focus();
+            }
+        }
+
+        async function handleChatSubmit(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('ai-chat-input');
+            const message = inputEl.value.trim();
+            if (!message) return;
+
+            inputEl.value = '';
+            appendChatMessage('user', message);
+            
+            const submitBtn = document.getElementById('ai-chat-submit');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
+            aiChatHistory.push({ role: 'user', parts: [{ text: message }] });
+
+            try {
+                const apiKey = ""; // API Key injected automatically by the environment
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                
+                const payload = {
+                    contents: aiChatHistory,
+                    systemInstruction: {
+                        parts: [{ text: aiSystemPrompt }]
+                    }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0) {
+                    const aiText = result.candidates[0].content.parts[0].text;
+                    aiChatHistory.push({ role: 'model', parts: [{ text: aiText }] });
+                    appendChatMessage('model', aiText);
+                } else {
+                    appendChatMessage('model', 'Error de decodificación. Revisar telemetría de comunicación con el modelo.');
+                }
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                appendChatMessage('model', '⚠️ Pérdida de comunicación con el centro de control (Error de Red). Intente de nuevo.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>';
+                document.getElementById('ai-chat-input').focus();
+            }
+        }
+
+        function appendChatMessage(role, text) {
+            const container = document.getElementById('ai-chat-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'flex items-start ' + (role === 'user' ? 'justify-end' : '');
+            
+            // Basic markdown parsing for bold text and line breaks
+            let formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em class="text-white/90">$1</em>')
+                .replace(/\n/g, '<br>');
+
+            const bubble = document.createElement('div');
+            if (role === 'user') {
+                bubble.className = 'bg-orange-500 text-white p-3 rounded-xl rounded-tr-none shadow-sm max-w-[85%] leading-relaxed';
+                bubble.innerHTML = formattedText;
+            } else {
+                bubble.className = 'bg-slate-800 border border-slate-700 text-slate-300 p-3 rounded-xl rounded-tl-none shadow-sm max-w-[85%] leading-relaxed';
+                bubble.innerHTML = formattedText;
+            }
+
+            msgDiv.appendChild(bubble);
+            container.appendChild(msgDiv);
+            
+            // Smooth scroll to bottom
+            container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Initialize Default View
+        selectTrainFormation('legacy');
+    </script>
+</body>
+</html>

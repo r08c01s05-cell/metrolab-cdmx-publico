@@ -1,0 +1,30 @@
+[
+  {
+    "asset": "NM79_cabina",
+    "endWindows": 1,
+    "postMounts": 12,
+    "seatCount": 26,
+    "sha256": "626acfb3274dafd5b736f2fd41d3a3578005da147807156b6f731f82d933cc7d"
+  },
+  {
+    "asset": "NM79_intermedio",
+    "endWindows": 2,
+    "postMounts": 12,
+    "seatCount": 28,
+    "sha256": "7316b3e4eaac3e7f1b4627e3600ce19c9b8575765b4a3e09146b346ba21c574b"
+  },
+  {
+    "asset": "MP82_cabina",
+    "endWindows": 1,
+    "postMounts": 12,
+    "seatCount": 26,
+    "sha256": "34f5df59d5871d4fcf590a89dcec04c4024da6af92eefb8c836cea93d271c4be"
+  },
+  {
+    "asset": "MP82_intermedio",
+    "endWindows": 2,
+    "postMounts": 12,
+    "seatCount": 28,
+    "sha256": "2c8eff34416e81d83d5d4792f968aa8c3190d77c42512a78d1e94d5652cde0b9"
+  }
+]

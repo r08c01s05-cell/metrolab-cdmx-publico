@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';import * as THREE from 'three';import {pickFastener131} from '../dist/fastener-picking131.js';import {makeBench102} from '../dist/maintenance-scene102.js';
+const canvas={getBoundingClientRect:()=>({left:230,top:85,width:800,height:600})},camera=new THREE.PerspectiveCamera(45,800/600,.1,100),scene=new THREE.Group(),target=new THREE.Group();target.userData.handTarget='screw1';target.add(new THREE.Mesh(new THREE.SphereGeometry(.012),new THREE.MeshStandardMaterial()));scene.add(target);
+function pick(offset=18,allowed=['screw1']){scene.updateMatrixWorld(true);camera.updateMatrixWorld(true);const ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2(offset/400,0),camera);return pickFastener131(ray,camera,canvas,[target],allowed,scene);}
+for(const z of[2,5,10]){camera.position.set(0,0,z);camera.lookAt(0,0,0);assert.equal(pick()?.id,'screw1');assert.equal(pick(21),null);assert.equal(pick(18,[]),null);}
+target.visible=false;assert.equal(pick(),null);target.visible=true;scene.visible=false;assert.equal(pick(),null);scene.visible=true;
+camera.position.set(0,0,5);camera.lookAt(0,0,0);const cover=new THREE.Mesh(new THREE.BoxGeometry(1,1,.1),new THREE.MeshStandardMaterial());cover.position.z=1;scene.add(cover);assert.equal(pick(),null,'No selection through cover');cover.visible=false;assert(pick());
+target.position.z=7;assert.equal(pick(),null,'Behind camera');target.position.z=0;
+const rigs=['ventilation','electrical','running'].map(makeBench102);for(const r of rigs){const ids=Object.keys(r.parts).filter(k=>/^(screw|bolt)\d+$/.test(k));assert.equal(ids.length,r.id==='running'?8:4);for(const id of ids){const p=r.parts[id];assert(p.children.some(o=>o.scale.x===1.45),'Visible head enlarged');} }
+console.log('131 PASS: 40px selection diameter at 3 camera distances; hidden/occluded/out-of-step/behind-camera fasteners rejected; heads enlarged in 4-screw covers and 8-bolt wheel.');

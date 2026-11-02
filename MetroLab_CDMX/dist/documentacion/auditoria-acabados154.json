@@ -1,0 +1,1508 @@
+{
+  "revision": 154,
+  "scope": "Todos los GLB servidos; CPU/geometría/materiales, sin certificación visual WebGL ni FPS.",
+  "assets": [
+    {
+      "file": "models/Captador_positivo111.glb.gz",
+      "meshes": 21,
+      "vertices": 2340,
+      "addedVertices": 540,
+      "fillets": 9,
+      "physicalMaterials": 0,
+      "categories": [
+        "copper",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/Cerradura_testero_L8.glb",
+      "meshes": 22,
+      "vertices": 14196,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 0,
+      "categories": [
+        "polished",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/MP82_cabina.glb.gz",
+      "meshes": 1707,
+      "vertices": 673289,
+      "addedVertices": 11496,
+      "fillets": 182,
+      "physicalMaterials": 386,
+      "categories": [
+        "brushed",
+        "cast",
+        "copper",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "rubber",
+        "seat",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/MP82_intermedio.glb.gz",
+      "meshes": 1653,
+      "vertices": 701710,
+      "addedVertices": 11496,
+      "fillets": 182,
+      "physicalMaterials": 324,
+      "categories": [
+        "brushed",
+        "cast",
+        "copper",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "rubber",
+        "seat",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/Motor_MP82_referencia94.glb.gz",
+      "meshes": 131,
+      "vertices": 12996,
+      "addedVertices": 1500,
+      "fillets": 25,
+      "physicalMaterials": 7,
+      "categories": [
+        "cast",
+        "copper",
+        "panel",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/Motor_NM22_referencia94.glb.gz",
+      "meshes": 85,
+      "vertices": 12264,
+      "addedVertices": 1440,
+      "fillets": 24,
+      "physicalMaterials": 2,
+      "categories": [
+        "cast",
+        "copper",
+        "panel",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/Motor_NM79_referencia94.glb.gz",
+      "meshes": 131,
+      "vertices": 12996,
+      "addedVertices": 1500,
+      "fillets": 25,
+      "physicalMaterials": 7,
+      "categories": [
+        "cast",
+        "copper",
+        "panel",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/NM22_cabina.glb.gz",
+      "meshes": 1256,
+      "vertices": 571285,
+      "addedVertices": 11496,
+      "fillets": 182,
+      "physicalMaterials": 220,
+      "categories": [
+        "brushed",
+        "cast",
+        "copper",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "paint",
+        "panel",
+        "polished",
+        "preserved",
+        "rubber",
+        "seat",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/NM22_intermedio.glb.gz",
+      "meshes": 1215,
+      "vertices": 578099,
+      "addedVertices": 11496,
+      "fillets": 182,
+      "physicalMaterials": 208,
+      "categories": [
+        "brushed",
+        "cast",
+        "copper",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "paint",
+        "panel",
+        "polished",
+        "preserved",
+        "rubber",
+        "seat",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/NM79_cabina.glb.gz",
+      "meshes": 1746,
+      "vertices": 690465,
+      "addedVertices": 11496,
+      "fillets": 182,
+      "physicalMaterials": 395,
+      "categories": [
+        "brushed",
+        "cast",
+        "copper",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "rubber",
+        "seat",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/NM79_intermedio.glb.gz",
+      "meshes": 1689,
+      "vertices": 717673,
+      "addedVertices": 11496,
+      "fillets": 182,
+      "physicalMaterials": 329,
+      "categories": [
+        "brushed",
+        "cast",
+        "copper",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "rubber",
+        "seat",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/Separador_fijo_Linea1.glb.gz",
+      "meshes": 40,
+      "vertices": 2190,
+      "addedVertices": 540,
+      "fillets": 9,
+      "physicalMaterials": 5,
+      "categories": [
+        "floor",
+        "glass",
+        "label",
+        "paint",
+        "panel",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/Separador_fijo_Linea8.glb.gz",
+      "meshes": 40,
+      "vertices": 2190,
+      "addedVertices": 540,
+      "fillets": 9,
+      "physicalMaterials": 5,
+      "categories": [
+        "floor",
+        "glass",
+        "label",
+        "paint",
+        "panel",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/Subestacion_SAF_referencia94.glb.gz",
+      "meshes": 75,
+      "vertices": 2664,
+      "addedVertices": 540,
+      "fillets": 9,
+      "physicalMaterials": 59,
+      "categories": [
+        "floor",
+        "mineral",
+        "panel",
+        "preserved",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_01_Pantitlan.glb.gz",
+      "meshes": 1334,
+      "vertices": 155802,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 242,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_02_Zaragoza.glb.gz",
+      "meshes": 1332,
+      "vertices": 157290,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 240,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_03_Gomez_Farias.glb.gz",
+      "meshes": 1328,
+      "vertices": 158586,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 382,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_04_Boulevard_Puerto_Aereo.glb.gz",
+      "meshes": 1328,
+      "vertices": 164706,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 382,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_05_Balbuena.glb.gz",
+      "meshes": 1288,
+      "vertices": 148166,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 362,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_06_Moctezuma.glb.gz",
+      "meshes": 1288,
+      "vertices": 148186,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 362,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_07_San_Lazaro.glb.gz",
+      "meshes": 1312,
+      "vertices": 157450,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 370,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_08_Candelaria.glb.gz",
+      "meshes": 1317,
+      "vertices": 157130,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 370,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_09_Merced.glb.gz",
+      "meshes": 1334,
+      "vertices": 155902,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 388,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_10_Pino_Suarez.glb.gz",
+      "meshes": 1294,
+      "vertices": 149402,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 242,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_11_Isabel_la_Catolica.glb.gz",
+      "meshes": 1330,
+      "vertices": 160048,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 236,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_12_Salto_del_Agua.glb.gz",
+      "meshes": 1312,
+      "vertices": 158890,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 370,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_13_Balderas.glb.gz",
+      "meshes": 1314,
+      "vertices": 157622,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 370,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_14_Cuauhtemoc.glb.gz",
+      "meshes": 1328,
+      "vertices": 158046,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 382,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_15_Insurgentes.glb.gz",
+      "meshes": 1328,
+      "vertices": 158566,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 236,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_16_Sevilla.glb.gz",
+      "meshes": 1288,
+      "vertices": 145966,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 362,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_17_Chapultepec.glb.gz",
+      "meshes": 1315,
+      "vertices": 158118,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 370,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_18_Juanacatlan.glb.gz",
+      "meshes": 1288,
+      "vertices": 148636,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 236,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_19_Tacubaya.glb.gz",
+      "meshes": 1428,
+      "vertices": 171314,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 224,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L1/L1_20_Observatorio.glb.gz",
+      "meshes": 1580,
+      "vertices": 201678,
+      "addedVertices": 11520,
+      "fillets": 172,
+      "physicalMaterials": 388,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_01_Garibaldi_Lagunilla.glb.gz",
+      "meshes": 1250,
+      "vertices": 322754,
+      "addedVertices": 4488,
+      "fillets": 74,
+      "physicalMaterials": 603,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_02_Bellas_Artes.glb.gz",
+      "meshes": 1484,
+      "vertices": 192602,
+      "addedVertices": 11508,
+      "fillets": 171,
+      "physicalMaterials": 522,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_03_San_Juan_de_Letran.glb.gz",
+      "meshes": 1336,
+      "vertices": 199714,
+      "addedVertices": 9528,
+      "fillets": 138,
+      "physicalMaterials": 540,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_04_Salto_del_Agua.glb.gz",
+      "meshes": 1264,
+      "vertices": 170496,
+      "addedVertices": 9528,
+      "fillets": 138,
+      "physicalMaterials": 540,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_05_Doctores.glb.gz",
+      "meshes": 1266,
+      "vertices": 169316,
+      "addedVertices": 9528,
+      "fillets": 138,
+      "physicalMaterials": 540,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_06_Obrera.glb.gz",
+      "meshes": 1266,
+      "vertices": 168618,
+      "addedVertices": 9528,
+      "fillets": 138,
+      "physicalMaterials": 540,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_07_Chabacano.glb.gz",
+      "meshes": 1368,
+      "vertices": 179666,
+      "addedVertices": 11088,
+      "fillets": 164,
+      "physicalMaterials": 540,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_08_La_Viga.glb.gz",
+      "meshes": 1478,
+      "vertices": 194364,
+      "addedVertices": 11508,
+      "fillets": 171,
+      "physicalMaterials": 522,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_09_Santa_Anita.glb.gz",
+      "meshes": 1412,
+      "vertices": 175073,
+      "addedVertices": 11508,
+      "fillets": 171,
+      "physicalMaterials": 522,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_10_Coyuya.glb.gz",
+      "meshes": 1566,
+      "vertices": 202346,
+      "addedVertices": 11328,
+      "fillets": 168,
+      "physicalMaterials": 548,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "preserved",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_11_Iztacalco.glb.gz",
+      "meshes": 1746,
+      "vertices": 211110,
+      "addedVertices": 11508,
+      "fillets": 171,
+      "physicalMaterials": 530,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "preserved",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_12_Apatlaco.glb.gz",
+      "meshes": 1746,
+      "vertices": 211010,
+      "addedVertices": 11508,
+      "fillets": 171,
+      "physicalMaterials": 530,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "preserved",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_13_Aculco.glb.gz",
+      "meshes": 1750,
+      "vertices": 210614,
+      "addedVertices": 11508,
+      "fillets": 171,
+      "physicalMaterials": 530,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "preserved",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_14_Escuadron_201.glb.gz",
+      "meshes": 1284,
+      "vertices": 172374,
+      "addedVertices": 9528,
+      "fillets": 138,
+      "physicalMaterials": 540,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_15_Atlalilco.glb.gz",
+      "meshes": 1282,
+      "vertices": 168192,
+      "addedVertices": 9528,
+      "fillets": 138,
+      "physicalMaterials": 540,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_16_Iztapalapa.glb.gz",
+      "meshes": 1282,
+      "vertices": 168934,
+      "addedVertices": 9528,
+      "fillets": 138,
+      "physicalMaterials": 540,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_17_Cerro_de_la_Estrella.glb.gz",
+      "meshes": 1302,
+      "vertices": 187722,
+      "addedVertices": 9528,
+      "fillets": 138,
+      "physicalMaterials": 540,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_18_UAM_I.glb.gz",
+      "meshes": 1302,
+      "vertices": 179882,
+      "addedVertices": 9528,
+      "fillets": 138,
+      "physicalMaterials": 540,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/andenes/L8/L8_19_Constitucion_de_1917.glb.gz",
+      "meshes": 1750,
+      "vertices": 216264,
+      "addedVertices": 11508,
+      "fillets": 171,
+      "physicalMaterials": 530,
+      "categories": [
+        "brushed",
+        "diffuser",
+        "floor",
+        "glass",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "polished",
+        "preserved",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/herramientas139/herramientas139.glb.gz",
+      "meshes": 76,
+      "vertices": 7381,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 50,
+      "categories": [
+        "brushed",
+        "panel",
+        "polished",
+        "rubber"
+      ]
+    },
+    {
+      "file": "models/mantenimiento103/doors.glb.gz",
+      "meshes": 65,
+      "vertices": 14289,
+      "addedVertices": 1656,
+      "fillets": 23,
+      "physicalMaterials": 17,
+      "categories": [
+        "brushed",
+        "glass",
+        "label",
+        "panel",
+        "rubber"
+      ]
+    },
+    {
+      "file": "models/mantenimiento103/electrical.glb.gz",
+      "meshes": 83,
+      "vertices": 20719,
+      "addedVertices": 1512,
+      "fillets": 21,
+      "physicalMaterials": 23,
+      "categories": [
+        "brushed",
+        "copper",
+        "diffuser",
+        "label",
+        "panel",
+        "rubber"
+      ]
+    },
+    {
+      "file": "models/mantenimiento103/running.glb.gz",
+      "meshes": 84,
+      "vertices": 19806,
+      "addedVertices": 1080,
+      "fillets": 15,
+      "physicalMaterials": 21,
+      "categories": [
+        "brushed",
+        "label",
+        "panel",
+        "rubber"
+      ]
+    },
+    {
+      "file": "models/mantenimiento103/ventilation.glb.gz",
+      "meshes": 70,
+      "vertices": 16490,
+      "addedVertices": 1296,
+      "fillets": 18,
+      "physicalMaterials": 14,
+      "categories": [
+        "brushed",
+        "label",
+        "panel",
+        "rubber"
+      ]
+    },
+    {
+      "file": "models/mantenimiento104/guante.glb.gz",
+      "meshes": 1,
+      "vertices": 10318,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 1,
+      "categories": [
+        "cloth"
+      ]
+    },
+    {
+      "file": "models/personajes/child_walk138.glb.gz",
+      "meshes": 15,
+      "vertices": 41604,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 6,
+      "categories": [
+        "cloth",
+        "eye",
+        "hair",
+        "leather",
+        "preserved",
+        "skin"
+      ]
+    },
+    {
+      "file": "models/personajes/hitman_walk138.glb.gz",
+      "meshes": 8,
+      "vertices": 39183,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 0,
+      "categories": [
+        "glass",
+        "preserved"
+      ]
+    },
+    {
+      "file": "models/personajes/joe_walk137.glb.gz",
+      "meshes": 12,
+      "vertices": 30173,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 3,
+      "categories": [
+        "cloth",
+        "hair",
+        "preserved",
+        "skin"
+      ]
+    },
+    {
+      "file": "models/personajes/kamala_walk138.glb.gz",
+      "meshes": 32,
+      "vertices": 95558,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 1,
+      "categories": [
+        "cloth",
+        "hair",
+        "preserved"
+      ]
+    },
+    {
+      "file": "models/personajes/mujer_walk137.glb.gz",
+      "meshes": 15,
+      "vertices": 41604,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 6,
+      "categories": [
+        "cloth",
+        "eye",
+        "hair",
+        "leather",
+        "preserved",
+        "skin"
+      ]
+    },
+    {
+      "file": "models/proteccion138/bancos138.glb.gz",
+      "meshes": 210,
+      "vertices": 15285,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 132,
+      "categories": [
+        "paint",
+        "rubber",
+        "seat"
+      ]
+    },
+    {
+      "file": "models/revision142/instrumentos142.glb.gz",
+      "meshes": 32,
+      "vertices": 44684,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 23,
+      "categories": [
+        "floor",
+        "glass",
+        "panel",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/revision142/servicio_ventilation142.glb.gz",
+      "meshes": 105,
+      "vertices": 30446,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 4,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "paint",
+        "panel",
+        "preserved",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/revision142/subestacion142.glb.gz",
+      "meshes": 2850,
+      "vertices": 645452,
+      "addedVertices": 864,
+      "fillets": 12,
+      "physicalMaterials": 983,
+      "categories": [
+        "brushed",
+        "cast",
+        "ceramic",
+        "copper",
+        "diffuser",
+        "floor",
+        "label",
+        "mineral",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/revision149/pupitres149.glb.gz",
+      "meshes": 102,
+      "vertices": 26516,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 48,
+      "categories": [
+        "brushed",
+        "label",
+        "paint",
+        "panel"
+      ]
+    },
+    {
+      "file": "models/revision150/battery150.glb.gz",
+      "meshes": 85,
+      "vertices": 15542,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 17,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "copper",
+        "label",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/revision150/control150.glb.gz",
+      "meshes": 107,
+      "vertices": 23729,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 26,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "copper",
+        "label",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/revision150/diodes150.glb.gz",
+      "meshes": 110,
+      "vertices": 27888,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 42,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "copper",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/revision150/insulation150.glb.gz",
+      "meshes": 107,
+      "vertices": 28394,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 50,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "copper",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/revision150/relay150.glb.gz",
+      "meshes": 110,
+      "vertices": 30624,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 43,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "copper",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/revision150/ventilation150.glb.gz",
+      "meshes": 75,
+      "vertices": 20791,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 3,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "panel",
+        "preserved",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/subestaciones129/diodes.glb.gz",
+      "meshes": 117,
+      "vertices": 29559,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 49,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "copper",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/subestaciones129/insulation.glb.gz",
+      "meshes": 112,
+      "vertices": 29903,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 55,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "copper",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/subestaciones129/relay.glb.gz",
+      "meshes": 117,
+      "vertices": 31882,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 50,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "copper",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/subestaciones134/servicio_battery.glb.gz",
+      "meshes": 110,
+      "vertices": 24109,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 18,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "copper",
+        "label",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/subestaciones134/servicio_control.glb.gz",
+      "meshes": 129,
+      "vertices": 31624,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 26,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "copper",
+        "label",
+        "paint",
+        "panel",
+        "rubber",
+        "steel"
+      ]
+    },
+    {
+      "file": "models/subestaciones136/servicio_ventilation.glb.gz",
+      "meshes": 124,
+      "vertices": 24023,
+      "addedVertices": 0,
+      "fillets": 0,
+      "physicalMaterials": 61,
+      "categories": [
+        "brushed",
+        "ceramic",
+        "paint",
+        "panel",
+        "rubber"
+      ]
+    }
+  ],
+  "totalAssets": 81,
+  "fillets": 7576,
+  "addedVertices": 505596,
+  "textures": {
+    "sets": 17,
+    "textures": 46,
+    "bytes": 12058624
+  }
+}

@@ -1,0 +1,11 @@
+/* Tools wrap within the available width; no clipped labels or horizontal rail. */
+#sr126-dialog .sr136-toolbelt{border-radius:6px;padding:9px 12px;box-shadow:none}
+#sr126-dialog .sr136-toolbelt .sr128-tools{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px;overflow:visible;flex-wrap:wrap;margin:7px 0;padding:0}
+#sr126-dialog .sr136-toolbelt button[data-sr128-tool]{display:flex;min-width:0;width:100%;min-height:43px;white-space:normal;overflow-wrap:normal;padding:7px 9px!important;gap:7px;border-radius:5px;font:500 12px/1.3 system-ui!important;transform:none;box-shadow:none}
+#sr126-dialog .sr136-toolbelt button[data-sr128-tool][hidden]{display:none!important}
+#sr126-dialog .sr136-toolbelt button[data-sr128-tool]>span{min-width:0;white-space:normal}
+#sr126-dialog .sr136-toolbelt button[data-sr128-tool] svg{width:21px;height:21px;flex-basis:21px}
+#sr126-dialog .sr136-toolbelt button[data-sr128-tool][aria-pressed=true]{box-shadow:inset 3px 0 #e3bd83;transform:none}
+#sr126-dialog .sr136-controls{font-size:10px;gap:5px;margin-top:5px}
+#sr126-dialog .sr136-toolbelt-head{gap:10px;letter-spacing:0}#sr126-dialog .sr136-toolbelt-head b{font-size:9px}
+@media(max-width:600px){#sr126-dialog .sr136-toolbelt .sr128-tools{grid-template-columns:repeat(2,minmax(0,1fr))}#sr126-dialog .sr136-toolbelt button[data-sr128-tool]{font-size:11px!important;min-height:39px}#sr126-dialog .sr136-controls{display:none}}

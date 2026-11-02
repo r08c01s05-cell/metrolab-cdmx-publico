@@ -1,0 +1,36 @@
+{
+  "source": "assets-source/audio/aviso_cierre_y_mensaje68.mp4",
+  "method": "Extractos del video aportado: cierre 0–5 s; mensaje manual 11.366667–14.766667 s. Sin bucle ni síntesis.",
+  "models": {
+    "NM-22": {
+      "url": "audio/cierre68/aviso_cierre.mp3",
+      "start": 0,
+      "end": 5,
+      "duration": 5,
+      "source_model": "Referencia común aportada",
+      "reference_only": true
+    },
+    "NM-79": {
+      "url": "audio/cierre68/aviso_cierre.mp3",
+      "start": 0,
+      "end": 5,
+      "duration": 5,
+      "source_model": "Referencia común aportada",
+      "reference_only": true
+    },
+    "MP-82": {
+      "url": "audio/cierre68/aviso_cierre.mp3",
+      "start": 0,
+      "end": 5,
+      "duration": 5,
+      "source_model": "Referencia común aportada",
+      "reference_only": true
+    }
+  },
+  "manual_message": {
+    "url": "audio/cierre68/permita_cierre.mp3",
+    "start": 11.366667,
+    "end": 14.766667,
+    "duration": 3.4
+  }
+}

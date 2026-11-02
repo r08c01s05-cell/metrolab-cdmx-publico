@@ -1,0 +1,9 @@
+# Mantenimiento con lista de tareas · 179
+
+La subestación conserva las seis misiones y sus acciones reales. El panel lateral presenta una lista de equipos (transformador, rectificador, tablero auxiliar y banco de baterías), su estado y los pasos de la intervención seleccionada. El progreso procede de la máquina de estados del ejercicio; las casillas no pueden marcarse a mano. Se retiran del panel principal las tarjetas y menús repetidos.
+
+WASD/flechas vuelve a caminar desde Inspeccionar o PAN. También se puede mantener pulsada una flecha del control de desplazamiento dentro de la vista. Al soltar se detiene; el botón derecho permite mirar en modo Caminar y trabajar. Las colisiones se calculan por malla para conservar los huecos entre piezas; no se utiliza la caja de todo un conjunto como bloque sólido. La bolsa permanece colocada en el piso. F / Ubicar trabajo actual recupera una posición de pie frente al equipo sin colocar la cámara dentro de una pieza baja.
+
+Los brazos mantienen un hombro fijo respecto al cuerpo y longitudes constantes en brazo y antebrazo. El guante no aparece unido artificialmente a un brazo extendido hacia una pieza distante: se indica acercarse o agacharse. Las mangas reciben coordenadas UV y relieve geométrico sutil. No se sustituyen modelos de tren ni estaciones.
+
+Validación: seis misiones montadas con 155 acciones de puntero; movimiento inmediato en cada misión; regreso desde inspección con WASD; movimiento por botones y parada al soltar; paso por huecos del bastidor; lista vinculada al estado real; hombro fijo y longitud de los segmentos; conducción y cámaras. Pruebas CPU/DOM. La revisión de imagen 3D sigue pendiente: el navegador disponible informa GL_VENDOR y GL_RENDERER Disabled y no crea el contexto WebGL. No se afirma validación visual ni medición de FPS.

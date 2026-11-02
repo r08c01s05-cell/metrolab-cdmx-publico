@@ -1,0 +1,11 @@
+import * as T from 'three';
+export function floorLevel192(view){if(!view.model?.isObject3D)return 0;view.model.updateWorldMatrix(true,true);const ray=new T.Raycaster(new T.Vector3(0,.35,-3.8),new T.Vector3(0,-1,0),0,.5),hits=ray.intersectObject(view.model,true).filter(h=>h.point.y>=-.05&&h.point.y<.15);return hits.length?Math.min(...hits.map(h=>h.point.y)):0;}
+// Ground-level furniture must clear low conduits as well as walking obstacles.
+export function floorHazards192(view,floor=0){
+ const hazards=[],v=new T.Vector3();view.model?.updateWorldMatrix(true,true);
+ view.model?.traverse(o=>{if(!o.isMesh||!o.geometry)return;for(let n=o;n;n=n.parent)if(!n.visible)return;const p=o.geometry.attributes.position,index=o.geometry.index;if(!p)return;const bounds=new T.Box3().setFromObject(o);if(bounds.max.y<floor+.035||bounds.min.y>floor+.8)return;for(let i=0;i<(index?.count||p.count);i+=3){const b=new T.Box3();for(let j=0;j<3;j++)b.expandByPoint(v.fromBufferAttribute(p,index?index.getX(i+j):i+j).applyMatrix4(o.matrixWorld));if(b.max.y>floor+.035&&b.min.y<floor+.8)hazards.push(b);}});
+ for(const door of view.model?.userData.doors||[]){door.updateWorldMatrix(true,true);const b=new T.Box3().setFromObject(door),size=b.getSize(new T.Vector3()),hinge=door.getWorldPosition(new T.Vector3()),radius=Math.hypot(size.x,size.z);if(b.min.y<floor+1.5)hazards.push(new T.Box3(new T.Vector3(hinge.x-radius,floor,hinge.z-radius),new T.Vector3(hinge.x+radius,floor+2,hinge.z+radius)));}
+ hazards.push(...(view.walk176?.obstacles||[]));return hazards;
+}
+export function floorBox192(point,hx,hz){return new T.Box3(new T.Vector3(point.x-hx,point.y,point.z-hz),new T.Vector3(point.x+hx,point.y+.8,point.z+hz));}
+export function findFloorPlace192(hazards,preferred,hx,hz){const candidates=[];for(let x=-8+hx;x<=8-hx;x+=.2)for(let z=-4.2+hz;z<=3.8-hz;z+=.2)candidates.push(new T.Vector3(x,preferred.y,z));candidates.sort((a,b)=>a.distanceToSquared(preferred)-b.distanceToSquared(preferred));return candidates.find(p=>{const boxes=[floorBox192(p,hx+.12,hz+.12),floorBox192(p.clone().add(new T.Vector3(0,0,-.65)),.3,.3)];return p.z> -3.2&&p.z< -2.65&&!hazards.some(o=>boxes.some(b=>b.max.x>o.min.x&&b.min.x<o.max.x&&b.max.z>o.min.z&&b.min.z<o.max.z));})||null;}

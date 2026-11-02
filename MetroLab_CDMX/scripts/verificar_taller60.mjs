@@ -1,0 +1,3 @@
+import assert from 'node:assert/strict';import{MaintenanceExercise,partCategory,CASES}from'../dist/workshop-core.js';
+for(const id of Object.keys(CASES)){const m=new MaintenanceExercise();m.reset(id);assert.throws(()=>m.repair());assert.throws(()=>m.inspect(CASES[id].group));m.isolate();assert.throws(()=>m.inspect('incorrect'));m.inspect(CASES[id].group);assert.throws(()=>m.test());m.repair();m.test();assert(m.passed);m.reset(id);assert(!m.isolated&&!m.passed&&m.log.length===0);}
+assert.equal(partCategory('Puerta_S1_1_Hoja_1',''),'doors');assert.equal(partCategory('Rueda','mecanica'),'mechanics');console.log('Tres prácticas de mantenimiento: orden, bloqueos y reinicio correctos.');

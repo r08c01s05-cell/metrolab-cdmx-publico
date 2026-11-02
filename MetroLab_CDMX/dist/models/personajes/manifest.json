@@ -1,0 +1,54 @@
+[
+  {
+    "name": "hombre_joe137",
+    "url": "./models/personajes/joe_walk137.glb.gz",
+    "kind137": "man",
+    "imported137": true
+  },
+  {
+    "name": "mujer_aprobada137",
+    "url": "./models/personajes/kamala_walk138.glb.gz",
+    "kind137": "woman",
+    "imported137": true
+  },
+  {
+    "name": "estudiante_hombre137",
+    "url": "./models/personajes/joe_walk137.glb.gz",
+    "kind137": "student-man",
+    "imported137": true,
+    "student137": true
+  },
+  {
+    "name": "estudiante_mujer137",
+    "url": "./models/personajes/kamala_walk138.glb.gz",
+    "kind137": "student-woman",
+    "imported137": true,
+    "student137": true
+  },
+  {
+    "name": "nino_hoodie138",
+    "url": "./models/personajes/child_walk138.glb.gz",
+    "kind137": "child",
+    "imported137": true,
+    "newFemale119": true
+  },
+  {
+    "name": "madre_infante138",
+    "url": "./models/personajes/kamala_walk138.glb.gz",
+    "kind137": "parent",
+    "imported137": true,
+    "infant138": true
+  },
+  {
+    "name": "pasajero_hitman138",
+    "url": "./models/personajes/hitman_walk138.glb.gz",
+    "kind137": "man",
+    "imported137": true
+  },
+  {
+    "name": "pasajera_kamala138",
+    "url": "./models/personajes/kamala_walk138.glb.gz",
+    "kind137": "woman",
+    "imported137": true
+  }
+]

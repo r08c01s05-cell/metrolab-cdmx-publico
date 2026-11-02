@@ -1,0 +1,9 @@
+/* L8 alone keeps its native square proportions inside the tracking popover. */
+#map.map-l8,#sim106-map-slot #map.map-l8{width:100%;min-width:0;height:auto;min-height:0;aspect-ratio:1/1;display:block}
+#sim106-map-slot .map-wrap:has(#map.map-l8){height:auto;min-height:0;overflow:hidden}
+#workshop-models .workshop-model{border-left:4px solid #ed5799}
+#workshop-models .workshop-model[data-line="8"]{border-left-color:#00ac63}
+#workshop-models .workshop-model b{font-size:20px}
+#workshop-models .workshop-line142{display:block;font-size:16px;font-weight:700;line-height:1.4;color:#f085b7!important;margin-top:7px}
+#workshop-models [data-line="8"] .workshop-line142{color:#75dfa8!important}
+@media(max-width:900px){#workshop-models{flex-wrap:wrap}#workshop-models .workshop-model{width:auto;flex:1 1 100px;min-width:0}#workshop-models .workshop-line142{font-size:15px}}

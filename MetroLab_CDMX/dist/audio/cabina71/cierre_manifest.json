@@ -1,0 +1,40 @@
+{
+  "source": "assets-source/audio/aviso_cierre_y_mensaje68.mp4",
+  "method": "Aviso derivado de la grabación aportada: tramo audible del extracto anterior 1.05–4.15 s, extendido a 5 s mediante ajuste temporal sin cambiar el tono. Mensaje manual original conservado.",
+  "models": {
+    "NM-22": {
+      "url": "audio/cabina71/aviso_cierre206.wav",
+      "start": 0,
+      "end": 5,
+      "duration": 5,
+      "source_model": "Referencia común aportada",
+      "reference_only": true,
+      "audible_duration206": 5
+    },
+    "NM-79": {
+      "url": "audio/cabina71/aviso_cierre206.wav",
+      "start": 0,
+      "end": 5,
+      "duration": 5,
+      "source_model": "Referencia común aportada",
+      "reference_only": true,
+      "audible_duration206": 5
+    },
+    "MP-82": {
+      "url": "audio/cabina71/aviso_cierre206.wav",
+      "start": 0,
+      "end": 5,
+      "duration": 5,
+      "source_model": "Referencia común aportada",
+      "reference_only": true,
+      "audible_duration206": 5
+    }
+  },
+  "manual_message": {
+    "url": "audio/cabina71/permita_cierre.mp3",
+    "start": 11.366667,
+    "end": 14.766667,
+    "duration": 3.4
+  },
+  "processing": "206: atempo 0.62 sobre el tramo audible; entrada/salida de 18 ms; WAV PCM mono 44.1 kHz de 5 s. Sin síntesis ni reproducción en bucle."
+}

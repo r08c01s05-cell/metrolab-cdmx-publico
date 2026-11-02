@@ -1,0 +1,50 @@
+[
+  {
+    "file": "models/NM22_cabina.glb.gz",
+    "originalNodes": 633,
+    "addedNodes": 104,
+    "motors": 4,
+    "sha256": "6d214dc29e7e8696479edd5ca4e52f9dc25c7b0d13007a3a0d0075b16620bf3c",
+    "scope": "Plantilla motriz. El simulador elimina motores de R y PR."
+  },
+  {
+    "file": "models/NM22_intermedio.glb.gz",
+    "originalNodes": 645,
+    "addedNodes": 104,
+    "motors": 4,
+    "sha256": "e015f97800a728a1e3eae8d46d6469649d6e6f18148653cc8ee7adf8217d85b0",
+    "scope": "Plantilla motriz. El simulador elimina motores de R y PR."
+  },
+  {
+    "file": "models/NM79_cabina.glb.gz",
+    "originalNodes": 668,
+    "addedNodes": 104,
+    "motors": 4,
+    "sha256": "475a5caecfb259b0a129e80c8fba7311fb144d64b15d1ac964782b9267ee3c67",
+    "scope": "Plantilla motriz. El simulador elimina motores de R y PR."
+  },
+  {
+    "file": "models/NM79_intermedio.glb.gz",
+    "originalNodes": 650,
+    "addedNodes": 104,
+    "motors": 4,
+    "sha256": "ef91c43b7ec8fc709d56f89752f7e6614bc9057e490ee0cd1ec3de48971944c9",
+    "scope": "Plantilla motriz. El simulador elimina motores de R y PR."
+  },
+  {
+    "file": "models/MP82_cabina.glb.gz",
+    "originalNodes": 623,
+    "addedNodes": 104,
+    "motors": 4,
+    "sha256": "0250410eb0131e2de186ff8f54e65d59f1612050472c3876232441d55307f09f",
+    "scope": "Plantilla motriz. El simulador elimina motores de R y PR."
+  },
+  {
+    "file": "models/MP82_intermedio.glb.gz",
+    "originalNodes": 611,
+    "addedNodes": 104,
+    "motors": 4,
+    "sha256": "3083b005d91aea7d860b319f1b50368825c04ba08234387699a8d8b863729ba4",
+    "scope": "Plantilla motriz. El simulador elimina motores de R y PR."
+  }
+]
