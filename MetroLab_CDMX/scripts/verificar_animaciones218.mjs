@@ -37,6 +37,6 @@ for(const id of ['NM22','NM79','MP82']){
  animation.dispose();assert.equal(disposedBorrowed,0);for(const r of before){assert.equal(r.o.parent,r.parent);assert(r.o.matrix.equals(r.matrix));}model.dispose();assert.equal(disposedBorrowed,0);assert.equal(scene.children.length,1);console.log('218 PASS geometry / restore / seek / ownership',id);
 }
 const model=await loadFaultModel217('substation'),scene=new T.Scene();scene.add(model.root);const effects=new FaultAnimation218(model,'substation',scene);
-effects.apply(sampleOutcome218('sr-cooling',1,'unprotected'));assert(effects.smoke.some(s=>s.o.visible&&s.o.material.opacity>0));
+effects.apply(sampleOutcome218('sr-cooling',1,'unprotected'));assert(effects.fx225?.smoke.group.visible||effects.smoke.some(s=>s.o.visible&&s.o.material.opacity>0),'Humo visible en la variante sin protección (226: humo realista del ensayo de ventilación)');
 effects.apply(sampleOutcome218('sr-cooling',1));assert(effects.smoke.every(s=>!s.o.visible));effects.dispose();model.dispose();
 console.log('218 PASS: deterministic train translation, rolling/locked wheels, complete doors, stopped fans, open protection, hypothetical thermal damage; three seek/reset cycles per model.');
