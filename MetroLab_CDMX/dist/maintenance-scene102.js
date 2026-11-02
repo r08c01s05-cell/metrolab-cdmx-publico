@@ -1,5 +1,5 @@
 import {WorkshopPlay199} from './workshop-play199.js?v=216';
-import {WorkshopWalk187} from './workshop-walk187.js?v=216';
+import {WorkshopWalk187} from './workshop-walk187.js?v=224';
 import {stageTrain176} from './instrument-staging176.js?v=188';
 import {mountedTrain156,mountRig156,maintenanceBay156} from './installed-train156.js?v=222';
 import {startBagPickup156,updateBagPickup156,cancelBagPickup156} from './tool-bag156.js?v=216';

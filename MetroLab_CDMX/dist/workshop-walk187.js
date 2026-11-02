@@ -1,4 +1,4 @@
-import {installKeyHelp181} from './game-keys181.js?v=216';
+import {installKeyHelp181} from './game-keys181.js?v=224';
 import * as T from 'three';
 // One player controller: cursor release never disables walking or crouching.
 export class WorkshopWalk187{

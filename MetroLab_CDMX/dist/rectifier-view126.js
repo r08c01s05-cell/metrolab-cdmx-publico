@@ -1,5 +1,5 @@
 import {RenderBudget101} from './render-budget101.js?v=222';
-import {Walk176} from './walk176.js?v=216';
+import {Walk176} from './walk176.js?v=224';
 import {installCad168} from './substation-cad168.js?v=219';
 import {installSpread144,detailSpread144} from './substation-spread144.js?v=144';
 import {maquetteCamera137,architecture137,installMaquetteUI137} from './substation-maquette137.js?v=138';
