@@ -7,6 +7,7 @@ export class FaultAnimation218{
   this.geometry=new Set();this.materials=new Set();this.textures=new Set();this.restore=[];this.pivots=[];this.doors=[];this.wheels=[];this.smoke=[];this.basePosition=model.root.position.clone();
   this.envelope=model.bounds().clone();this.initialBounds=this.envelope.clone();
   if(domain==='train')this.train();else this.substation();
+  if(globalThis.location?.search?.includes('depurar225'))globalThis.faultFx225=this;
  }
  mesh(geometry,color,parent=this.root,options={}){this.geometry.add(geometry);const m=new T.MeshStandardMaterial({color,roughness:.7,...options});this.materials.add(m);const o=new T.Mesh(geometry,m);o.userData.study218=true;parent.add(o);return o;}
  box(size,color,position,parent=this.root){const o=this.mesh(new T.BoxGeometry(...size),color,parent);o.position.set(...position);return o;}
@@ -37,18 +38,79 @@ export class FaultAnimation218{
   const map=new T.DataTexture(pixels,64,64);map.needsUpdate=true;this.textures.add(map);
   for(let i=0;i<7;i++){const material=new T.SpriteMaterial({map,color:'#626760',transparent:true,opacity:0,depthWrite:false});this.materials.add(material);const o=new T.Sprite(material);this.root.add(o);o.position.set(c.x+(i%3-1)*size.x*.16,b.max.y,c.z);this.smoke.push({o,x:o.position.x,y:o.position.y,z:o.position.z,i});}
   this.envelope.max.y+=1;
+  this.cooling225(map);
+ }
+ // Fenómenos 225: what physically happens in the transformer when forced ventilation is lost.
+ // Cooling air rising through the windings from fans below them, the fans running down, the
+ // air turning into slow warm convection, the windings heating, and the protection opening
+ // with a brief spark at the terminals. Everything is driven by the absolute sample, so seeking,
+ // pausing and display rate give the same picture. Sober, study-scene effects; not a solver.
+ cooling225(map){
+  const fx=this.fx225={root:new T.Group(),fans:[],coils:[]};fx.root.name='Fenómenos de ventilación225';this.root.add(fx.root);
+  // Winding materials heat up: dull red emissive, stronger only in the unprotected hypothesis.
+  for(const row of this.model.rows)if(row.part==='transformer'&&/resina|devanado|bobina/i.test(row.material.name)&&row.material.emissive)fx.coils.push({material:row.material,emissive:row.material.emissive.clone(),intensity:row.material.emissiveIntensity});
+  // Effects anchor to the windings themselves, not to the enclosure around them.
+  const coilMaterials=new Set(fx.coils.map(c=>c.material)),box=new T.Box3();this.model.targets.get('transformer')?.traverse(o=>{if(o.isMesh&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>coilMaterials.has(m)))box.union(new T.Box3().setFromObject(o));});
+  if(box.isEmpty())box.copy(this.model.bounds('transformer'));
+  const size=box.getSize(new T.Vector3()),c=box.getCenter(new T.Vector3());Object.assign(fx,{box,size,center:c});
+  // The cabinet is open on its -z face (where the study camera looks from), and the winding block is wide along x and thin along z.
+  // Air: streaks rising through the winding ducts and just in front of them, drawn as thin
+  // instanced bars so they keep a visible width at any distance.
+  const count=300,seeds=[];for(let i=0;i<count;i++){const h=Math.sin(i*12.9898)*43758.5453,r=h-Math.floor(h),h2=Math.sin(i*78.233)*12345.678,r2=h2-Math.floor(h2),h3=Math.sin(i*39.425)*24634.6345,r3=h3-Math.floor(h3);seeds.push({x:r2-.5,depth:i%3?r3*.35:.35+r3*.65,phase:r});}
+  const bar=new T.BoxGeometry(.02,1,.02);bar.translate(0,.5,0);this.geometry.add(bar);
+  const airMaterial=new T.MeshBasicMaterial({color:'#ffffff',transparent:true,opacity:.75,depthWrite:false});this.materials.add(airMaterial);
+  fx.air=new T.InstancedMesh(bar,airMaterial,count);fx.air.instanceMatrix.setUsage(T.DynamicDrawUsage);fx.air.setColorAt(0,new T.Color());fx.air.frustumCulled=false;fx.air.name='Aire de refrigeración225';fx.root.add(fx.air);fx.seeds=seeds;
+  // Two axial fans at the foot of the windings on the open side, blowing in under them; the
+  // air then turns and rises through the winding ducts.
+  const radius=Math.min(.26,size.x*.12),blade=new T.BoxGeometry(radius*.34,radius*.86,radius*.05);blade.translate(0,radius*.47,0);this.geometry.add(blade);
+  for(const k of [-1,1]){const fan=new T.Group();fan.position.set(c.x+k*size.x*.27,box.min.y+radius*.55,box.min.z-.16);fx.root.add(fan);
+   this.mesh(new T.TorusGeometry(radius,radius*.08,8,28),'#2f3539',fan,{metalness:.4,roughness:.5});
+   this.mesh(new T.RingGeometry(radius*.2,radius,20,1),'#1d2124',fan,{transparent:true,opacity:.3,side:T.DoubleSide}).position.z=.02;
+   const rotor=new T.Group();fan.add(rotor);for(let j=0;j<5;j++){const m=this.mesh(blade,'#5d676f',rotor,{metalness:.3,roughness:.55});m.rotation.z=j*Math.PI*2/5;m.rotation.y=.4;}
+   this.mesh(new T.CylinderGeometry(radius*.17,radius*.17,radius*.16,16),'#1f2326',rotor).rotation.x=Math.PI/2;fx.fans.push(rotor);}
+  // Sparks and a flash at the terminals above the windings when the protection opens.
+  const sparkCount=48,spark=new T.BufferGeometry();spark.setAttribute('position',new T.BufferAttribute(new Float32Array(sparkCount*3),3));this.geometry.add(spark);
+  const sparkMaterial=new T.PointsMaterial({size:.09,map,color:'#ffd27a',transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending});this.materials.add(sparkMaterial);
+  fx.sparks=new T.Points(spark,sparkMaterial);fx.sparks.frustumCulled=false;fx.sparks.name='Chispa de apertura225';fx.root.add(fx.sparks);
+  fx.sparkSeeds=Array.from({length:sparkCount},(_,i)=>{const a=i*2.399,u=(i*.618)%1;return {dx:Math.cos(a)*(.3+u),dz:Math.sin(a)*(.3+u),up:.6+((i*.37)%1)};});
+  const top=this.model.bounds('transformer');fx.terminal=new T.Vector3(c.x+size.x*.25,box.max.y+.12,box.min.z-.05);
+  const coreMaterial=new T.SpriteMaterial({map,color:'#cfe6ff',transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending});this.materials.add(coreMaterial);fx.arc=new T.Sprite(coreMaterial);fx.arc.scale.setScalar(.45);fx.arc.position.copy(fx.terminal);fx.root.add(fx.arc);
+  fx.flash=new T.PointLight('#ffcf8a',0,4,1.5);fx.flash.position.copy(fx.terminal);fx.root.add(fx.flash);
+ }
+ coolingApply225(sample){
+  const fx=this.fx225;if(!fx)return;const active=sample.scenario?.id==='sr-cooling';fx.root.visible=active;
+  for(const coil of fx.coils){coil.material.emissive.copy(coil.emissive);coil.material.emissiveIntensity=coil.intensity;}
+  if(!active)return;
+  // The physical effects now carry the heat; the flat amber false colour would wash them out.
+  this.model.tint('',0);
+  const a=sample.outcome,p=sample.progress,flow=sample.signals.flow??0,heat=sample.signals.heat??0,flowTravel=a.fanAngle/(Math.PI*64),{box,size,center}=fx;
+  for(const fan of fx.fans)fan.rotation.z=a.fanAngle*1.6;
+  // Forced air rises fast and cool; with the fans stopped only a slow warm draught remains.
+  const cool=new T.Color('#3d8fd6'),warm=new T.Color('#e0702e'),tint=cool.clone().lerp(warm,T.MathUtils.smoothstep(heat,.3,.85)*(1-flow*.8)),colour=new T.Color(),m=new T.Matrix4(),v=new T.Vector3(),q=new T.Quaternion(),sc=new T.Vector3();
+  const natural=.09*T.MathUtils.smoothstep(heat,.25,.9),climb=flowTravel*9+p*16*natural,len=size.y*(.05+.13*flow+.08*natural),y0=box.min.y-.05,span=size.y+.4;
+  fx.seeds.forEach((s,i)=>{const t=(s.phase+climb)%1,sway=Math.sin(t*9+i)*.025*(1-flow),fade=Math.sin(Math.PI*t);v.set(center.x+s.x*size.x*1.02+sway,y0+span*t,box.min.z-.04+s.depth*size.z);sc.set(1,len*(.4+.6*fade),1);m.compose(v,q,sc);fx.air.setMatrixAt(i,m);fx.air.setColorAt(i,colour.copy(tint).multiplyScalar(.35+.65*fade));});
+  fx.air.instanceMatrix.needsUpdate=true;fx.air.instanceColor.needsUpdate=true;fx.air.material.opacity=.35+.6*Math.max(flow,.75*T.MathUtils.smoothstep(heat,.3,.8));
+  // Heating: subtle under protection, glowing when the hypothesis says the protection does not act.
+  const glow=T.MathUtils.smoothstep(heat,.45,.95)*(a.unprotected?1.8:.45);
+  for(const coil of fx.coils){coil.material.emissive.set('#ff4d17');coil.material.emissiveIntensity=glow;}
+  // Opening: a half-second burst of sparks and a flash at the terminals (not in the unprotected case).
+  const burst=a.unprotected?0:T.MathUtils.clamp((p-.75)/.05,0,1),live=burst>0&&burst<1;
+  fx.sparks.visible=live;fx.arc.visible=live;fx.arc.material.opacity=live?Math.max(0,1-burst*2.6):0;fx.flash.intensity=live?Math.max(0,1-burst*1.4)*14:0;
+  if(live){const sp=fx.sparks.geometry.attributes.position,r=.35;fx.sparkSeeds.forEach((q,i)=>{const t=burst*(.6+(i%5)*.1);sp.setXYZ(i,fx.terminal.x+q.dx*r*t,fx.terminal.y+q.up*r*t-1.6*r*t*t,fx.terminal.z+q.dz*r*t);});sp.needsUpdate=true;fx.sparks.material.opacity=1-burst;}
  }
  apply(sample){
   const a=sample.outcome;this.model.root.position.copy(this.basePosition);if(this.domain==='train')this.model.root.position.x+=a.distance;
   for(const d of this.doors)d.pivot.position.x=d.x+d.sign*.52*a.doorOpening;
   for(const w of this.wheels)w.pivot.rotation.z=-a.wheelDistance/w.radius;
   for(const {o,x,y,z,i}of this.smoke){o.visible=a.damage>.02;const rise=(sample.progress*3+i/7)%1;o.position.set(x+Math.sin(i+sample.progress*9)*.15,y+rise*.85,z);o.scale.setScalar(.4+rise*.9);o.material.opacity=a.damage*(1-rise)*.55;}
+  this.coolingApply225(sample);
   if(a.damage)for(const row of this.model.rows)if(row.part==='transformer'&&row.base&&/resina|aislamiento/i.test(row.material.name))row.material.color.multiplyScalar(1-a.damage*.72);
   this.model.root.updateMatrixWorld(true);
  }
  bounds(part){if(part==='doors'&&this.doors.length){const box=new T.Box3();for(const d of this.doors)box.union(new T.Box3().setFromObject(d.pivot));return box;}return part?this.model.bounds(part):this.envelope.clone();}
  dispose(){
   this.model.root.position.copy(this.basePosition);for(const r of this.restore){r.parent.add(r.o);r.o.matrix.copy(r.matrix);}for(const p of this.pivots)p.removeFromParent();
+  for(const coil of this.fx225?.coils||[]){coil.material.emissive.copy(coil.emissive);coil.material.emissiveIntensity=coil.intensity;}
   for(const w of this.wheels)w.mark.removeFromParent();this.root.removeFromParent();for(const g of this.geometry)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();this.model.tint('',0);this.model.root.updateMatrixWorld(true);
  }
 }
