@@ -57,9 +57,11 @@ export class FaultAnimation218{
   // Air: streaks rising through the winding ducts and just in front of them, drawn as thin
   // instanced bars so they keep a visible width at any distance.
   const count=300,seeds=[];for(let i=0;i<count;i++){const h=Math.sin(i*12.9898)*43758.5453,r=h-Math.floor(h),h2=Math.sin(i*78.233)*12345.678,r2=h2-Math.floor(h2),h3=Math.sin(i*39.425)*24634.6345,r3=h3-Math.floor(h3);seeds.push({x:r2-.5,depth:i%3?r3*.35:.35+r3*.65,phase:r});}
-  const bar=new T.BoxGeometry(.02,1,.02);bar.translate(0,.5,0);this.geometry.add(bar);
-  const airMaterial=new T.MeshBasicMaterial({color:'#ffffff',transparent:true,opacity:.75,depthWrite:false});this.materials.add(airMaterial);
-  fx.air=new T.InstancedMesh(bar,airMaterial,count);fx.air.instanceMatrix.setUsage(T.DynamicDrawUsage);fx.air.setColorAt(0,new T.Color());fx.air.frustumCulled=false;fx.air.name='Aire de refrigeración225';fx.root.add(fx.air);fx.seeds=seeds;
+  // Each seed is a soft trail of four glowing motes (additive, so dimmer motes read as thinner
+  // air): a light haze rather than solid bars.
+  const TRAIL=4,air=new T.BufferGeometry();air.setAttribute('position',new T.BufferAttribute(new Float32Array(count*TRAIL*3),3));air.setAttribute('color',new T.BufferAttribute(new Float32Array(count*TRAIL*3),3));this.geometry.add(air);
+  const airMaterial=new T.PointsMaterial({size:.13,map,vertexColors:true,transparent:true,opacity:1,depthWrite:false,blending:T.AdditiveBlending,sizeAttenuation:true});this.materials.add(airMaterial);
+  fx.air=new T.Points(air,airMaterial);fx.air.frustumCulled=false;fx.air.name='Aire de refrigeración225';fx.root.add(fx.air);fx.seeds=seeds;fx.trail=TRAIL;
   // Two axial fans at the foot of the windings on the open side, blowing in under them; the
   // air then turns and rises through the winding ducts.
   const radius=Math.min(.26,size.x*.12),blade=new T.BoxGeometry(radius*.34,radius*.86,radius*.05);blade.translate(0,radius*.47,0);this.geometry.add(blade);
@@ -86,10 +88,11 @@ export class FaultAnimation218{
   const a=sample.outcome,p=sample.progress,flow=sample.signals.flow??0,heat=sample.signals.heat??0,flowTravel=a.fanAngle/(Math.PI*64),{box,size,center}=fx;
   for(const fan of fx.fans)fan.rotation.z=a.fanAngle*1.6;
   // Forced air rises fast and cool; with the fans stopped only a slow warm draught remains.
-  const cool=new T.Color('#3d8fd6'),warm=new T.Color('#e0702e'),tint=cool.clone().lerp(warm,T.MathUtils.smoothstep(heat,.3,.85)*(1-flow*.8)),colour=new T.Color(),m=new T.Matrix4(),v=new T.Vector3(),q=new T.Quaternion(),sc=new T.Vector3();
-  const natural=.09*T.MathUtils.smoothstep(heat,.25,.9),climb=flowTravel*9+p*16*natural,len=size.y*(.05+.13*flow+.08*natural),y0=box.min.y-.05,span=size.y+.4;
-  fx.seeds.forEach((s,i)=>{const t=(s.phase+climb)%1,sway=Math.sin(t*9+i)*.025*(1-flow),fade=Math.sin(Math.PI*t);v.set(center.x+s.x*size.x*1.02+sway,y0+span*t,box.min.z-.04+s.depth*size.z);sc.set(1,len*(.4+.6*fade),1);m.compose(v,q,sc);fx.air.setMatrixAt(i,m);fx.air.setColorAt(i,colour.copy(tint).multiplyScalar(.35+.65*fade));});
-  fx.air.instanceMatrix.needsUpdate=true;fx.air.instanceColor.needsUpdate=true;fx.air.material.opacity=.35+.6*Math.max(flow,.75*T.MathUtils.smoothstep(heat,.3,.8));
+  const cool=new T.Color('#7fc1ff'),warm=new T.Color('#ff9a55'),tint=cool.clone().lerp(warm,T.MathUtils.smoothstep(heat,.3,.85)*(1-flow*.8));
+  const natural=.09*T.MathUtils.smoothstep(heat,.25,.9),climb=flowTravel*9+p*16*natural,len=size.y*(.05+.12*flow+.07*natural),y0=box.min.y-.05,span=size.y+.4;
+  const strength=.45+.85*Math.max(flow,.7*T.MathUtils.smoothstep(heat,.3,.8)),pos=fx.air.geometry.attributes.position,col=fx.air.geometry.attributes.color,n=fx.trail;
+  fx.seeds.forEach((s,i)=>{const t=(s.phase+climb)%1,fade=Math.sin(Math.PI*t)*strength;for(let k=0;k<n;k++){const back=k/(n-1),y=y0+span*t-len*back,sway=Math.sin((t-back*.02)*9+i)*.025*(1-flow),j=i*n+k,f=fade*(1-back*.75);pos.setXYZ(j,center.x+s.x*size.x*1.02+sway,y,box.min.z-.04+s.depth*size.z);col.setXYZ(j,tint.r*f,tint.g*f,tint.b*f);}});
+  pos.needsUpdate=true;col.needsUpdate=true;
   // Heating: subtle under protection, glowing when the hypothesis says the protection does not act.
   const glow=T.MathUtils.smoothstep(heat,.45,.95)*(a.unprotected?1.8:.45);
   for(const coil of fx.coils){coil.material.emissive.set('#ff4d17');coil.material.emissiveIntensity=glow;}
