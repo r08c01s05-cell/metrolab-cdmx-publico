@@ -57,7 +57,7 @@ export class FaultHud229{
   $('[data-h229-sound]').onclick=e=>{this.muted=!this.muted;e.currentTarget.setAttribute('aria-pressed',String(!this.muted));e.currentTarget.textContent=this.muted?'🔇':'🔊';};
   $('[data-h229-continue]').onclick=()=>this.resume();
   $('[data-h229-again]').onclick=()=>{this.reset();end.hidden=true;lab.clock.seek(0);lab.clock.play();lab.paint();};
-  $('[data-h229-next]').onclick=()=>{const sel=$('[data-f217-case]'),i=sel.selectedIndex;sel.selectedIndex=(i+1)%sel.options.length;end.hidden=true;lab.change();};
+  $('[data-h229-next]').onclick=()=>{const sel=$('[data-f217-case]'),i=sel.selectedIndex;sel.selectedIndex=(i+1)%sel.options.length;end.hidden=true;this.reset();lab.change();};
   for(const sel of ['[data-f217-reset]','[data-f217-seek]'])$(sel).addEventListener('input',()=>this.rewind());$('[data-f217-reset]').addEventListener('click',()=>this.reset());
   for(const sel of ['[data-f217-case]','[data-f217-domain]','[data-f218-variant]','[data-f217-model]'])$(sel).addEventListener('change',()=>this.reset());
   d.addEventListener('keydown',e=>this.key(e));
@@ -77,6 +77,9 @@ export class FaultHud229{
  }
  update(s){
   const lab=this.lab,id=lab.scenario?.id;if(!id)return;
+  // Corrección 233: a new scenario or condition always starts a fresh challenge, whatever changed it
+  // ("Siguiente escenario" sets the list without a change event, so the old checkpoints stayed used).
+  const key=id+':'+lab.variant;if(key!==this.key233){this.key233=key;this.reset();}
   this.stage.dataset.phase=String(s.phase);
   // Gauges: ring around each value.
   for(const [i,node] of (lab.metricNodes||[]).entries()){const v=Number(node.bar.value)||0;if(!node.ring){const ns='http://www.w3.org/2000/svg',svg=lab.doc.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 44 44');svg.classList.add('h229-ring');svg.innerHTML='<circle cx="22" cy="22" r="18" pathLength="100"/><circle cx="22" cy="22" r="18" pathLength="100" data-v/>';node.bar.before(svg);node.ring=svg.querySelector('[data-v]');}node.ring.style.strokeDasharray=(v*100).toFixed(1)+' 100';}

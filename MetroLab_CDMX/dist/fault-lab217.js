@@ -7,7 +7,7 @@ import {loadFaultModel217} from './fault-model217.js?v=222';
 import {FAULT_CASES217,FAULT_SOURCES217,FAULT_SCOPE217,FaultClock217} from './fault-catalog217.js?v=217';
 import {sampleOutcome218,variants218,EXTRA_SOURCES218} from './fault-outcomes218.js?v=218';
 import {studyShadows226} from './fault-realism226.js?v=229';
-import {FaultHud229} from './fault-hud229.js?v=230';
+import {FaultHud229} from './fault-hud229.js?v=233';
 import {FaultStage225,cameraTween225} from './fault-stage225.js?v=230';
 import {FaultAnimation218,createConsequence218} from './fault-animation218.js?v=229';
 const NS='http://www.w3.org/2000/svg',svg=(tag,attrs)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));return e;};
