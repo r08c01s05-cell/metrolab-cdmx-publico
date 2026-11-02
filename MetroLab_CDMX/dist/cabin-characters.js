@@ -1,8 +1,8 @@
 import {refinePassengers180} from './passenger-realism180.js?v=204';
 import {PASSENGERS145,passengerManifest145} from './passenger-assets145.js?v=180';
-import {PassengerContacts122} from './world-contact122.js?v=212';
+import {PassengerContacts122} from './world-contact122.js?v=222';
 import {prepareImported137,selectPassenger137,attachInfant138} from './passenger-cast137.js?v=144';
-import {InstancedPassengers121,selectDetailed121} from './instanced-passengers121.js?v=212';
+import {InstancedPassengers121,selectDetailed121} from './instanced-passengers121.js?v=222';
 import{avatarDetail119,applyCloth120}from'./passenger-cloth119.js?v=130';
 import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
 import * as THREE from 'three';
@@ -10,13 +10,23 @@ import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {prepareWardrobe,applyWardrobe} from './passenger-wardrobe.js?v=144';
 
 // Clone the hierarchy and rebind every skin to its own bones. Geometry and
-// materials stay shared; skeletons and animation state must never be shared.
+// materials stay shared; skeletons and animation state must never be shared
+// between characters.
+// Fluidez 222: inside one copy, skins that use the same bones with the same
+// inverse bind matrices share one Skeleton. The renderer then computes and
+// uploads those bone matrices once per character instead of once per garment.
+function sameSkin222(a,b){
+ if(a===b)return true;if(a.bones.length!==b.bones.length||a.boneInverses.length!==b.boneInverses.length)return false;
+ for(let i=0;i<a.bones.length;i++)if(a.bones[i]!==b.bones[i]||!a.boneInverses[i].equals(b.boneInverses[i]))return false;
+ return true;
+}
 export function cloneCharacter(source){
- const copy=source.clone(true),mapping=new Map();
+ const copy=source.clone(true),mapping=new Map(),shared=[];
  function pair(a,b){mapping.set(a,b);a.children.forEach((child,i)=>pair(child,b.children[i]));}pair(source,copy);
  source.traverse(original=>{if(!original.isSkinnedMesh)return;const mesh=mapping.get(original);
-  mesh.skeleton=original.skeleton.clone();mesh.skeleton.bones=original.skeleton.bones.map(b=>mapping.get(b));
-  mesh.bind(mesh.skeleton,original.bindMatrix);mesh.frustumCulled=false;
+  let entry=shared.find(e=>sameSkin222(e.original,original.skeleton));
+  if(!entry){const skeleton=original.skeleton.clone();skeleton.bones=original.skeleton.bones.map(b=>mapping.get(b));entry={original:original.skeleton,skeleton};shared.push(entry);}
+  mesh.skeleton=entry.skeleton;mesh.bind(mesh.skeleton,original.bindMatrix);mesh.frustumCulled=false;
  });return copy;
 }
 
@@ -154,7 +164,7 @@ export class CabinCharacters{
    const moving=running?actor.moving:(item.lastMoving??actor.moving);item.lastMoving=moving;
    item.actor203={...actor,moving,trainId:this.train203};item.root.userData.passenger203=item.actor203;item.phase203=(hash%1000)/1000;poseCharacter(item,item.actor203,time+item.phase203);
   });
-  if(farEntries121.length||this.background121){this.background121??=new InstancedPassengers121(this.scene121||this.group.parent||this.group,{create:createCharacter,pose:poseCharacter});this.background121.update(farEntries121,time,this.alignment121,this.trainState211);}
+  if(farEntries121.length||this.background121){this.background121??=new InstancedPassengers121(this.scene121||this.group.parent||this.group,{create:createCharacter,pose:poseCharacter});this.background121.camera=this.camera119||null;this.background121.update(farEntries121,time,this.alignment121,this.trainState211);}
   this.contacts122??=new PassengerContacts122(this.scene121||this.group.parent||this.group);this.contacts122.update(actors,time,this.alignment121,this.trainState211);
   this.stats121={detailed:liveActors121.length,instanced:farEntries121.length,platform:actors.filter(a=>a.location==='platform'||a.id.startsWith('wait:')).length,total:actors.length};
   // Remove surplus clones after a change of crowd composition; shared assets stay alive.

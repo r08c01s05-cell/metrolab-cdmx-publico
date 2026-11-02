@@ -5,15 +5,15 @@ import {gate142,prepareFrame142} from './resource-gate142.js?v=150';
 import {photographicRenderer130,inspectionShadows130,updateInspectionShadows130,shadowModel130} from './photographic130.js?v=205';
 import {inspectionGround122} from './scene-realism122.js?v=122';
 import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
-import {RenderBudget101} from './render-budget101.js?v=204';
-import {createMetroEnvironment} from './metro-render.js?v=212';
+import {RenderBudget101} from './render-budget101.js?v=222';
+import {createMetroEnvironment} from './metro-render.js?v=222';
 import {motorBench90,motorDescription90,motorEvidence94} from './motor-runtime90.js?v=111';
 import {motorPartMatrix90} from './motor-view90.js';
 import {requestStudy89} from './study-context89.js';
-import {trainAsset,depotEnvironment} from './depot86.js?v=212';
+import {trainAsset,depotEnvironment} from './depot86.js?v=222';
 import{FORMATION9,CAR_TYPES,carReference,TECHNICAL_REFERENCE}from'./train-formation.js?v=64';import * as THREE from 'three';import{WorkshopNavigation}from'./workshop-navigation.js?v=61';import{OrbitControls}from'./vendor/OrbitControls.js';import{GLTFLoader}from'./vendor/GLTFLoader.js';import{MODELS,PARTS,CASES,partCategory}from'./workshop-core.js?v=112';
 import{LESSONS,STAGES,GuidedMaintenance}from'./maintenance-course.js?v=78';
-import{mountHandsMaintenance}from'./maintenance-hands-ui.js?v=216';
+import{mountHandsMaintenance}from'./maintenance-hands-ui.js?v=222';
 const $=id=>document.getElementById(id);let model='NM22',unit='cabina',carIndex=0,mode='explore',viewer,selected='body',request=0;const exercise=new GuidedMaintenance();let maintenanceTimer=0,maintenanceRun=0;
 function setText(id,text){$(id).textContent=text;}
 function dispose(group){const gs=new Set(),ms=new Set(),ts=new Set();group.traverse(o=>{if(o.geometry)gs.add(o.geometry);if(o.material)for(const m of Array.isArray(o.material)?o.material:[o.material]){ms.add(m);for(const v of Object.values(m))if(v?.isTexture)ts.add(v);}});gs.forEach(g=>g.dispose());ms.forEach(m=>m.dispose());ts.forEach(t=>t.dispose());}

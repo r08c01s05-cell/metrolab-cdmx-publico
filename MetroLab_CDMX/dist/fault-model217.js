@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {trainAsset} from './depot86.js?v=212';
+import {trainAsset} from './depot86.js?v=222';
 import {partCategory} from './workshop-core.js?v=112';
 import {loadRectifier127} from './rectifier-assets127.js?v=205';
 import {inheritSurfaceDetail205} from './surface-detail205.js?v=205';

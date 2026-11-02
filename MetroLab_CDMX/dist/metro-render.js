@@ -21,13 +21,15 @@ export function enhanceMetroMaterials(model,modelId=''){
   if(!cache.has(original)){
    let material=original.clone();const name=original.name.toLowerCase();
    if(name.includes('vidrio testero neutro42')){
-    material.color.set('#cddadb');material.opacity=.12;material.transparent=true;material.depthWrite=false;material.roughness=.17;material.metalness=0;
+    material.color.set('#cddadb');material.opacity=.12;material.transparent=true;material.depthWrite=false;material.roughness=.17;material.metalness=0;material.forceSinglePass=true;
    }else if(name.includes('naranja')){
     material=new THREE.MeshPhysicalMaterial();THREE.MeshStandardMaterial.prototype.copy.call(material,original);
     material.clearcoat=.12;material.clearcoatRoughness=.4;material.roughness=.36;material.metalness=.10;material.envMapIntensity=.85;
    }else if(name.includes('cristal')){
     material.color.copy(original.color);material.opacity=Math.min(original.opacity,.18);material.transparent=true;material.depthWrite=false;
     material.roughness=.14;material.metalness=0;material.envMapIntensity=.9;
+    // Fluidez 222: thin glazing; one double-sided pass avoids two program changes per pane and frame.
+    material.forceSinglePass=true;
    }else if(name.includes('acero')||name.includes('pasamanos')){
     material.roughness=original.roughnessMap?1:(name.includes('cepillado')?.39:.30);material.metalness=.82;material.envMapIntensity=1.1;
    }else if(name.includes('goma')){material.roughness=.9;material.metalness=0;}

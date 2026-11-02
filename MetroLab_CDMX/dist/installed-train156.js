@@ -1,7 +1,7 @@
 import {depotDetail205} from './depot-detail205.js?v=205';
 import * as THREE from 'three';
-import {trainAsset} from './depot86.js?v=212';
-import {batchTrainStatics} from './metro-render.js?v=212';
+import {trainAsset} from './depot86.js?v=222';
+import {batchTrainStatics} from './metro-render.js?v=222';
 import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
 const templates=new Map();
 async function template156(model,unit){const key=model+unit;if(!templates.has(key))templates.set(key,trainAsset(model,unit).then(source=>{const g=source.clone(true);batchTrainStatics(g);g.updateMatrixWorld(true);return g;}).catch(e=>{templates.delete(key);throw e;}));return templates.get(key);}
