@@ -6,7 +6,7 @@ Trabaja en una rama específica por tarea (`feat/`, `fix/` o `chore/`); no confi
 
 Antes de cambiar el remoto, confirma el repositorio compartido usando el enlace que proporcione el usuario. No incluyas credenciales en archivos ni commits.
 
-El remoto compartido es `https://github.com/r08c01s05-cell/metrolab-cdmx.git`. Las ramas `mejora/`, `correccion/`, `feat/`, `fix/` y `chore/` se verifican e integran automáticamente mediante `.github/workflows/validar.yml`. Publica sólo trabajo listo para integrar. No fuerces pushes ni eludas protecciones: si falla la automatización, corrige la causa. Conserva separados los cambios de tareas distintas.
+El remoto compartido es `https://github.com/r08c01s05-cell/metrolab-cdmx-publico.git`. Las ramas `mejora/`, `correccion/`, `feat/`, `fix/` y `chore/` se verifican e integran automáticamente mediante `.github/workflows/validar.yml`. Publica sólo trabajo listo para integrar. No fuerces pushes ni eludas protecciones: si falla la automatización, corrige la causa. Conserva separados los cambios de tareas distintas.
 
 Lee CONTEXTO_CODEX.md antes de editar. Proyecto estático HTML/ES modules/Three.js; `dist/` es código fuente editable, no una salida para borrar/regenerar.
 Mantén interfaz y comunicaciones en español. Preserva modos de conducción, seguimiento/red, inspección, mantenimiento de trenes y subestación, rutas L1/L8, cámaras, audios y activos.
