@@ -6,7 +6,7 @@ import {photographicRenderer130} from './photographic130.js?v=205';
 import {loadFaultModel217} from './fault-model217.js?v=222';
 import {FAULT_CASES217,FAULT_SOURCES217,FAULT_SCOPE217,FaultClock217} from './fault-catalog217.js?v=217';
 import {sampleOutcome218,variants218,EXTRA_SOURCES218} from './fault-outcomes218.js?v=218';
-import {FaultAnimation218,createConsequence218} from './fault-animation218.js?v=218';
+import {FaultAnimation218,createConsequence218} from './fault-animation218.js?v=227';
 const NS='http://www.w3.org/2000/svg',svg=(tag,attrs)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));return e;};
 export class FaultLab217{
  constructor(doc=document){
@@ -58,4 +58,4 @@ export class FaultLab217{
  close(){this.generation++;this.clock.pause();if(this.frameId)cancelAnimationFrame(this.frameId);this.frameId=null;this.observer?.disconnect();this.controls?.dispose();this.effects?.dispose();this.effects=null;this.model?.dispose();this.model=null;this.assetKey=null;this.env?.dispose();this.renderer?.dispose();this.renderer=null;this.scene=null;if(this.priorFlag===undefined)delete this.doc.body.dataset.faultLab217;else this.doc.body.dataset.faultLab217=this.priorFlag;if(this.priorPause===undefined)delete this.doc.body.dataset.pause105;else this.doc.body.dataset.pause105=this.priorPause;if(this.priorPause!=='true')globalThis.window?.dispatchEvent(new CustomEvent('metro-resume105',{detail:{elapsed:performance.now()-this.openedAt}}));this.opener?.focus?.();}
 }
 let lab;
-if(typeof document!=='undefined')document.addEventListener('click',e=>{const b=e.target.closest?.('[data-fault-open217]');if(!b)return;lab??=new FaultLab217();lab.open(b.dataset.faultOpen217||'train',b);});
+if(typeof document!=='undefined')document.addEventListener('click',e=>{const b=e.target.closest?.('[data-fault-open217]');if(!b)return;lab??=new FaultLab217();if(globalThis.location?.search?.includes('depurar225'))globalThis.faultLab225=lab;lab.open(b.dataset.faultOpen217||'train',b);});
