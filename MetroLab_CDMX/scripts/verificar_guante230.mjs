@@ -16,4 +16,9 @@ assert.equal(FINGER_MAP230.length,5,'Los cinco dedos del rig tienen equivalente'
 for(const name of ['Protector de cuero sobre guante aislante230','Puño de hule aislante230','Manga de camisa de trabajo230'])assert(h.root.getObjectByName(name),'Incluye '+name);
 assert.equal(h.root.getObjectByName('Puño de hule aislante230').material.color.getHexString(),'e56b1f','Hule aislante naranja');
 h.dispose();assert(!h.root.parent);
-console.log('230 PASS: guante dieléctrico con mano articulada alineada al rig, dedos que se cierran hacia la palma y vuelven, puño de hule naranja y protector de cuero. CPU/geometría.');
+// 234: volumen de guante, color que no parece piel, pulgar frente a la palma y dedos juntos.
+{const h=createDielectricHand230(),c=h.hand.geometry.attributes.color,hsl={};let sat=0;for(let i=0;i<c.count;i+=37){new T.Color(c.getX(i),c.getY(i),c.getZ(i)).getHSL(hsl,T.SRGBColorSpace);sat=Math.max(sat,hsl.s);}
+ assert(sat<.3,'El protector no tiene tono de piel');assert(h.hand.material.bumpMap,'Grano de cuero');
+ const tip=()=>h.bones[4].getWorldPosition(new T.Vector3()),open=tip();h.angles.opposition234=.6;h.pose(h.angles);assert(tip().distanceTo(open)>.01,'El pulgar se cruza frente a la palma al sujetar');
+ const fingers=[];h.angles.opposition234=0;h.pose(h.angles);for(const i of [9,24])fingers.push(h.bones[i].position.clone());assert(fingers[0].distanceTo(fingers[1])<.085,'Dedos juntos, sin abanico');h.dispose();}
+console.log('230/234 PASS: guante dieléctrico con mano articulada alineada al rig, dedos que se cierran hacia la palma y vuelven, puño de hule naranja y protector de cuero. CPU/geometría.');
