@@ -38,7 +38,7 @@ import {doorOpenness,planPassengerStop} from './passenger-flow.js?v=225';
 import {buildNaturalPassengerFrame} from './passenger-journeys.js?v=225';
 import {preparePocketDoors,updatePocketDoor} from './train-doors.js?v=29';
 import {TrainAudio} from './train-audio.js?v=206';
-import {CabinCharacters} from './cabin-characters.js?v=225';
+import {CabinCharacters} from './cabin-characters.js?v=226';
 import {trainPrefix,loadTrainPair} from './train-assets.js?v=34';
 const $=id=>document.getElementById(id);
 const readiness214=new WeakMap();
