@@ -1,3 +1,4 @@
+import {crossflowVentilation230} from './crossflow230.js?v=231';
 import {ventilationInterior202} from './ventilation-interior202.js?v=204';
 import {serviceControls148} from './service-controls148.js?v=148';
 import {drawInstrument146} from './instrument-readout146.js?v=148';
@@ -34,5 +35,5 @@ export async function loadServiceBench134(id){
   if(e==='test'){spinning=true;for(const o of indicators){o.material=o.material.clone();o.material.color.set('#458d5c');o.material.emissive.set('#14451e');o.material.emissiveIntensity=.4;}}
  }
  function update(dt){for(const g of targets.values()){if(g.userData.destination134)g.position.lerp(g.userData.destination134,1-Math.exp(-12*dt));const turn=g.userData.turn134||0;if(Math.abs(turn)>.002){const delta=turn*(1-Math.exp(-12*dt));g.rotation.z+=delta;g.userData.turn134-=delta;}}if(spinning&&rotor)rotor.rotation.z+=dt*11;}
- const bench={group,installed150:true,targets,homes136:home,apply,update,dispose(){const gs=new Set(),ms=new Set();group.traverse(o=>{if(o.geometry)gs.add(o.geometry);for(const m of(o.material?(Array.isArray(o.material)?o.material:[o.material]):[]))ms.add(m);});for(const g of gs)g.dispose();for(const m of ms){for(const k of['map','normalMap','roughnessMap'])if(m[k]&&!m[k].userData.quality100Shared)m[k].dispose();m.dispose();}group.removeFromParent();}};const ready=serviceControls148(serviceMotion145(await serviceMeasurement143(await upgradeService142(await houseSubstation138(bench,'sr_'+id),id),id),id),id);return id==='ventilation'?ventilationInterior202(ready):ready;
+ const bench={group,installed150:true,targets,homes136:home,apply,update,dispose(){const gs=new Set(),ms=new Set();group.traverse(o=>{if(o.geometry)gs.add(o.geometry);for(const m of(o.material?(Array.isArray(o.material)?o.material:[o.material]):[]))ms.add(m);});for(const g of gs)g.dispose();for(const m of ms){for(const k of['map','normalMap','roughnessMap'])if(m[k]&&!m[k].userData.quality100Shared)m[k].dispose();m.dispose();}group.removeFromParent();}};const ready=serviceControls148(serviceMotion145(await serviceMeasurement143(await upgradeService142(await houseSubstation138(bench,'sr_'+id),id),id),id),id);return id==='ventilation'?crossflowVentilation230(ventilationInterior202(ready)):ready;
 }

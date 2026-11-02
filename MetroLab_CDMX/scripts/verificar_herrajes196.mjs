@@ -25,7 +25,7 @@ for(const door of model.userData.doors){
 }
 assert.equal(batteryLeaves,2,'Both battery-cover hinge directions are covered');
 
-const bench=await loadServiceBench134('ventilation'),plate=bench.group.getObjectByName('Placa fija con aberturas de filtro y ventilación196');
+const bench=await loadServiceBench134('ventilation'),plate=bench.crossflow230?bench.group.getObjectByName('Brida frontal del soplador central230'):bench.group.getObjectByName('Placa fija con aberturas de filtro y ventilación196');
 assert(plate?.userData.fastenerSupport196,'The mounted ventilation practice has a fixed physical flange');
 bench.group.updateMatrixWorld(true);
 for(const key of ['screwL','screwR','screw3','screw4']){
