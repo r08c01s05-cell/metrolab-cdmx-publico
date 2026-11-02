@@ -5,7 +5,9 @@ view.camera.position.set(center.x,.98,box.min.z-.8);view.controls.target.copy(ce
 for(let i=0;i<50;i++)player.update(.05);
 player.keys.clear();
 assert(view.camera.position.z<=box.min.z-.23,'The player cannot walk into the installed filter');
-assert(view.camera.position.z>box.min.z-.5,'The student can approach within a human working distance');
+// 230: the centre cross-flow blower sits under the coil, behind the cable run in front of the
+// windings, so the student stops a little further away and reaches in crouched.
+assert(view.camera.position.z>box.min.z-(ui.bench.crossflow230?.7:.5),'The student can approach within a human working distance');
 const immutable=player.benchSolids196.map(b=>b.clone());filter.position.x+=3;player.buildObstacles179();
 assert(player.benchSolids196.every((b,i)=>b.equals(immutable[i])),'Transported filter does not turn into a moving collision around the player');
 ui.setActive(false);

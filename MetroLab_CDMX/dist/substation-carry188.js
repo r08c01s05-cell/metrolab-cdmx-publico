@@ -59,7 +59,7 @@ export class SubstationCarry188{
   const s=this.ui.state,b=this.bench,bag=this.view.bagBrowser157;
   if(!this.enabled||s.done||!s.step||s.step.choices)return null;
   const tool=s.step.tool,effect=s.step.effect;
-  if(this.held?.kind==='filter')return effect==='remove'?{object:this.pad,label:'Apoyar el filtro en el tapete'}:{point:this.filterHome.parent.localToWorld(this.filterHome.position.clone()),label:'Montar el filtro'};
+  if(this.held?.kind==='filter')return effect==='remove'?{object:this.pad,label:'Apoyar la rejilla en el tapete'}:{point:this.filterHome.parent.localToWorld(this.filterHome.position.clone()),label:'Montar el filtro'};
   if(this.held?.kind==='instrument'&&!['airBefore','airAfter'].includes(effect))return{object:bag.model.root,label:'Guardar el anemómetro · E'};
   if(['airBefore','airAfter'].includes(effect)&&this.held?.kind!=='instrument')return this.instrumentPlaced?{object:b.instrument142,label:'Recoger el anemómetro · E'}:{object:bag.model.root,label:'Seleccionar anemómetro · Tab'};
   if(['driver','brush'].includes(tool)&&!this.ui.play135.bag156.prepared176.has(tool))return{object:bag.model.root,label:tool==='driver'?'Seleccionar destornillador · Tab':'Seleccionar cepillo · Tab'};
