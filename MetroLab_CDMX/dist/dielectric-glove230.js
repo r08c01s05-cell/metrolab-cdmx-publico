@@ -9,13 +9,18 @@ import {HAND_GLB230,HAND_AXES230} from './hand-generic230.js?v=232';
 
 // generic-hand space -> palm104 space: mirror x (the model is the other hand), turn fingers from
 // -y to +y with the palm toward +z, scale to the rig's finger lengths and place the index knuckle.
+export const GLOVE_BULK234=.0022,THUMB_REST234=.35,THUMB_OPPOSE234=.6;
 export const HAND_FIT230={scale:1.3,offset:[-.0228,.1631,.0416]};
 const BASIS230=new T.Matrix4().set(0,0,1,0, 0,-1,0,0, 1,0,0,0, 0,0,0,1).multiply(new T.Matrix4().makeScale(-1,1,1));
 const CHAINS230=[[1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],[15,16,17,18,19],[20,21,22,23,24]];
 // Rig finger i (0 index … 3 pinky, 4 thumb) and joint j -> generic chain and bone index in it.
 export const FINGER_MAP230=[[1,[1,2,3]],[2,[1,2,3]],[3,[1,2,3]],[4,[1,2,3]],[0,[0,1,2]]];
 
-let data230=null;
+let data230=null,grain234=null;
+// Leather grain as a small tiling bump map (pure data, no canvas, so it also works in tests).
+function leatherGrain234(){if(grain234)return grain234;const n=128,a=new Uint8Array(n*n*4);let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;const base=Array.from({length:n*n},rnd);
+ for(let y=0;y<n;y++)for(let x=0;x<n;x++){let v=0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)v+=base[((y+dy+n)%n)*n+(x+dx+n)%n];v=v/9;const pore=base[y*n+x]>.93?-.35:0,g=Math.round(255*Math.min(1,Math.max(0,.5+(v-.5)*1.6+pore)));a.set([g,g,g,255],(y*n+x)*4);}
+ grain234=new T.DataTexture(a,n,n);grain234.wrapS=grain234.wrapT=T.RepeatWrapping;grain234.repeat.set(3,3);grain234.needsUpdate=true;return grain234;}
 function handData230(){
  if(data230)return data230;
  const bin=globalThis.atob?atob(HAND_GLB230):Buffer.from(HAND_GLB230,'base64').toString('binary'),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
@@ -24,15 +29,25 @@ function handData230(){
  const P=acc(0),N=acc(1),J=acc(3),W=acc(4),I=acc(5),IB=acc(6),count=P.length/3;
  const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.BufferAttribute(P,3));geometry.setAttribute('normal',new T.BufferAttribute(N,3));
  geometry.setAttribute('skinIndex',new T.Uint16BufferAttribute(Uint16Array.from(J),4));geometry.setAttribute('skinWeight',new T.BufferAttribute(W,4));geometry.setIndex(new T.BufferAttribute(I,1));
- // Leather protector: tan on the back, a darker reinforced palm patch and darker fingertips.
- const colours=new Float32Array(count*3),back=new T.Color('#b88a55'),palm=new T.Color('#7e5a35'),tip=new T.Color('#6d4c2c'),c=new T.Color();
- const tipY=-.10;for(let i=0;i<count;i++){const nx=N[i*3],y=P[i*3+1],palmSide=T.MathUtils.smoothstep(-nx,.15,.55),tipMix=T.MathUtils.smoothstep(tipY-y,0,.02);c.copy(back).lerp(palm,palmSide*.85).lerp(tip,tipMix*.6);colours.set([c.r,c.g,c.b],i*3);}
+ // Glove bulk 234: the protector over the rubber glove adds about 2 mm all around, so the
+ // fingers read thick and blunt like a work glove instead of bare skin.
+ for(let i=0;i<count;i++)for(let k=0;k<3;k++)P[i*3+k]+=N[i*3+k]*GLOVE_BULK234;geometry.attributes.position.needsUpdate=true;
+ const UV=acc(2);geometry.setAttribute('uv',new T.BufferAttribute(UV,2));
+ // Leather protector: worn tan back, darker reinforced palm, darker fingertips and seams
+ // along the sides of the fingers where the panels are stitched.
+ const colours=new Float32Array(count*3),back=new T.Color('#a49b8b'),palm=new T.Color('#6e5a44'),tip=new T.Color('#5f4c39'),seam=new T.Color('#3b3128'),c=new T.Color();
+ const tipY=-.10;for(let i=0;i<count;i++){const nx=N[i*3],nz=N[i*3+2],y=P[i*3+1],palmSide=T.MathUtils.smoothstep(-nx,.15,.55),tipMix=T.MathUtils.smoothstep(tipY-y,0,.02),finger=T.MathUtils.smoothstep(-y,.03,.045),side=finger*T.MathUtils.smoothstep(Math.abs(nz),.88,.97);c.copy(back).lerp(palm,palmSide*.85).lerp(tip,tipMix*.6).lerp(seam,side*.8);colours.set([c.r,c.g,c.b],i*3);}
  geometry.setAttribute('color',new T.BufferAttribute(colours,3));
  const nodes=json.nodes.slice(0,25),rest=nodes.map(n=>new T.Matrix4().compose(new T.Vector3(...n.translation),new T.Quaternion(...n.rotation),new T.Vector3(...(n.scale||[1,1,1]))));
  const relative=rest.map(m=>m.clone());CHAINS230.forEach(ch=>{for(let k=1;k<ch.length;k++)relative[ch[k]]=rest[ch[k-1]].clone().invert().multiply(rest[ch[k]]);});
  const inverses=Array.from({length:25},(_,i)=>new T.Matrix4().fromArray(IB,i*16));
  const wrist=new T.Vector3().setFromMatrixPosition(rest[0]);
- return data230={geometry,rest,relative,inverses,wrist};
+ // Hand space: fingers run along -y, the palm faces -x and z goes from index to pinky. Natural
+ // pose 234: fingers drawn together (rotation about the palm normal at the knuckle) and the thumb
+ // swung in front of the palm (rotation about the hand's long axis at its metacarpal).
+ const local=(i,v)=>v.clone().applyQuaternion(new T.Quaternion().setFromRotationMatrix(rest[i]).invert()).normalize();
+ const extra=new Map([[6,[local(6,new T.Vector3(1,0,0)),-.05]],[16,[local(16,new T.Vector3(1,0,0)),.1]],[21,[local(21,new T.Vector3(1,0,0)),.16]]]),pos=i=>new T.Vector3().setFromMatrixPosition(rest[i]),thumbAxis=local(1,pos(2).sub(pos(1)).cross(new T.Vector3(-1,0,0)));
+ return data230={geometry,rest,relative,inverses,wrist,extra,thumbAxis};
 }
 
 export function createDielectricHand230(){
@@ -40,12 +55,12 @@ export function createDielectricHand230(){
  const root=new T.Group();root.name='Guante dieléctrico230';
  const arm=new T.Group();arm.matrixAutoUpdate=false;arm.matrix.makeTranslation(...HAND_FIT230.offset).multiply(new T.Matrix4().makeScale(HAND_FIT230.scale,HAND_FIT230.scale,HAND_FIT230.scale)).multiply(BASIS230);root.add(arm);
  const bones=D.rest.map(m=>{const b=new T.Bone();m.decompose(b.position,b.quaternion,b.scale);arm.add(b);return b;});
- const leather=mat({vertexColors:true,roughness:.78,side:T.DoubleSide});
+ const leather=mat({vertexColors:true,roughness:.88,bumpMap:leatherGrain234(),bumpScale:.4,side:T.DoubleSide});
  const hand=new T.SkinnedMesh(D.geometry,leather);hand.name='Protector de cuero sobre guante aislante230';hand.frustumCulled=false;hand.bind(new T.Skeleton(bones,D.inverses),new T.Matrix4());arm.add(hand);
  // Cuffs along the forearm (palm104 -y from the wrist): leather protector cuff with strap,
  // the longer flared orange rubber gauntlet, then the sleeve.
  const wrist=D.wrist.clone().applyMatrix4(arm.matrix),add=(geo,m,y,name)=>{owned.push(geo);const o=new T.Mesh(geo,m);o.position.set(wrist.x+.006,y,wrist.z+.004);o.name=name;root.add(o);return o;};
- const tan=mat({color:'#a97b48',roughness:.8}),rubber=mat({color:'#e56b1f',roughness:.42,metalness:0}),strap=mat({color:'#3a2b1f',roughness:.7}),buckle=mat({color:'#b8bcbd',metalness:.8,roughness:.3}),sleeve=mat({color:'#24364d',roughness:.9}),cuff=mat({color:'#1c2a3c',roughness:.9});
+ const tan=mat({color:'#948a78',roughness:.85}),rubber=mat({color:'#e56b1f',roughness:.42,metalness:0}),strap=mat({color:'#3a2b1f',roughness:.7}),buckle=mat({color:'#b8bcbd',metalness:.8,roughness:.3}),sleeve=mat({color:'#24364d',roughness:.9}),cuff=mat({color:'#1c2a3c',roughness:.9});
  add(new T.CylinderGeometry(.043,.04,.055,28,1,true),tan,wrist.y-.02,'Puño del protector de cuero230').material.side=T.DoubleSide;
  add(new T.CylinderGeometry(.0445,.0445,.012,28,1,true),strap,wrist.y-.03,'Correa del protector230').material.side=T.DoubleSide;
  add(new T.BoxGeometry(.016,.014,.006),buckle,wrist.y-.03,'Hebilla230').position.z+=.045;
@@ -56,10 +71,10 @@ export function createDielectricHand230(){
  for(const o of root.children)if(o.isMesh)o.castShadow=false;
  const Wp=[],R=new T.Matrix4(),axis=new T.Vector3();
  // angles[f][k]: flexion (rad) per generic chain f and bone k; missing entries stay straight.
- function pose(angles){CHAINS230.forEach((ch,f)=>{for(let k=0;k<ch.length;k++){const i=ch[k],M=k===0?D.rest[i].clone():Wp[ch[k-1]].clone().multiply(D.relative[i]),a=angles?.[f]?.[k]||0;if(a){axis.fromArray(HAND_AXES230[i]);M.multiply(R.makeRotationAxis(axis,a));}Wp[i]=M;M.decompose(bones[i].position,bones[i].quaternion,bones[i].scale);}});}
- const angles=CHAINS230.map(ch=>ch.map(()=>0));
+ function pose(angles){CHAINS230.forEach((ch,f)=>{for(let k=0;k<ch.length;k++){const i=ch[k],M=k===0?D.rest[i].clone():Wp[ch[k-1]].clone().multiply(D.relative[i]),a=angles?.[f]?.[k]||0,e=D.extra.get(i);if(e)M.multiply(R.makeRotationAxis(e[0],e[1]));if(i===1)M.multiply(R.makeRotationAxis(D.thumbAxis,THUMB_REST234+(angles?.opposition234||0)));if(a){axis.fromArray(HAND_AXES230[i]);M.multiply(R.makeRotationAxis(axis,a));}Wp[i]=M;M.decompose(bones[i].position,bones[i].quaternion,bones[i].scale);}});}
+ const angles=CHAINS230.map(ch=>ch.map(()=>0));angles.opposition234=0;
  // Copy the rig fingers' flexion (rotation.x, positive = toward the palm).
- function follow(fingers){if(!fingers)return;for(const [i,[f,ks]] of FINGER_MAP230.entries())for(let j=0;j<3;j++){const b=fingers[i]?.[j];angles[f][ks[j]]=b?Math.max(-.1,b.rotation.x)*(f===0?.8:1):0;}pose(angles);}
+ function follow(fingers){if(!fingers)return;for(const [i,[f,ks]] of FINGER_MAP230.entries())for(let j=0;j<3;j++){const b=fingers[i]?.[j];angles[f][ks[j]]=b?Math.max(-.1,b.rotation.x)*(f===0?.8:1):0;}const t=fingers[4]?.[0];angles.opposition234=t?THUMB_OPPOSE234*T.MathUtils.clamp(Math.abs(t.rotation.y-(t.userData?.rest199?.y??t.rotation.y))/.5+Math.max(0,t.rotation.x)/.8,0,1):0;pose(angles);}
  pose(angles);
  return {root,hand,bones,pose,follow,angles,dispose(){root.removeFromParent();for(const o of owned)o.dispose();}};
 }
