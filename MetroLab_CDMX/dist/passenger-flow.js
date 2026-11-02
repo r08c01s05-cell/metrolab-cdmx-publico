@@ -7,6 +7,10 @@ const clamp=v=>Math.max(0,Math.min(1,v));
 const lerp=(a,b,t)=>a+(b-a)*t;
 // Saturation keeps the web renderer responsive; figures represent groups at high demand.
 export const crowdCount=platformCount121;
+// Realismo 224: walkers used a lane at 8.45 m, behind the 8 m back wall of lateral platforms, so
+// they and the boarding routes that start from them walked inside the wall. The lane now lies
+// on the platform, clear of the wall (platform collision keeps people within 7.40 m minus their radius).
+export const WALK_LANE224=6.9;
 export function platformWalk(time,index){
  const cycle=18,phase=((time+index*1.73)%cycle+cycle)%cycle;
  // Eight metres, with pauses and a slow start/stop at each end.
@@ -70,7 +74,7 @@ export function buildPassengerFrame({engine,train,stationCenter,queue,portals=[]
   // near-edge row before using the rest of the island. Stable small offsets
   // break military-looking lines without changing identities or logical demand.
   const row210=[0,4,2,6,1,5,3,7][slot.row];
-  let x=slot.x+(walk?path.offset:island208?.16*Math.sin(i*2.4):0),z=island208?waitingSlot208(islandId209(train.line,stationCenter),walk?platform*6.2:platform*(4.45+row210*.46))+(walk?0:.10*Math.sin(i*1.8)):(walk?platform*8.45:slot.z);
+  let x=slot.x+(walk?path.offset:island208?.16*Math.sin(i*2.4):0),z=island208?waitingSlot208(islandId209(train.line,stationCenter),walk?platform*6.2:platform*(4.45+row210*.46))+(walk?0:.10*Math.sin(i*1.8)):(walk?platform*WALK_LANE224:slot.z);
   if(!walk&&blockedPortals121.some(p=>p.z*platform>0&&Math.abs(x-p.x)<.7))x+=.82;
   x=Math.max(stationCenter-66,Math.min(stationCenter+66,x));
   if(!eligibleForReserved91({modelType})&&(x-stationCenter)*(-platform)>18.5)x=stationCenter+(-platform)*18.5;

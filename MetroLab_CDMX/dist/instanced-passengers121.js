@@ -1,7 +1,7 @@
 import {passengerCarPose211} from './passenger-car211.js?v=212';
 import * as THREE from 'three';
 import {mergeGeometries} from './vendor/BufferGeometryUtils.js';
-import {wardrobeFor} from './passenger-wardrobe.js?v=144';
+import {wardrobeFor} from './passenger-wardrobe.js?v=225';
 import {avatarDetail119,applyCloth120} from './passenger-cloth119.js?v=130';
 
 // Vertex clustering for distant GLB silhouettes. Textures and material roles survive.

@@ -30,8 +30,20 @@ export function clampPlatformCamera169(view){
  if(!['platform','passenger'].includes(view.cameraMode)){view.previousPlatform169=null;return;}const center=view.fixedAnchor??0,side=view.platformSide169??-1,station=view.stationCache.get(view.platformStation??view.cameraStation),solids=station?.userData.solids169||[],c=view.camera.position;
  const desired={x:c.x-center,z:c.z},from=view.previousPlatform169||desired,p=sweepPlatform169(from,desired,side,solids,.30),dx=p.x+center-c.x,dz=p.z-c.z,dy=clamp(c.y,view.cameraMode==='passenger'?2.15:2.25,3.15)-c.y;c.x+=dx;c.z+=dz;c.y+=dy;view.controls.target.add(new T.Vector3(dx,dy,dz));view.camera.lookAt(view.controls.target);view.previousPlatform169=p;
 }
+function clearFlow224(a,center,solids,radius){
+ let x=a.x-center,z=a.z;const side=z<0?-1:1;
+ z=side*clamp(z*side,0,7.40-radius);
+ for(let pass=0;pass<4;pass++){let moved=false;for(const b of solids){const minX=b.minX-radius,maxX=b.maxX+radius,minZ=b.minZ-radius,maxZ=b.maxZ+radius;if(x<=minX||x>=maxX||z<=minZ||z>=maxZ)continue;
+  const options=[[x-minX,minX,z],[maxX-x,maxX,z],[z-minZ,x,minZ],[maxZ-z,x,maxZ]].filter(([,,nz])=>nz*side>=4&&nz*side<=7.40-radius).sort((p,q)=>p[0]-q[0]);
+  if(options.length){x=options[0][1];z=options[0][2];moved=true;}}if(!moved)break;}
+ a.x=x+center;a.z=z;
+}
 export function constrainPlatformActors169(actors,center,solids){
  if(platformBounds208(solids))return separateSurfaceCrowd210(actors,center,solids,safePlatformPoint169,platformBounds208);
+ // Realismo 224: people walking to or from a door kept their straight route through walls,
+ // pillars and benches. On the platform itself (beyond the edge) they now step around them;
+ // the crossing between the edge and the car is left untouched.
+ for(const a of actors)if(a.flow&&a.location==='platform'&&a.z*a.z>16)clearFlow224(a,center,solids,a.modelType==='child'?.16:.22);
  const grid=new Map();for(const a of actors){if(a.location!=='platform'||a.flow||(!platformBounds208(solids)&&a.z*a.z<14))continue;const side=a.z<0?-1:1,p=safePlatformPoint169({x:a.x-center,z:a.z},side,solids,a.modelType==='child'?.19:.26);a.x=p.x+center;a.z=p.z;
   // A small local separation prevents walking figures occupying a waiting body.
   const key=(x,z)=>Math.floor(x/.6)+':'+Math.floor(z/.6);for(let attempt=0;attempt<3;attempt++){const ix=Math.floor(a.x/.6),iz=Math.floor(a.z/.6);let moved=false;for(let x=ix-1;x<=ix+1;x++)for(let z=iz-1;z<=iz+1;z++)for(const b of grid.get(x+':'+z)||[]){const d=Math.hypot(a.x-b.x,a.z-b.z),min=a.guardianId===b.id?.40:.48;if(d<min){const q=safePlatformPoint169({x:a.x-center+(d>.001?(a.x-b.x)/d:1)*(min-d+.01),z:a.z+(d>.001?(a.z-b.z)/d:0)*(min-d+.01)},side,solids,.26);a.x=q.x+center;a.z=q.z;moved=true;}}if(!moved)break;}const k=key(a.x,a.z);if(!grid.has(k))grid.set(k,[]);grid.get(k).push(a);

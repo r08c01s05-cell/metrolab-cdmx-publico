@@ -1,7 +1,7 @@
 import {islandAt208,waitingZ208} from './station-layout208.js?v=209';
 import * as T from 'three';
-import {doorOpenness} from './passenger-flow.js?v=211';
-import {safePlatformPoint169} from './platform-collision169.js?v=210';
+import {doorOpenness} from './passenger-flow.js?v=225';
+import {safePlatformPoint169} from './platform-collision169.js?v=225';
 const setText=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
 export class TrainBoarding200{
  constructor(player,doc){this.player=player;this.view=player.view;this.doc=doc;this.portals=new WeakMap();const stage=player.canvas.parentElement;if(stage&&doc.createElement){this.button=doc.createElement('button');this.button.type='button';this.button.className='ride200-action';this.button.hidden=true;this.button.setAttribute('aria-label','Subir o bajar del tren');this.button.onclick=()=>this.interact();stage.append(this.button);}}

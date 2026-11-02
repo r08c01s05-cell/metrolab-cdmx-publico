@@ -9,10 +9,17 @@
     "passenger-car211.js": "bfc7b0a83087eb0ab43adaa40482bfcd8690c963897670d9e51efb3c098d4017",
     "passenger-seats.js": "4c016de392d231bcdd0fdcc0e81644c9658166767ea09892dafe28a7eac7ae99",
     "cab-camera118.js": "edc96b429c895febe698d454d3afc1adcd166f72589e5425ab812924abebf02d",
-    "platform-collision169.js": "adce4aff92448d6ccbdcf82fc8abf9dbcba3c44121e8cdefb3768b00639b4738",
+    "platform-collision169.js": "b8f78cc881b7561981c41a28583c36794641bd218caccc58253b5d026a9128f6",
     "surface-crowd210.js": "afceb3f5af462801c3f8f790ed3d874ef190cd65464496f3914bb29879c04416",
     "train-boarding200.js": "09a92aa29357d1ec5da67de70c3647437c2ba04ece4b5d8f5e37bd6faeea4654",
     "track-details99.js": "5ebb8cd4a1cf3ab0a7085ddd0f753eb4dba58fbeda96cd981823860ece72c35e",
     "engine.js": "0b857e3499e59366f53cc75552454a2825e30933f2aa2c09ec7cae292ba370ef"
-  }
+  },
+  "cambios_autorizados": [
+    {
+      "revision": 224,
+      "archivo": "platform-collision169.js",
+      "motivo": "Los pasajeros que caminan hacia o desde una puerta rodean muros, pilares y bancas del andén (clearFlow224). Autorizado por el usuario el 2 de noviembre de 2026."
+    }
+  ]
 }
