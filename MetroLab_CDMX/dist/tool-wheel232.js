@@ -19,13 +19,13 @@ export class ToolWheel232{
  }
  mount(){const host=this.bag.host.closest?.('dialog')||this.bag.doc.body;if(this.root.parentElement!==host)host.append(this.root);}
  open(){
-  const bag=this.bag;this.mount();this.ring.replaceChildren();this.items=bag.buttons.map(b=>({button:b,id:bag.getId(b)})).filter(x=>x.id);
-  const n=this.items.length;this.items.forEach((item,i)=>{const a=i/n*Math.PI*2,el=bag.doc.createElement('div'),ready=['hand','inspect','test','spare'].includes(item.id)||bag.prepared176.has(item.id);
+  const bag=this.bag;this.mount();if(this.ring.replaceChildren)this.ring.replaceChildren();else this.ring.innerHTML='';this.items=bag.buttons.map(b=>({button:b,id:bag.getId(b)})).filter(x=>x.id);
+  const n=this.items.length;this.items.forEach((item,i)=>{const a=i/n*Math.PI*2,el=bag.doc.createElement('div'),ready=!!bag.belt238||['hand','inspect','test','spare'].includes(item.id)||bag.prepared176.has(item.id);
    el.className='wheel232-item';el.dataset.ready=String(ready);el.style.setProperty('--x',(Math.sin(a)*150).toFixed(1)+'px');el.style.setProperty('--y',(-Math.cos(a)*150).toFixed(1)+'px');
-   el.innerHTML=`<span>${ICONS232[item.id]||'🧰'}</span><b></b><small>${ready?'':'en la bolsa'}</small>`;el.querySelector('b').textContent=bag.title(item.id);item.el=el;item.ready=ready;this.ring.append(el);});
+   el.innerHTML=`<span>${ICONS232[item.id]||'🧰'}</span><b></b><small>${ready?'':'en la bolsa'}</small>`;el.querySelector('b').textContent=bag.title(item.id);item.el=el;item.ready=ready;el.onpointerdown=e=>{e.preventDefault?.();e.stopPropagation?.();this.select(i);this.close(true);bag.sticky238=false;};this.ring.append(el);});
   this.vec={x:0,y:0};const current=this.items.findIndex(x=>x.id===bag.selected);this.select(current>=0?current:0);this.root.hidden=false;
  }
- select(i){this.index=i;this.items.forEach((x,j)=>x.el.dataset.active=String(j===i));const item=this.items[i];if(item)this.center.innerHTML=`<span>${ICONS232[item.id]||'🧰'}</span><b>${item.el.querySelector('b').textContent}</b><small>${item.ready?'Suelta Tab para tomarla':'Está en la bolsa del suelo'}</small>`;}
+ select(i){this.index=i;this.items.forEach((x,j)=>x.el.dataset.active=String(j===i));const item=this.items[i];if(item)this.center.innerHTML=`<span>${ICONS232[item.id]||'🧰'}</span><b>${item.el.querySelector('b').textContent}</b><small>${item.ready?(this.bag.sticky238?'Clic o Tab para tomarla':'Suelta Tab para tomarla'):'Está en la bolsa del suelo'}</small>`;}
  step(d){if(this.items.length)this.select((Math.max(0,this.index)+d+this.items.length)%this.items.length);}
  close(choose=true){if(this.root.hidden)return null;this.root.hidden=true;const item=choose?this.items[this.index]:null;if(item)item.button.click();return item?.id||null;}
  get isOpen(){return !this.root.hidden;}

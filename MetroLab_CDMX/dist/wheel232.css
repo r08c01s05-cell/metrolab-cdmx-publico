@@ -24,3 +24,4 @@
 .walk236[data-alarm=true] strong{color:#ffb4a9}
 @keyframes walk236{to{background:#3a1512e6}}
 @media(prefers-reduced-motion:reduce){.walk236[data-alarm=true]{animation:none}}
+.wheel232-item{pointer-events:auto;cursor:pointer}
