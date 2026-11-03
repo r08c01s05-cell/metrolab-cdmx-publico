@@ -1,5 +1,6 @@
 import * as T from 'three';
 import {scorchMaterial226,releaseScorch226,puffTexture226,Smoke226} from './fault-realism226.js?v=229';
+import {FaultShow235} from './fault-show235.js?v=235';
 
 // Only the isolated study clone is articulated. Shared GLB buffers stay intact.
 export class FaultAnimation218{
@@ -8,6 +9,7 @@ export class FaultAnimation218{
   this.geometry=new Set();this.materials=new Set();this.textures=new Set();this.restore=[];this.pivots=[];this.doors=[];this.wheels=[];this.smoke=[];this.basePosition=model.root.position.clone();
   this.envelope=model.bounds().clone();this.initialBounds=this.envelope.clone();
   if(domain==='train')this.train();else this.substation();
+  this.show235=new FaultShow235(this);
   if(globalThis.location?.search?.includes('depurar225'))globalThis.faultFx225=this;
  }
  mesh(geometry,color,parent=this.root,options={}){this.geometry.add(geometry);const m=new T.MeshStandardMaterial({color,roughness:.7,...options});this.materials.add(m);const o=new T.Mesh(geometry,m);o.userData.study218=true;parent.add(o);return o;}
@@ -121,6 +123,7 @@ export class FaultAnimation218{
   for(const w of this.wheels)w.pivot.rotation.z=-a.wheelDistance/w.radius;
   for(const {o,x,y,z,i}of this.smoke){o.visible=a.damage>.02;const rise=(sample.progress*3+i/7)%1;o.position.set(x+Math.sin(i+sample.progress*9)*.15,y+rise*.85,z);o.scale.setScalar(.4+rise*.9);o.material.opacity=a.damage*(1-rise)*.55;}
   this.coolingApply225(sample);
+  this.show235?.apply(sample);
   if(a.damage&&sample.scenario?.id!=='sr-cooling')for(const row of this.model.rows)if(row.part==='transformer'&&row.base&&/resina|aislamiento/i.test(row.material.name))row.material.color.multiplyScalar(1-a.damage*.72);
   this.model.root.updateMatrixWorld(true);
  }
@@ -128,7 +131,7 @@ export class FaultAnimation218{
  dispose(){
   this.model.root.position.copy(this.basePosition);for(const r of this.restore){r.parent.add(r.o);r.o.matrix.copy(r.matrix);}for(const p of this.pivots)p.removeFromParent();
   for(const coil of this.fx225?.coils||[]){coil.material.emissive.copy(coil.emissive);coil.material.emissiveIntensity=coil.intensity;releaseScorch226(coil.material);}
-  this.fx225?.smoke.dispose();
+  this.fx225?.smoke.dispose();this.show235?.dispose();
   for(const w of this.wheels)w.mark.removeFromParent();this.root.removeFromParent();for(const g of this.geometry)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();this.model.tint('',0);this.model.root.updateMatrixWorld(true);
  }
 }

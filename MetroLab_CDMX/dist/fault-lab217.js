@@ -9,7 +9,7 @@ import {sampleOutcome218,variants218,EXTRA_SOURCES218} from './fault-outcomes218
 import {studyShadows226} from './fault-realism226.js?v=229';
 import {FaultHud229} from './fault-hud229.js?v=233';
 import {FaultStage225,cameraTween225} from './fault-stage225.js?v=230';
-import {FaultAnimation218,createConsequence218} from './fault-animation218.js?v=229';
+import {FaultAnimation218,createConsequence218} from './fault-animation218.js?v=235';
 const NS='http://www.w3.org/2000/svg',svg=(tag,attrs)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));return e;};
 export class FaultLab217{
  constructor(doc=document){
