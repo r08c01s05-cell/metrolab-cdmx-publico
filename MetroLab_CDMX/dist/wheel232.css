@@ -12,3 +12,15 @@
 .wheel232-center span{font-size:40px;line-height:1}
 .wheel232-center small{font:500 11px system-ui;color:#b8c9c2}
 @media(max-width:520px){.wheel232{transform:scale(.75)}}
+/* Portaherramientas 236 en el recorrido de la planta: lectura de la herramienta en la mano. */
+.walk236{position:absolute;right:16px;bottom:16px;z-index:5;display:grid;gap:2px;min-width:220px;max-width:min(320px,calc(100% - 32px));padding:10px 14px;border-radius:12px;background:#0f1c1ad9;backdrop-filter:blur(6px);border:1px solid #ffffff2e;color:#eef4ef;font:500 12px/1.35 system-ui;pointer-events:none}
+.walk236[hidden]{display:none}
+.walk236 b{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#f0b545}
+.walk236 strong{font:700 24px ui-monospace,monospace;color:#fff;min-height:0}
+.walk236 strong:empty{display:none}
+.walk236 small{color:#b8c9c2}
+.walk236 em{font-style:normal;font-size:10px;color:#ffffff80;margin-top:4px}
+.walk236[data-alarm=true]{border-color:#ef5b4c;box-shadow:0 0 0 2px #ef5b4c66;animation:walk236 .5s ease-in-out infinite alternate}
+.walk236[data-alarm=true] strong{color:#ffb4a9}
+@keyframes walk236{to{background:#3a1512e6}}
+@media(prefers-reduced-motion:reduce){.walk236[data-alarm=true]{animation:none}}

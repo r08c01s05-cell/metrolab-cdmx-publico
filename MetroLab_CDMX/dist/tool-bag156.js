@@ -1,6 +1,6 @@
 import {PhysicalBag157} from './physical-bag157.js?v=216';
 import * as THREE from 'three';
-import {ToolWheel232,HOLD_MS232} from './tool-wheel232.js?v=232';
+import {ToolWheel232,HOLD_MS232} from './tool-wheel232.js?v=236';
 import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
 export class ToolBag156{
  constructor({host,tools,doc=globalThis.document,getId=b=>b.dataset.tool,onEquip=()=>{},getContext=()=>null}){

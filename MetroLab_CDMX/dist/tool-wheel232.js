@@ -1,7 +1,7 @@
 // Portaherramientas 232: hold Tab to open a radial wheel with every tool of the bag; point with the
 // mouse (or arrows / scroll) and release Tab to take it. A short tap of Tab still opens the bag.
 // Tools not yet taken from the floor bag show as "en la bolsa"; choosing one opens the bag.
-const ICONS232={hand:'✋',inspect:'🔍',meter:'📟',driver:'🪛',screwdriver:'🪛',brush:'🧹',test:'▶',spare:'🔩',wrench:'🔧',megohm:'⚡',dmm:'📟',probe:'📟',light:'🔦',lock:'🔒',rag:'🧽'};
+const ICONS232={hand:'✋',inspect:'🔍',meter:'📟',driver:'🪛',screwdriver:'🪛',brush:'🧹',test:'▶',spare:'🔩',wrench:'🔧',megohm:'⚡',dmm:'📟',probe:'📟',light:'🔦',lock:'🔒',rag:'🧽',flashlight:'🔦',detector:'⚡',thermal:'🌡️',laser:'📏'};
 export const HOLD_MS232=180;
 export function wheelIndex232(dx,dy,count){
  if(!count||Math.hypot(dx,dy)<14)return -1;
