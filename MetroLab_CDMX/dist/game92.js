@@ -1,5 +1,5 @@
-import './workshop.js?v=234';
-import './game86.js?v=234';
+import './workshop.js?v=236';
+import './game86.js?v=236';
 const $=id=>document.getElementById(id);
 const icons={substations:'M4 3h16v18H4zM8 6h8M8 18h8m-5-9-2 4h4l-2 3',explore:'M4 20V7l8-4 8 4v13M8 20v-7h8v7M8 8h8',maintenance:'m14 6 4-3 3 3-3 4-4-1-8 11-3-3 10-8z',operator:'M4 18a8 8 0 1 1 16 0M12 16l5-7M5 20h14',automatic:'M5 4h14v14H5zM8 8h8M8 12h8M8 18l-2 3m10-3 2 3'};
 for(const b of document.querySelectorAll('[data-game-mode]')){const svg=document.createElement('span');svg.className='game92-mode-icon';svg.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="${icons[b.dataset.gameMode]||icons.explore}"/></svg>`;b.prepend(svg);}
