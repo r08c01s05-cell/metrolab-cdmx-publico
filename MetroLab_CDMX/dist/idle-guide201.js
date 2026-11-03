@@ -8,7 +8,7 @@ export function installIdleGuide201({host,doc=host.ownerDocument,win=doc.default
  if(!doc?.createElement||!win?.setInterval||!host?.append)return null;
  const clock=new IdleClock201(),root=doc.createElement('aside');root.className='idle201-guide';root.hidden=true;root.setAttribute('aria-label','Ayuda del trabajo actual');
  const title=doc.createElement('strong');title.textContent='¿Qué sigue?';const text=doc.createElement('p');text.setAttribute('role','status');text.setAttribute('aria-live','polite');const controls=doc.createElement('div');
- for(const[label,action]of [['Enfocar · F',focus],['Bolsa · Tab',bag],['Plan · J',plan]])if(action){const b=doc.createElement('button');b.type='button';b.textContent=label;b.onclick=()=>{clock.reset();root.hidden=true;action();};controls.append(b);}
+ for(const[label,action]of [['Enfocar · F',focus],['Herramientas · Tab',bag],['Plan · J',plan]])if(action){const b=doc.createElement('button');b.type='button';b.textContent=label;b.onclick=()=>{clock.reset();root.hidden=true;action();};controls.append(b);}
  root.append(title,text,controls);host.append(root);
  const tick=()=>{const state=get(),active=!!state?.active&&!doc.hidden;const show=clock.check(win.performance?.now?.()??Date.now(),state?.key,active);if(show&&text.textContent!==state.text)text.textContent=state.text;root.hidden=!show;};
  const activity=e=>{if(root.contains(e.target))return;clock.reset();root.hidden=true;};
