@@ -40,4 +40,9 @@ belt.dispose();assert(!camera.children.length,'Se retira al cerrar');
  const b2=new ToolBelt239(ctxOwner);b2.open();assert.deepEqual(b2.items.map(x=>x.id),['inspect','screwdriver','meter','brush'],'El cinturón trae solo las herramientas de la práctica');
  b2.select(1);assert(/Destornillador aislado/.test(b2.tag.textContent),'Nombre de la herramienta real');b2.select(2);assert(/Anemómetro/.test(b2.tag.textContent));b2.close(false);b2.dispose();
  const empty={...ctxOwner,getContext:()=>({tools:[]})},b3=new ToolBelt239(empty);b3.open();assert(!b3.isOpen&&/manos/.test(empty.status.textContent),'Práctica sin herramientas: se avisa que se trabaja con las manos');b3.dispose();}
+// 243: las puntas no son herramientas aparte; con el multímetro en la mano se usa la punta del paso.
+{const {SubstationMaintenance128}=await import('../dist/substation-maintenance-state128.js');const st=new SubstationMaintenance128();st.start('diodes');
+ while(!['red','black'].includes(st.step.tool)){st.choose(st.step.tool);st.act(st.step.target);}
+ const lead=st.step.tool,before=st.index;st.choose('meter');st.act(st.step.target);assert.equal(st.index,before+1,'Con el multímetro se coloca la '+(lead==='red'?'punta roja':'punta negra'));
+ st.choose('driver');const i2=st.index;st.act(st.step.target);assert.equal(st.index,i2,'Otra herramienta sigue sin servir para las puntas');}
 console.log('239 PASS: cinturón portaherramientas en la cadera: sube, levanta la marcada con su nombre, cambia con flechas/rueda/ratón y toma con clic incluso con el puntero capturado; Esc cancela; bolsa vacía para la herramienta en mano.');
