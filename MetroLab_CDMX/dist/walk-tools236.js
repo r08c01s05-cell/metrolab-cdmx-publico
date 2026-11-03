@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {ToolWheel232,HOLD_MS232} from './tool-wheel232.js?v=238';
+import {ToolBelt239 as ToolWheel232,HOLD_MS239 as HOLD_MS232} from './tool-belt239.js?v=239';
 import {createGlove104} from './repair-glove104.js?v=234';
 
 // Portaherramientas 236 para el recorrido a pie de la planta rectificadora. Mantén Tab para abrir
@@ -88,7 +88,7 @@ export class WalkTools236{
  render(force=false){const r=this.reading||{},t=WALK_TOOLS236.find(x=>x.id===this.selected),key=this.selected+'|'+r.value+'|'+r.note;if(!force&&key===this.lastKey)return;this.lastKey=key;
   this.hud.querySelector('[data-walk236-title]').textContent=t.title;this.hud.querySelector('[data-walk236-value]').textContent=r.value||'';this.hud.querySelector('[data-walk236-note]').textContent=r.note||t.hint;this.hud.dataset.alarm=String(!!r.alarm);this.hud.dataset.tool=this.selected;}
  update(dt=0){
-  const on=this.active;this.hud.hidden=!on;this.rig.visible=on;if(!on){this.spot.intensity=0;this.beam.visible=this.dot.visible=false;if(this.wheel232.isOpen)this.wheel232.close(false);return;}
+  const on=this.active;this.hud.hidden=!on;this.rig.visible=on;if(!on){this.spot.intensity=0;this.beam.visible=this.dot.visible=false;if(this.wheel232.isOpen)this.wheel232.close(false);this.wheel232.update(1);return;}
   this.time+=dt;const hit=this.selected==='hand'||this.selected==='flashlight'?null:this.aim();this.reading=this.measure(hit);
   this.spot.intensity=this.selected==='flashlight'?28:0;
   this.led.material.emissiveIntensity=this.reading.alarm?(Math.sin(this.time*this.reading.rate*Math.PI*2)>0?4:.4):0;this.beep(this.reading.rate,dt);
@@ -97,7 +97,7 @@ export class WalkTools236{
   if(laser){const from=this.models.laser.localToWorld(new T.Vector3(0,0,-.056)),p=this.beam.geometry.attributes.position;p.setXYZ(0,from.x,from.y,from.z);p.setXYZ(1,hit.point.x,hit.point.y,hit.point.z);p.needsUpdate=true;this.dot.position.copy(hit.point).addScaledVector(hit.direction,-.01);}
   // A little sway while walking keeps the tool alive in the hand.
   const moving=this.view.walk176.keys?.size?1:0;this.rig.position.y=-.16+Math.sin(this.time*7)*.004*moving;this.rig.position.x=.17+Math.cos(this.time*3.5)*.003*moving;
-  this.glove.update?.(dt);this.render();}
+  this.glove.update?.(dt);this.wheel232.update(dt);this.render();}
  dispose(){this.view.dialog.removeEventListener('keydown',this.onKeyDown,true);this.view.dialog.removeEventListener('keyup',this.onKeyUp,true);this.wheel232.dispose();this.hud.remove();this.rig.removeFromParent();this.beam.removeFromParent();this.dot.removeFromParent();for(const o of this.owned)o.dispose?.();}
 }
 // Glove placement per tool in the tool rig (glove space: fingers +y, palm +z, thumb +x).

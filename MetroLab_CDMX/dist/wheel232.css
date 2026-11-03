@@ -25,3 +25,6 @@
 @keyframes walk236{to{background:#3a1512e6}}
 @media(prefers-reduced-motion:reduce){.walk236[data-alarm=true]{animation:none}}
 .wheel232-item{pointer-events:auto;cursor:pointer}
+/* Portaherramientas 239: nombre de la herramienta marcada sobre su bolsa del cinturón. */
+.belt239-tag{position:absolute;z-index:6;transform:translate(-50%,-100%);padding:3px 10px;border-radius:4px;background:#0b0b0af0;border:2px solid #ffc400;color:#ffc400;font:700 13px/1.3 system-ui;white-space:nowrap;pointer-events:none}
+.belt239-tag[hidden]{display:none}
