@@ -30,4 +30,6 @@ assert.equal(belt.close(false),null,'Esc cancela sin tomar');assert.deepEqual(ta
 assert(!fire('pointerdown',{button:0}),'Cerrado, el clic vuelve a la escena');
 for(const id of ['screwdriver','wrench','brush','meter','red','black','inspect','test','spare','lock','rag','flashlight','detector','thermal','laser'])assert(toolProp239(id).children.length>0,'Modelo para '+id);
 belt.dispose();assert(!camera.children.length,'Se retira al cerrar');
+// Real browsers ignore click() on a button while its own click is dispatching: the bag must not rely on it.
+{const {ToolBag156}=await import('../dist/tool-bag156.js');assert(/queueMicrotask\(\(\)=>this\.take238\(id\)\)/.test(ToolBag156.toString()),'La herramienta se entrega después del clic, no dentro de él');}
 console.log('239 PASS: cinturón portaherramientas en la cadera: sube, levanta la marcada con su nombre, cambia con flechas/rueda/ratón y toma con clic incluso con el puntero capturado; Esc cancela; bolsa vacía para la herramienta en mano.');

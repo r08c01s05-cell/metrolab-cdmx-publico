@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {ToolBelt239 as ToolWheel232,HOLD_MS239 as HOLD_MS232} from './tool-belt239.js?v=239';
+import {ToolBelt239 as ToolWheel232,HOLD_MS239 as HOLD_MS232} from './tool-belt239.js?v=240';
 import {createGlove104} from './repair-glove104.js?v=234';
 
 // Portaherramientas 236 para el recorrido a pie de la planta rectificadora. Mantén Tab para abrir

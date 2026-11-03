@@ -67,7 +67,7 @@ export class ToolBelt239{
  close(choose=true){if(!this.isOpen)return null;this.want=0;this.tag.hidden=true;const item=choose?this.items[this.index]:null;if(item)item.button.click();return item?.id||null;}
  // Called every frame by the scene that shows it (substation, workshop bench, plant walk).
  update(dt=.016,snap=false){if(!this.root)return;const k=snap?1:Math.min(1,dt*9);this.open239+=(this.want-this.open239)*k;if(this.want===0&&this.open239<.02){this.root.visible=false;this.tag.hidden=true;return;}
-  this.root.visible=true;this.root.position.set(0,-.6+this.open239*.37,-.52);this.root.rotation.x=-.5-this.open239*.3;
+  this.root.visible=true;this.root.position.set(0,-.6+this.open239*.45,-.52);this.root.rotation.x=-.5-this.open239*.35;
   const sel=this.items[this.index]?.id,held=this.owner.selected;
   for(const p of this.pouches||[]){const on=this.isOpen&&p.id===sel,e=snap?1:Math.min(1,dt*14);p.pr.visible=p.id!==held;p.pr.position.y+=((on?.045:0)-p.pr.position.y)*e;p.g.position.z+=((on?.03:.004)-p.g.position.z)*e;}
   const pouch=this.pouches?.find(p=>p.id===sel),c=this.view?.canvas;if(this.isOpen&&pouch&&c){const w=pouch.g.getWorldPosition(new T.Vector3());w.y+=.07;w.project(this.view.camera);const r={width:c.clientWidth||c.width||1,height:c.clientHeight||c.height||1};this.tag.style.left=((w.x+1)/2*r.width)+'px';this.tag.style.top=((1-w.y)/2*r.height)+'px';this.tag.hidden=false;}}
