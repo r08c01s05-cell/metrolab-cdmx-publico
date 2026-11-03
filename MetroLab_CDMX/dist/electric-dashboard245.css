@@ -1,7 +1,7 @@
 /* Análisis eléctrico 245: tablero sobre la vista de conducción. */
-.ed245{--ed245-surface:#121a19f2;--ed245-ink:#f0efec;--ed245-muted:#c3c2b7;--ed245-grid:#ffffff1c;--ed245-series:#3987e5;position:fixed;right:16px;top:72px;z-index:60;width:min(640px,calc(100vw - 32px));max-height:calc(100vh - 96px);overflow:auto;padding:14px 16px;border-radius:14px;background:var(--ed245-surface);border:1px solid #ffffff26;box-shadow:0 18px 50px #0009;color:var(--ed245-ink);font:13px/1.45 system-ui;backdrop-filter:blur(8px)}
+.ed245{--ed245-surface:#121a19f2;--ed245-ink:#f0efec;--ed245-muted:#c3c2b7;--ed245-grid:#ffffff1c;--ed245-series:#3987e5;position:fixed;right:16px;top:132px;z-index:60;width:min(600px,calc(100vw - 32px));max-height:calc(100vh - 150px);overflow:auto;padding:14px 16px;border-radius:14px;background:var(--ed245-surface);border:1px solid #ffffff26;box-shadow:0 18px 50px #0009;color:var(--ed245-ink);font:13px/1.45 system-ui;backdrop-filter:blur(8px)}
 .ed245[hidden]{display:none}
-.ed245 header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.ed245 header{position:static;background:none;border:0;box-shadow:none;padding:0;height:auto;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
 .ed245 header small{letter-spacing:.1em;font-size:10px;color:var(--ed245-muted)}
 .ed245 h3{margin:2px 0 0;font-size:16px}
 .ed245-actions{display:flex;gap:6px}
@@ -30,6 +30,6 @@
 .ed245-params{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .ed245-params label{display:flex;flex-direction:column;gap:2px;font-size:11px;color:var(--ed245-muted)}
 .ed245-params input{width:90px;padding:4px 6px;border-radius:6px;border:1px solid #ffffff2e;background:#0c1312;color:var(--ed245-ink)}
-.ed245-toggle{margin-left:auto;font:600 12px system-ui;padding:6px 12px;border-radius:999px;border:1px solid #f0b545;background:#3b3220;color:#ffe2a4;cursor:pointer}
+.ed245-toggle{font:600 12px system-ui;padding:6px 12px;border-radius:999px;border:1px solid #f0b545;background:#3b3220;color:#ffe2a4;cursor:pointer}
 .ed245-toggle[aria-expanded=true]{background:#f0b545;color:#1d1608}
 @media(max-width:640px){.ed245{left:16px;right:16px;top:60px;width:auto}.ed245-tiles{grid-template-columns:1fr 1fr}.ed245-params{grid-template-columns:1fr}}
