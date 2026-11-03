@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {detailedTool240} from './tool-props240.js?v=242';
 
 // Portaherramientas 239: el cinturón del simulador de la planta de emergencia, adaptado. Va puesto
 // en la cadera: un cinturón de nylon oscuro con franjas amarillas y hebilla, y una bolsa por
@@ -44,21 +45,24 @@ export class ToolBelt239{
  get view(){return this.owner.view||this.owner.getContext?.()?.view||null;}
  // Built once per camera; pouches are rebuilt when the set of tools changes.
  build(){
-  const v=this.view;if(!v?.camera)return false;const ids=this.owner.buttons.map(b=>this.owner.getId(b)).filter(id=>id&&id!=='hand');const key=ids.join(',');
+  const v=this.view;if(!v?.camera)return false;const ctx=this.owner.getContext?.()||{},ids=this.items.map(x=>x.id);const key=ids.join(',')+'|'+(ctx.kind||'')+'|'+(ctx.spare||'');
   if(this.root&&this.root.parent===v.camera&&key===this.key)return true;this.dispose3d();this.key=key;
-  const mat=(c,r=.85,me=0)=>{const x=new T.MeshStandardMaterial({color:c,roughness:r,metalness:me,depthTest:false});this.owned.push(x);return x;};
+  const mat=(c,r=.85,me=0)=>{const x=new T.MeshStandardMaterial({color:c,roughness:r,metalness:me});this.owned.push(x);return x;};
   const root=new T.Group();root.name='Portaherramientas en la cadera239';root.visible=false;v.camera.add(root);this.root=root;
+  // Clear depth right before the belt draws (lowest renderOrder of the belt): it stays on top of the
+  // scene while its own pieces still hide each other correctly.
+  const clearGeo=new T.PlaneGeometry(.001,.001),clearMat=new T.MeshBasicMaterial({colorWrite:false,depthWrite:false});this.owned.push(clearGeo,clearMat);const clear=new T.Mesh(clearGeo,clearMat);clear.renderOrder=980;clear.frustumCulled=false;clear.position.z=-.3;clear.onBeforeRender=renderer=>renderer.clearDepth();root.add(clear);
   const put=(geo,m,x,y,z,ord,p=root)=>{this.owned.push(geo);const o=new T.Mesh(geo,m);o.position.set(x,y,z);o.renderOrder=ord;o.frustumCulled=false;p.add(o);return o;};
   const nylon=mat('#2e3338',.95),nyl2=mat('#3a4147',.95),strap=mat('#1c1f22',.9),yel=mat('#ffc400',.6),metal=mat('#aeb6bb',.3,.9),n=Math.max(2,ids.length),span=Math.min(.92,.11*n);
   put(new T.BoxGeometry(span+.14,.05,.012),strap,0,0,0,990);put(new T.BoxGeometry(span+.14,.006,.014),yel,0,.022,0,991);put(new T.BoxGeometry(span+.14,.006,.014),yel,0,-.022,0,991);put(new T.BoxGeometry(.06,.05,.02),metal,-(span/2+.04),0,.006,992);
   this.pouches=ids.map((id,i)=>{const x=-span/2+i*(span/(n-1)),g=new T.Group();g.position.set(x,-.012,.004);root.add(g);
    put(new T.BoxGeometry(.088,.11,.012),nyl2,0,-.02,0,993,g);put(new T.BoxGeometry(.088,.082,.03),nylon,0,-.035,.016,995,g);put(new T.BoxGeometry(.09,.012,.032),strap,0,.004,.016,996,g);put(new T.BoxGeometry(.088,.004,.032),yel,0,-.07,.016,996,g);
-   const pr=toolProp239(this.kindOf(id),this.owned);pr.rotation.x=Math.PI/2;pr.scale.setScalar(.75);g.add(pr);return {id,g,pr};});
+   const ctx=this.owner.getContext?.()||{},pr=detailedTool240(id,{kind:ctx.kind||'',spare:ctx.spare||''},this.owned);pr.rotation.x=Math.PI/2;pr.scale.setScalar(.75);g.add(pr);return {id,g,pr};});
   root.rotation.x=-.5;root.position.set(0,-.6,-.52);return true;
  }
  kindOf(id){const k=this.owner.getContext?.()?.kind;return id==='meter'&&k?({anemometer:'meter',megohm:'megohm',dmm:'dmm'}[k]||'meter'):id;}
  open(){
-  const o=this.owner;this.items=o.buttons.map(b=>({button:b,id:o.getId(b)})).filter(x=>x.id&&x.id!=='hand');if(!this.items.length)return;
+  const o=this.owner;const allow=o.getContext?.()?.tools;this.items=o.buttons.map(b=>({button:b,id:o.getId(b)})).filter(x=>x.id&&x.id!=='hand'&&(!allow||allow.includes(x.id)));if(!this.items.length){if(o.status)o.status.textContent='En esta práctica trabajas con las manos con guante: no necesitas herramientas.';return;}
   this.build();const v=this.view;if(v)v.toolBelt239=this;const host=v?.canvas?.parentElement||o.host?.closest?.('dialog')||this.doc.body;if(this.tag.parentElement!==host)host?.append?.(this.tag);
   const current=this.items.findIndex(x=>x.id===o.selected);this.want=1;this.dx=0;this.select(current>=0?current:0);if(this.root){this.root.visible=true;}this.update(0,true);
  }
@@ -69,9 +73,10 @@ export class ToolBelt239{
  update(dt=.016,snap=false){if(!this.root)return;const k=snap?1:Math.min(1,dt*9);this.open239+=(this.want-this.open239)*k;if(this.want===0&&this.open239<.02){this.root.visible=false;this.tag.hidden=true;return;}
   this.root.visible=true;this.root.position.set(0,-.6+this.open239*.45,-.52);this.root.rotation.x=-.5-this.open239*.35;
   const sel=this.items[this.index]?.id,held=this.owner.selected;
-  for(const p of this.pouches||[]){const on=this.isOpen&&p.id===sel,e=snap?1:Math.min(1,dt*14);p.pr.visible=p.id!==held;p.pr.position.y+=((on?.045:0)-p.pr.position.y)*e;p.g.position.z+=((on?.03:.004)-p.g.position.z)*e;}
-  const pouch=this.pouches?.find(p=>p.id===sel),c=this.view?.canvas;if(this.isOpen&&pouch&&c){const w=pouch.g.getWorldPosition(new T.Vector3());w.y+=.07;w.project(this.view.camera);const r={width:c.clientWidth||c.width||1,height:c.clientHeight||c.height||1};this.tag.style.left=((w.x+1)/2*r.width)+'px';this.tag.style.top=((1-w.y)/2*r.height)+'px';this.tag.hidden=false;}}
+  for(const p of this.pouches||[]){const on=this.isOpen&&p.id===sel,e=snap?1:Math.min(1,dt*14);p.pr.visible=p.id!==held;p.pr.position.y+=((on?.075:.028)-p.pr.position.y)*e;p.g.position.z+=((on?.03:.004)-p.g.position.z)*e;}
+  const pouch=this.pouches?.find(p=>p.id===sel),c=this.view?.canvas;if(this.isOpen&&pouch&&c){const w=pouch.g.getWorldPosition(new T.Vector3());w.y+=.15;w.project(this.view.camera);const r={width:c.clientWidth||c.width||1,height:c.clientHeight||c.height||1};this.tag.style.left=((w.x+1)/2*r.width)+'px';this.tag.style.top=((1-w.y)/2*r.height)+'px';this.tag.hidden=false;}}
  dispose3d(){this.root?.removeFromParent();for(const o of this.owned)o.dispose?.();this.owned=[];this.root=null;this.pouches=[];}
  dispose(){this.doc.removeEventListener?.('mousemove',this.onMove,true);this.doc.removeEventListener?.('wheel',this.onWheel,{capture:true});this.doc.removeEventListener?.('pointerdown',this.onDown,true);this.dispose3d();this.tag.remove?.();}
 }
-function o239name(owner,id){if(id==='meter'){const k=owner.getContext?.()?.kind;return {anemometer:'Anemómetro',megohm:'Megóhmetro',dmm:'Multímetro'}[k]||owner.title?.(id)||'Instrumento';}return owner.title?.(id)||NAMES239[id]||id;}
+const BELT_NAMES240={screwdriver:'Destornillador aislado',driver:'Destornillador aislado',brush:'Cepillo de nylon',wrench:'Llave de matraca',inspect:'Linterna de inspección',test:'Hoja de prueba funcional'},SPARE_NAMES240={fuse:'Fusible de repuesto',module:'Módulo de diodos de repuesto',relay:'Relé de repuesto'};
+function o239name(owner,id){if(BELT_NAMES240[id])return BELT_NAMES240[id];if(id==='spare')return SPARE_NAMES240[owner.getContext?.()?.spare]||'Repuesto';if(id==='meter'){const k=owner.getContext?.()?.kind;return {anemometer:'Anemómetro',megohm:'Megóhmetro',dmm:'Multímetro'}[k]||owner.title?.(id)||'Instrumento';}return owner.title?.(id)||NAMES239[id]||id;}

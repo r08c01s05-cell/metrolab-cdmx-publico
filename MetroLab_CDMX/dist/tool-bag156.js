@@ -1,6 +1,6 @@
 import {PhysicalBag157} from './physical-bag157.js?v=239';
 import * as THREE from 'three';
-import {ToolBelt239 as ToolWheel232,HOLD_MS239 as HOLD_MS232} from './tool-belt239.js?v=240';
+import {ToolBelt239 as ToolWheel232,HOLD_MS239 as HOLD_MS232} from './tool-belt239.js?v=242';
 import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
 export const BELT_HINT238='Tab: portaherramientas · Q: guardar',BAG_HINT238='Tab: bolsa · mantén Tab: portaherramientas';
 export class ToolBag156{
