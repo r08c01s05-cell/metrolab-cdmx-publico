@@ -1,6 +1,6 @@
 import {ToolBag156} from './tool-bag156.js?v=240';
 import {gate142} from './resource-gate142.js?v=150';
-import{MissionGame117}from'./mission-game117.js?v=238';
+import{MissionGame117}from'./mission-game117.js?v=241';
 import{HAND_CASES}from'./maintenance-hands-core.js?v=216';import{MaintenanceSession102,LABELS102}from'./maintenance-session102.js?v=216';import{MaintenanceBench102}from'./maintenance-scene102.js?v=240';
 const toolNames={hand:'Manos libres',screwdriver:'Destornillador',wrench:'Llave',meter:'Multímetro'};
 export function mountHandsMaintenance({onCase=()=>{},onState=()=>{},createBench=(c,h)=>new MaintenanceBench102(c,h)}={}){const $=id=>document.getElementById(id),root=$('maintenance-hands-panel');root.dataset.rebuild102='true';let bench=null,bag156=null,completed=false,started=Date.now(),rendering=false,lastActions='',lastStage='',lastLog='';const session=new MaintenanceSession102(()=>render()),state=session.state;

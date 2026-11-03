@@ -13,7 +13,7 @@ import {requestStudy89} from './study-context89.js';
 import {trainAsset,depotEnvironment} from './depot86.js?v=222';
 import{FORMATION9,CAR_TYPES,carReference,TECHNICAL_REFERENCE}from'./train-formation.js?v=64';import * as THREE from 'three';import{WorkshopNavigation}from'./workshop-navigation.js?v=61';import{OrbitControls}from'./vendor/OrbitControls.js';import{GLTFLoader}from'./vendor/GLTFLoader.js';import{MODELS,PARTS,CASES,partCategory}from'./workshop-core.js?v=112';
 import{LESSONS,STAGES,GuidedMaintenance}from'./maintenance-course.js?v=78';
-import{mountHandsMaintenance}from'./maintenance-hands-ui.js?v=240';
+import{mountHandsMaintenance}from'./maintenance-hands-ui.js?v=241';
 import{pocketLeaf237,leafKey237}from'./door-pocket237.js?v=237';
 const $=id=>document.getElementById(id);let model='NM22',unit='cabina',carIndex=0,mode='explore',viewer,selected='body',request=0;const exercise=new GuidedMaintenance();let maintenanceTimer=0,maintenanceRun=0;
 function setText(id,text){$(id).textContent=text;}

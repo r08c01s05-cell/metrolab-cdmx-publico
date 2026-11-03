@@ -1,4 +1,4 @@
-import {installIdleGuide201} from './idle-guide201.js?v=201';
+import {installIdleGuide201} from './idle-guide201.js?v=241';
 import {ToolBag156} from './tool-bag156.js?v=240';
 import * as THREE from 'three';
 import {angularStep116} from './maintenance-gestures116.js?v=116';
