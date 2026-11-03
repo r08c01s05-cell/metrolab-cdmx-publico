@@ -1,4 +1,4 @@
-import {key181,installKeyHelp181} from './game-keys181.js?v=224';
+import {key181,installKeyHelp181} from './game-keys181.js?v=238';
 import * as T from 'three';
 const ignored=e=>['INPUT','TEXTAREA','SELECT'].includes(e.target?.tagName);
 export class Walk176{

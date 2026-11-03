@@ -4,7 +4,7 @@ import {SR_TECHNICAL129} from './substation-technical129.js?v=129';
 export const SR_TOOLS128={inspect:'Inspección visual',hand:'Manos libres',driver:'Destornillador',brush:'Cepillo',meter:'Multímetro',spare:'Repuesto',test:'Prueba funcional',red:'Punta roja',black:'Punta negra'};
 export const SR_MISSIONS128={
  ventilation:{title:'Ventilación del transformador',part:'transformer',summary:'El soplador de flujo cruzado bajo la bobina central entrega poco aire: su rejilla de protección está tapada de polvo. Retírala, límpiala y comprueba el soplador.',targets:{filter:'Rejilla del soplador central',screwL:'Tornillo izquierdo',screwR:'Tornillo superior derecho',screw3:'Tornillo inferior izquierdo',screw4:'Tornillo inferior derecho',fan:'Soplador de flujo cruzado'},steps:[
-  {text:'Toma el anemómetro de la bolsa, llévalo a la salida del soplador central y mantén E para medir el flujo inicial.',tool:'meter',target:'fan',effect:'airBefore'},
+  {text:'Toma el anemómetro del portaherramientas, llévalo a la salida del soplador central y mantén E para medir el flujo inicial.',tool:'meter',target:'fan',effect:'airBefore'},
   {text:'Inspecciona la rejilla del soplador para identificar la obstrucción.',tool:'inspect',target:'filter',effect:'diagnose'},
   {text:'El flujo es bajo y la rejilla tiene polvo acumulado. ¿Qué revisarías primero?',tool:'inspect',target:'filterRestriction',effect:'diagnose',choices:{filterRestriction:'Rejilla obstruida',replaceMotor:'Cambiar el motor sin comprobar',ignoreFlow:'Ignorar la lectura de flujo'}},
   {text:'Afloja el tornillo izquierdo con el destornillador.',tool:'driver',target:'screwL',effect:'loosenL'},
