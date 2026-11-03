@@ -31,7 +31,7 @@ assert.equal(tools.selected,'hand');assert(!tools.glove.root.visible,'Con manos 
 key('keydown','Tab');key('keyup','Tab');assert.equal(tools.selected,'flashlight','Un toque de Tab pasa a la siguiente');
 step();assert(tools.spot.intensity>0&&tools.models.flashlight.visible&&tools.glove.root.visible,'La linterna ilumina y se ve en la mano');
 key('keydown','Tab');await new Promise(r=>setTimeout(r,230));assert(tools.wheel232.isOpen,'Mantener Tab abre la rueda');
-assert.equal(tools.wheel232.items.length,WALK_TOOLS236.length,'La rueda muestra todas las herramientas');
+assert.equal(tools.wheel232.items.length,WALK_TOOLS236.length-1,'El cinturón tiene una bolsa por herramienta (las manos libres se eligen con Q)');
 const thermal=tools.wheel232.items.findIndex(x=>x.id==='thermal');tools.wheel232.select(thermal);key('keyup','Tab');
 assert(!tools.wheel232.isOpen&&tools.selected==='thermal','Al soltar Tab se toma la herramienta marcada');
 step();assert.equal(tools.spot.intensity,0,'La linterna se apaga al cambiar');

@@ -77,7 +77,7 @@ export class PhysicalBag157{
  update(now=performance.now()){
   // Portaherramientas 238: the kit rides on the belt. The hidden bag stays at the worker's feet so
   // every "near the bag" rule of the practices holds, and it is never drawn.
-  if(this.belt238&&this.parked178){const c=this.view.camera.getWorldPosition(new T.Vector3());this.model.root.position.set(c.x,this.anchor178?.y??0,c.z);this.anchor178?.copy(this.model.root.position);this.model.root.visible=false;}
+  if(this.belt238&&this.parked178){const c=this.view.camera.getWorldPosition(new T.Vector3());this.model.root.position.set(c.x,c.y-.9,c.z);this.anchor178?.copy(this.model.root.position);this.model.root.visible=false;}
   if(['closed','loading'].includes(this.phase))return;this.layout();const t=(now-this.at)/(phaseTime196[this.phase]||260);
   if(this.phase==='lowering'){this.crouch176(ease(t));if(t>=1){this.phase='opening';this.at=now;this.notify('Abriendo la bolsa…');}return;}
   if(this.phase==='rising'){this.crouch176(1-ease(t));if(t>=1){const id=this.selected;this.committing=true;try{this.onEquip(id);}finally{this.committing=false;this.close();}this.glove?.set(id==='driver'?'screwdriver':['red','black'].includes(id)?'meter':id,true);this.notify('En la mano · '+(names[id]||id));}return;}
