@@ -1,5 +1,6 @@
 import * as T from 'three';
 import {scorchMaterial226,releaseScorch226,puffTexture226,Smoke226} from './fault-realism226.js?v=229';
+import {pocketLeaf237} from './door-pocket237.js?v=237';
 import {FaultShow235} from './fault-show235.js?v=235';
 
 // Only the isolated study clone is articulated. Shared GLB buffers stay intact.
@@ -19,7 +20,7 @@ export class FaultAnimation218{
   const leaves=new Map(),meshes=[];this.model.root.traverse(o=>{if(!o.isMesh)return;meshes.push(o);const f=o.userData.faultFamily218;if(/Puerta.*Hoja_/i.test(f)){if(!leaves.has(f))leaves.set(f,[]);leaves.get(f).push(o);}});
   const pairs=new Map();for(const [family,objects]of leaves){const key=family.replace(/_Hoja_.*/,''),box=new T.Box3();objects.forEach(o=>box.union(new T.Box3().setFromObject(o)));if(!pairs.has(key))pairs.set(key,[]);pairs.get(key).push({objects,center:box.getCenter(new T.Vector3())});}
   const pair=[...pairs.values()].filter(a=>a.length===2&&a[0].center.z>0).sort((a,b)=>Math.abs(a[0].center.x+a[1].center.x)-Math.abs(b[0].center.x+b[1].center.x))[0];
-  if(pair){const mid=(pair[0].center.x+pair[1].center.x)/2;for(const leaf of pair){const pivot=this.pivot(leaf.objects,leaf.center,this.model.targets.get('doors'));this.doors.push({pivot,x:leaf.center.x,sign:Math.sign(leaf.center.x-mid)});}}
+  if(pair){const mid=(pair[0].center.x+pair[1].center.x)/2;for(const leaf of pair){const sign=Math.sign(leaf.center.x-mid),box=new T.Box3();leaf.objects.forEach(o=>box.union(new T.Box3().setFromObject(o)));const pocket=pocketLeaf237(leaf.objects,box,new T.Vector3(sign,0,0)),pivot=this.pivot(leaf.objects,leaf.center,this.model.targets.get('doors'));this.doors.push({pivot,x:leaf.center.x,sign,pocket});}}
   // Rim/fasteners are separate geometry; the rotationally symmetric rubber is
   // batched in the source. Animate the actual rims and add a small witness mark.
   const rims=meshes.filter(o=>/^Aro_llanta(?:_\d+)?$/.test(o.name));
@@ -119,7 +120,7 @@ export class FaultAnimation218{
  }
  apply(sample){
   const a=sample.outcome;this.model.root.position.copy(this.basePosition);if(this.domain==='train')this.model.root.position.x+=a.distance;
-  for(const d of this.doors)d.pivot.position.x=d.x+d.sign*.52*a.doorOpening;
+  const moved=this.model.root.position.clone().sub(this.basePosition);for(const d of this.doors){d.pivot.position.x=d.x+d.sign*.52*a.doorOpening;d.pocket.follow(moved);}
   for(const w of this.wheels)w.pivot.rotation.z=-a.wheelDistance/w.radius;
   for(const {o,x,y,z,i}of this.smoke){o.visible=a.damage>.02;const rise=(sample.progress*3+i/7)%1;o.position.set(x+Math.sin(i+sample.progress*9)*.15,y+rise*.85,z);o.scale.setScalar(.4+rise*.9);o.material.opacity=a.damage*(1-rise)*.55;}
   this.coolingApply225(sample);
@@ -129,7 +130,7 @@ export class FaultAnimation218{
  }
  bounds(part){if(part==='doors'&&this.doors.length){const box=new T.Box3();for(const d of this.doors)box.union(new T.Box3().setFromObject(d.pivot));return box;}return part?this.model.bounds(part):this.envelope.clone();}
  dispose(){
-  this.model.root.position.copy(this.basePosition);for(const r of this.restore){r.parent.add(r.o);r.o.matrix.copy(r.matrix);}for(const p of this.pivots)p.removeFromParent();
+  this.model.root.position.copy(this.basePosition);for(const d of this.doors)d.pocket.restore();for(const r of this.restore){r.parent.add(r.o);r.o.matrix.copy(r.matrix);}for(const p of this.pivots)p.removeFromParent();
   for(const coil of this.fx225?.coils||[]){coil.material.emissive.copy(coil.emissive);coil.material.emissiveIntensity=coil.intensity;releaseScorch226(coil.material);}
   this.fx225?.smoke.dispose();this.show235?.dispose();
   for(const w of this.wheels)w.mark.removeFromParent();this.root.removeFromParent();for(const g of this.geometry)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();this.model.tint('',0);this.model.root.updateMatrixWorld(true);
