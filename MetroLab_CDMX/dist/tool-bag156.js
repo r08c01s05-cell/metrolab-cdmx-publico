@@ -1,6 +1,6 @@
 import {PhysicalBag157} from './physical-bag157.js?v=239';
 import * as THREE from 'three';
-import {ToolBelt239 as ToolWheel232,HOLD_MS239 as HOLD_MS232} from './tool-belt239.js?v=239';
+import {ToolBelt239 as ToolWheel232,HOLD_MS239 as HOLD_MS232} from './tool-belt239.js?v=240';
 import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
 export const BELT_HINT238='Tab: portaherramientas · Q: guardar',BAG_HINT238='Tab: bolsa · mantén Tab: portaherramientas';
 export class ToolBag156{
@@ -15,7 +15,7 @@ export class ToolBag156{
   this.wheel232=new ToolWheel232(this);
   doc.addEventListener?.('keyup',e=>{if(String(e.key||'').toLowerCase()!=='tab')return;if(this.tabTimer232){clearTimeout(this.tabTimer232);this.tabTimer232=null;if(this.available194())this.belt238?this.toggleWheel238():void this.setOpen(true);e.preventDefault();return;}if(this.wheel232.isOpen&&!this.sticky238){e.preventDefault();e.stopImmediatePropagation();this.wheel232.close(true);}},true);
   doc.addEventListener?.('keydown',e=>{if(!this.wheel232.isOpen)return;const k=String(e.key||'').toLowerCase();if(['arrowright','arrowdown','arrowleft','arrowup','escape'].includes(k)){e.preventDefault();e.stopImmediatePropagation();if(k==='escape')this.wheel232.close(false);else this.wheel232.step(['arrowright','arrowdown'].includes(k)?1:-1);}},true);
-  for(const b of this.buttons)b.addEventListener('click',e=>{const id=this.getId(b);if(!id)return;if(['hand','inspect','test','spare'].includes(id)){this.sync(id);return;}const committing=this.browser?.committing||this.committing238;if(!committing&&this.prepared176.has(id)){this.onEquip(id,{prepared:true});this.sync(id);return;}if(!committing){e.preventDefault?.();e.stopImmediatePropagation?.();if(this.belt238){this.take238(id);return;}void this.setOpen(true);return;}this.prepared176.add(id);this.getContext()?.onPrepared176?.(id);this.onEquip(id,{prepared:true});this.sync(id);},true);this.sync('hand');
+  for(const b of this.buttons)b.addEventListener('click',e=>{const id=this.getId(b);if(!id)return;if(['hand','inspect','test','spare'].includes(id)){this.sync(id);return;}const committing=this.browser?.committing||this.committing238;if(!committing&&this.prepared176.has(id)){this.onEquip(id,{prepared:true});this.sync(id);return;}if(!committing){e.preventDefault?.();e.stopImmediatePropagation?.();if(this.belt238){/* Browsers ignore click() on a button whose click is still being dispatched, so hand it over right after this event. */queueMicrotask(()=>this.take238(id));return;}void this.setOpen(true);return;}this.prepared176.add(id);this.getContext()?.onPrepared176?.(id);this.onEquip(id,{prepared:true});this.sync(id);},true);this.sync('hand');
 
  }
  available194(){const v=this.getContext()?.view;if(v?.service128)return !!v.service128.active&&!!v.dialog?.open;if(v?.visible&&this.doc.body?.dataset.gameScreen==='maintenance')return true;return !!this.host.getClientRects?.().length;}
