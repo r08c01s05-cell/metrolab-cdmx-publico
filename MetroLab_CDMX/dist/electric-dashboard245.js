@@ -38,10 +38,12 @@ const SERIES245=[['speed','Velocidad','km/h',0],['I','Corriente de tracción','A
 export class ElectricDashboard245{
  constructor(doc=document,win=window){
   this.doc=doc;this.win=win;this.params={...ASSUMED245};this.history=[];this.reset();
-  const host=doc.getElementById('sim106-shell')||doc.body,heading=doc.querySelector('.drive107-heading');
-  this.button=doc.createElement('button');this.button.type='button';this.button.className='ed245-toggle';this.button.textContent='⚡ Análisis eléctrico';this.button.setAttribute('aria-expanded','false');this.button.onclick=()=>this.toggle();(heading||host).append(this.button);
+  const host=doc.getElementById('sim106-shell')||doc.body,tools=doc.querySelector('.sim106-view-tools'),heading=doc.querySelector('.drive107-heading');
+  this.button=doc.createElement('button');this.button.type='button';this.button.className='ed245-toggle';this.button.innerHTML='⚡ Análisis eléctrico';this.button.setAttribute('aria-expanded','false');this.button.onclick=()=>this.toggle();// 246: in the shared view tools (next to Cameras and Map), so it works while following the network
+  // and while driving.
+  (tools||heading||host).append(this.button);
   this.root=doc.createElement('section');this.root.className='ed245';this.root.hidden=true;this.root.setAttribute('aria-label','Análisis eléctrico del tren');
-  this.root.innerHTML=`<header><div><small>ANÁLISIS ELÉCTRICO · TREN EN CONDUCCIÓN</small><h3 data-ed245-title>Tren</h3></div><div class="ed245-actions"><button type="button" data-ed245-reset>Reiniciar registro</button><button type="button" data-ed245-close aria-label="Cerrar">×</button></div></header>
+  this.root.innerHTML=`<header><div><small data-ed245-mode>ANÁLISIS ELÉCTRICO</small><h3 data-ed245-title>Tren</h3></div><div class="ed245-actions"><button type="button" data-ed245-reset>Reiniciar registro</button><button type="button" data-ed245-close aria-label="Cerrar">×</button></div></header>
 <div class="ed245-tiles" data-ed245-tiles></div>
 <div class="ed245-charts" data-ed245-charts></div>
 <details class="ed245-table"><summary>Consumo por interestación</summary><table><thead><tr><th>Tramo</th><th>Distancia</th><th>Tiempo</th><th>Tracción</th><th>Frenado eléctrico</th><th>kWh/km</th><th>Corriente pico</th></tr></thead><tbody data-ed245-rows><tr><td colspan="7">Conduce de una estación a otra para registrar el primer tramo.</td></tr></tbody></table></details>
@@ -65,7 +67,7 @@ export class ElectricDashboard245{
  // Reads the simulator (never writes it).
  read(){const s=this.win.metroViewState?.();const e=s?.engine;if(!e)return null;const op=e.operator,t=e.trains?.find(x=>op?x.id===op.trainId:x.id===s.selectedTrain);if(!t)return null;return {e,op,t,s};}
  sample(now=(this.win.performance?.now?.()??Date.now())){
-  const r=this.read();if(!r){this.lastT=null;return;}const {e,op,t}=r,time=now/1000;
+  const r=this.read();if(!r){this.lastT=null;return;}const {e,op,t}=r,time=now/1000;if(this.trainId!==undefined&&this.trainId!==t.id+'@'+t.line){this.reset();}this.trainId=t.id+'@'+t.line;
   if(this.lastT==null||time-this.lastT>2){this.lastT=time;this.lastV=t.speed;this.lastPos=t.position;this.train=t;return;}
   const dt=time-this.lastT;if(dt<=0)return;const raw=Math.max(-3,Math.min(3,(t.speed-this.lastV)/dt)),k=1-Math.exp(-dt/.8);this.acc=(this.acc??raw)+(raw-(this.acc??raw))*k;const a=this.acc,powered=!!e.power?.[t.line]&&!e.emergency;
   const st=electricState245({v:t.speed,a,load:t.load||0,traction:op?op.throttle:(a>-.05&&t.speed>.3?1:0),brake:op?op.brake:0,powered},this.params);
@@ -79,14 +81,14 @@ export class ElectricDashboard245{
   this.lastT=time;this.lastV=t.speed;this.lastPos=t.position;this.train=t;this.state=st;
   if(!this.root.hidden)this.draw();
  }
- draw(){const t=this.train;this.root.querySelector('[data-ed245-title]').textContent=t?`${t.model||'Tren'} · Línea ${t.line} · control ${CONTROL245[t.model]||'según modelo'}`:'Toma los mandos de un tren para empezar';
+ draw(){const t=this.train,op=this.win.metroViewState?.()?.engine?.operator;this.root.querySelector('[data-ed245-mode]').textContent=op?'ANÁLISIS ELÉCTRICO · TREN EN CONDUCCIÓN':'ANÁLISIS ELÉCTRICO · SEGUIMIENTO DE LA RED · '+(t?'convoy '+t.id:'');this.root.querySelector('[data-ed245-title]').textContent=t?`${t.model||'Tren'} · Línea ${t.line} · control ${CONTROL245[t.model]||'según modelo'}`:'Toma los mandos de un tren para empezar';
   const T=this.totals,st=this.state,perKm=T.km>.05?(T.tractionKWh+T.auxKWh)/T.km:null;
   const tiles=[['Corriente ahora',st?fmt(st.I)+' A':'—'],['Tensión en el tren',st?fmt(st.V)+' V':'—'],['Potencia de tracción',st?fmt(st.tractionKW)+' kW'+(st.limited?' · al límite':''):'—'],['Energía de tracción',fmt(T.tractionKWh,2)+' kWh'],['Auxiliares',fmt(T.auxKWh,2)+' kWh'],['Disipada al frenar',fmt(T.brakeKWh,2)+' kWh'],['Consumo por km',perKm==null?'—':fmt(perKm,2)+' kWh/km'],['Corriente pico',fmt(T.peakA)+' A'],['Masa estimada',st?fmt(st.massT,1)+' t':'—']];
   this.tiles.innerHTML=tiles.map(([k,v])=>`<div><small>${k}</small><b>${v}</b></div>`).join('');
   for(const c of this.charts)this.drawChart(c);}
  drawChart(c){const cv=c.canvas,ctx=cv.getContext?.('2d');const last=this.history[this.history.length-1];c.now.textContent=last?fmt(last[c.key])+' '+c.unit:'';if(!ctx)return;
   const W=cv.width,H=cv.height,L=46,R=8,Tp=10,B=20,css=getComputedStyle(this.root),ink=css.getPropertyValue('--ed245-muted').trim()||'#9aa39e',grid=css.getPropertyValue('--ed245-grid').trim()||'#ffffff1f',line=css.getPropertyValue('--ed245-series').trim()||'#3987e5';
-  ctx.clearRect(0,0,W,H);const pts=this.history;let lo=Math.min(0,...pts.map(p=>p[c.key])),hi=Math.max(1,...pts.map(p=>p[c.key]));if(c.key==='V'){lo=Math.min(600,...pts.map(p=>p.V));hi=Math.max(760,...pts.map(p=>p.V));}
+  ctx.clearRect(0,0,W,H);const pts=this.history;let lo=Math.min(0,...pts.map(p=>p[c.key])),hi=Math.max({speed:90,I:1000,P:500}[c.key]||1,...pts.map(p=>p[c.key]));if(c.key==='V'){lo=Math.min(600,...pts.map(p=>p.V));hi=Math.max(760,...pts.map(p=>p.V));}
   const nice=niceStep245((hi-lo)/3);lo=Math.floor(lo/nice)*nice;hi=Math.ceil(hi/nice)*nice;const t1=last?.time||120,t0=t1-120,x=t=>L+(t-t0)/120*(W-L-R),y=v=>Tp+(hi-v)/(hi-lo||1)*(H-Tp-B);
   ctx.font='11px system-ui';ctx.fillStyle=ink;ctx.strokeStyle=grid;ctx.lineWidth=1;ctx.textAlign='right';ctx.textBaseline='middle';
   for(let v=lo;v<=hi+1e-9;v+=nice){ctx.beginPath();ctx.moveTo(L,Math.round(y(v))+.5);ctx.lineTo(W-R,Math.round(y(v))+.5);ctx.stroke();ctx.fillText(fmt(v),L-6,y(v));}
