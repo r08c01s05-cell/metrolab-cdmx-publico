@@ -33,3 +33,30 @@
 .ed245-toggle{font:600 12px system-ui;padding:6px 12px;border-radius:999px;border:1px solid #f0b545;background:#3b3220;color:#ffe2a4;cursor:pointer}
 .ed245-toggle[aria-expanded=true]{background:#f0b545;color:#1d1608}
 @media(max-width:640px){.ed245{left:16px;right:16px;top:60px;width:auto}.ed245-tiles{grid-template-columns:1fr 1fr}.ed245-params{grid-template-columns:1fr}}
+/* 248: pestañas, esquema del tren, comparación por carga y selector de carga. */
+.ed245-tabs{display:flex;gap:4px;margin:0 0 10px;border-bottom:1px solid #ffffff1f}
+.ed245 .ed245-tabs button{border:0!important;border-bottom:2px solid transparent!important;border-radius:0!important;background:none!important;padding:8px 12px!important;color:var(--ed245-muted)!important;font-weight:600;box-shadow:none!important}
+.ed245 .ed245-tabs button[aria-selected=true]{color:var(--ed245-ink)!important;border-bottom-color:#f0b545!important}
+.ed245-train{margin:0 0 8px;padding:8px 10px 6px;border-radius:10px;background:#ffffff08}
+.ed245-train svg{display:block;width:100%;height:auto}
+.ed245-train .car{fill:#ffffff10;stroke:#ffffff40;stroke-width:1}
+.ed245-train .fill{fill:#3987e5;opacity:.55;transition:height .3s,y .3s}
+.ed245-train .wheel{fill:color-mix(in srgb,#f0b545 calc(var(--m)*100%),#3a4240)}
+.ed245-train .trailer{fill:#3a4240}
+.ed245-train .code{fill:var(--ed245-muted);font:600 9px system-ui;text-anchor:middle}
+.ed245-train .force{stroke:#d95926;stroke-width:3;stroke-linecap:round}
+.ed245-train .force-head{fill:#d95926}
+.ed245-train-legend,.ed245-legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11px;color:var(--ed245-muted);margin-top:4px}
+.ed245-train-legend i,.ed245-legend i,.ed245 .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.sw-fill{background:#3987e5}.sw-motor{background:#f0b545}.sw-force{background:#d95926}
+.ed245-hint{margin:6px 0;font-size:11px;color:var(--ed245-muted)}
+.ed245-tiles div[data-warn]{border-color:#f0b54599;background:#3b322044}
+.ed245-starts{margin-top:8px}
+.ed245-modes{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12px;color:var(--ed245-muted)}
+.ed245 .ed245-modes button[aria-pressed=true]{background:#f0b545!important;color:#1d1608!important;border-color:#f0b545!important}
+.ed245 .ed245-compare{margin-top:10px}
+.ed245 td[data-warn]{color:#ffd27a}
+.tl248{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#c3c2b7;white-space:nowrap}
+.tl248 select{font:500 12px system-ui;padding:4px 6px;border-radius:6px;border:1px solid #ffffff2e;background:#1d2a27;color:#f0efec}
+.tl248 input[type=range]{width:90px;accent-color:#f0b545}
+.tl248 output{font:600 11px ui-monospace,monospace;color:#f0efec}
