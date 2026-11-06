@@ -103,3 +103,6 @@ Misma rama revision/flujo-energia-via-captadores / PR3. Barras completas por amb
 
 ## Captación bilateral251
 SR ilustrativas trasladadas a puntos medios de interestaciones (no ubicaciones reales verificadas). No convertir SAF en rectificadoras. Doce pares de derivaciones para seis motrices, ambos lados y sentidos; ocho barras completas por ambas vías. Corte neumático también bilateral. No duplicar corriente ni atribuir reparto real. Ver docs/revision251.md.
+
+## Posición SR252
+Fuente didáctica co-ubicada por cada local real de la maqueta (substations94), anclaje x/z/lado e ID del edificio. Se retira z=13 y distribución independiente. Alimentador desde fachada, gabinete interior, rótulo encima; conservar ambos lados de captación. No cambia clasificación SAF ni certifica función real. Ver revision252.
