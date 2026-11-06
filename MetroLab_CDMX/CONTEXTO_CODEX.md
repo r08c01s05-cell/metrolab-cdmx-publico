@@ -106,3 +106,6 @@ SR ilustrativas trasladadas a puntos medios de interestaciones (no ubicaciones r
 
 ## Posición SR252
 Fuente didáctica co-ubicada por cada local real de la maqueta (substations94), anclaje x/z/lado e ID del edificio. Se retira z=13 y distribución independiente. Alimentador desde fachada, gabinete interior, rótulo encima; conservar ambos lados de captación. No cambia clasificación SAF ni certifica función real. Ver revision252.
+
+## Último coche253
+Trazos de vía prolongados90 m en terminales y distribución auxiliar esquemática hasta los nueve coches. Anclajes locales por caja; ambos sentidos. Captación motriz y consumos intactos. Ver revision253.
