@@ -185,4 +185,4 @@ export class ElectricDashboard245{
 }
 function nearest245(line,pos){const d=line?.distances||[];let k=0;for(let i=1;i<d.length;i++)if(Math.abs(d[i]-pos)<Math.abs(d[k]-pos))k=i;return k;}
 function niceStep245(x){if(!(x>0))return 1;const e=Math.pow(10,Math.floor(Math.log10(x))),f=x/e;return (f<=1?1:f<=2?2:f<=5?5:10)*e;}
-export function installElectricDashboard245(doc=document,win=window){if(doc.querySelector('.ed245'))return null;return new ElectricDashboard245(doc,win);}
+export function installElectricDashboard245(doc=document,win=window){if(doc.querySelector('.ed245'))return win.electricDashboard245??null;return win.electricDashboard245=new ElectricDashboard245(doc,win);}
