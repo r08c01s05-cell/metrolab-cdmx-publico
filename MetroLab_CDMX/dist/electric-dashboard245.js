@@ -53,7 +53,7 @@ export function startRun248(frac,{mode='limit',accel=1,seconds=45,dt=.1}={},p=AS
 }
 
 const fmt=(x,dig=0)=>Number(x).toLocaleString('es-MX',{maximumFractionDigits:dig,minimumFractionDigits:dig});
-const SERIES245=[['speed','Velocidad','km/h'],['motorA','Corriente de motores (24)','A'],['I','Corriente de línea','A'],['V','Tensión en el tren','V'],['P','Potencia (tracción + / frenado −)','kW']];
+const SERIES245=[['speed','Velocidad','km/h'],['motorA','Suma indicativa de 24 corrientes de motor','A'],['I','Corriente de línea','A'],['V','Tensión en el tren','V'],['P','Potencia (tracción + / frenado −)','kW']];
 
 export class ElectricDashboard245{
  constructor(doc=document,win=window){
@@ -87,7 +87,7 @@ export class ElectricDashboard245{
   for(const b of this.root.querySelectorAll('[data-ed245-run]'))b.onclick=()=>{this.mode248=b.dataset.ed245Run;for(const x of this.root.querySelectorAll('[data-ed245-run]'))x.setAttribute('aria-pressed',String(x===b));this.drawWeight();};
   this.tiles=$('[data-ed245-tiles]');
   this.charts=SERIES245.map(([key,label,unit])=>this.figure($('[data-ed245-charts]'),key,label,unit,130));
-  this.weightCharts=[['v','Velocidad','km/h'],['motorA','Corriente de motores (24)','A'],['I','Corriente de línea','A'],['V','Tensión en el tren','V']].map(([key,label,unit])=>this.figure($('[data-ed245-weight-charts]'),key,label,unit,140,true));
+  this.weightCharts=[['v','Velocidad','km/h'],['motorA','Suma indicativa de 24 corrientes de motor','A'],['I','Corriente de línea','A'],['V','Tensión en el tren','V']].map(([key,label,unit])=>this.figure($('[data-ed245-weight-charts]'),key,label,unit,140,true));
   $('[data-ed245-weight-legend]').innerHTML=LOADS248.map(([f,l,c])=>`<span><i style="background:${c}"></i>${l}</span>`).join('');
   this.notes();
   this.timer=win.setInterval?.(()=>this.sample(),200);
@@ -102,7 +102,7 @@ export class ElectricDashboard245{
   box.innerHTML=`<p><b>Datos documentados.</b> Tracción a ${d.nominalV} V CD por barra guía. Un tren de 9 carros pesa ${fmt(d.emptyT,1)} t vacío y ${fmt(d.loadedT,1)} t a carga completa (4/4, con 70 kg por persona). Lleva 4 motores por carro motriz, 24 en total, y frenado eléctrico reostático y/o neumático. El control es chopper en el NM-79 y el MP-82, y VVVF en el NM-22.</p>
 <p><b>Supuestos del modelo.</b> No son datos del fabricante; cámbialos para ver qué pasa.</p>
 <div class="ed245-params">${[['forcePerA','Fuerza por ampere de motor','N/A',10,120,1],['motorLimitA','Corriente límite de los 24 motores','A',2000,20000,500],['maxKW','Potencia máxima de tracción','kW',500,8000,100],['efficiency','Rendimiento de la cadena de tracción','',.6,.99,.01],['motorOhm','Resistencia de cada motor','Ω',0,.2,.005],['auxKW','Auxiliares (aire, alumbrado, ventilación)','kW',0,400,10],['rollingNPerT','Resistencia de rodadura','N/t',5,60,1],['lineOhm','Resistencia de la alimentación','Ω',0,.08,.005]].map(([k,l,u,min,max,step])=>`<label>${l}<input type="number" data-ed245-param="${k}" value="${p[k]}" min="${min}" max="${max}" step="${step}"> <span>${u}</span></label>`).join('')}</div>
-<p><b>Dos corrientes distintas.</b> La de motores depende de la fuerza: al arrancar es la más alta, aunque el tren casi no se mueva. La de línea es la que toma el tren de la barra guía, igual a la potencia de entrada entre la tensión. Al arrancar, el control entrega mucha corriente a los motores con poca tensión, así que de la línea se toma poca. Conforme sube la velocidad, la corriente de línea crece hasta el límite de potencia.</p>
+<p><b>Sobre los 10 000 A.</b> Es el parámetro educativo motorLimitA: suma indicativa de 24 corrientes de motor (unos 417 A por motor si se reparte por igual). No es una corriente medida ni el máximo del tren tomado de la vía. En CA no se deben sumar corrientes de fase o de módulos para deducir corriente CC de línea. El máximo de captación real requiere el límite del fabricante, tensión mínima, auxiliares y límites de convertidores. Ejemplo exclusivamente aritmético: 10 000 A de línea a 750 V serían 7,5 MW eléctricos de entrada.</p><p><b>Dos corrientes distintas.</b> La de motores depende de la fuerza: al arrancar es la más alta, aunque el tren casi no se mueva. La de línea es la que toma el tren de la barra guía, igual a la potencia de entrada entre la tensión. Al arrancar, el control entrega mucha corriente a los motores con poca tensión, así que de la línea se toma poca. Conforme sube la velocidad, la corriente de línea crece hasta el límite de potencia.</p>
 <p><b>Ojo con la aceleración.</b> En el simulador el tren acelera parejo hasta su velocidad máxima. Un tren real está limitado por la corriente de sus motores y por su potencia. Cuando el movimiento pide más, el tablero marca «al límite» y calcula lo que el tren sí podría entregar. Los 3,400 kW de potencia máxima son la tracción documentada de los trenes férreos FM-86, FM-95, FE-07 y FE-10 del STC; para los neumáticos no hay dato publicado, así que se usan como comparación.</p>
 <p>En frenado, la energía mostrada es la que se disipa en el reóstato: no está documentado que estos trenes la regresen a la red, así que no se cuenta como ahorro.</p>
 <p>${d.sources.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${t}</a>`).join(' · ')}</p>`;

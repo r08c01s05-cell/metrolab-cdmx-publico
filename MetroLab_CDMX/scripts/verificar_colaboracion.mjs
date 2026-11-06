@@ -4,7 +4,7 @@ const checks=[
  ['node','scripts/verificar_imports122.mjs'],
  ['node','scripts/verificar_privacidad_ayuda201.mjs'],
  ['node','scripts/verificar_audio206.mjs'],
- ...['animaciones218','fallos217','alimentacion216','carga214','referencias213','apoyos212','pasajeros_curva211','afluencia210','superficie209','embarque209','coyuya208','embarque208','cargas197','frente_colaboracion','bolsa196','herrajes196','simbologia196','colision196',
+ ...['energia249',animaciones218','fallos217','alimentacion216','carga214','referencias213','apoyos212','pasajeros_curva211','afluencia210','superficie209','embarque209','coyuya208','embarque208','cargas197','frente_colaboracion','bolsa196','herrajes196','simbologia196','colision196',
      'espacio192','transporte188','juego187','mezcla187','materiales194',
      'controles181','anden181','tren_montado156','conduccion177',
      'agarre199','taller199','puertas200','embarque200','fluidez202','multitud202',
