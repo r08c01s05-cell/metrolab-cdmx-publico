@@ -109,3 +109,6 @@ Fuente didáctica co-ubicada por cada local real de la maqueta (substations94), 
 
 ## Último coche253
 Trazos de vía prolongados90 m en terminales y distribución auxiliar esquemática hasta los nueve coches. Anclajes locales por caja; ambos sentidos. Captación motriz y consumos intactos. Ver revision253.
+
+## Intervalos254
+Locales L1/L8 distribuidos uniformemente en cada interestación (huecos incluyendo extremos), conservando cantidad/ID/lado/tipo. SR252 los siguen. Posición ilustrativa solicitada, no topografía real. Ver revision254 y verificar_intervalos254.

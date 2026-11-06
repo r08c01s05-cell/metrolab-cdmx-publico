@@ -2,7 +2,7 @@ import{refineSurfaceMaterials100}from'./visual-quality100.js?v=205';
 import * as THREE from 'three';
 export const SAF_SOURCE94='https://metro.cdmx.gob.mx/storage/app/media/FIMETRO/INFORME-TRIMESTRAL-FIMETRO/2025/Cuarto%20Informe%20Trimestral%202024.pdf';
 // Counts documented for L1; placements are an illustrative layout, not a surveyed plan.
-export function substationPlan94(line){
+function originalPlan94(line){
  if(line.stations.length<2)return [];
  if(line.stations[0]?.linea===8)return line.stations.map((s,i)=>{
   const exterior=s.entorno_visual?.tipo==='superficial',segment=Math.min(i,line.stations.length-2),midpoint=(line.distances[segment]+line.distances[segment+1])/2;
@@ -18,6 +18,13 @@ export function substationPlan94(line){
   const offset=terminalExtra?direction*spacing*2.5:-direction*spacing;
   return {id:s.id+'-SAF-'+(k+1),station:s.nombre||s.name||s.id,stationId:s.id,x:midpoint+offset,side:direction,index:k+1,kind:'SAF',width:6.6,approximate:true,segment,midpoint,placement96:'zona central de interestación'};
  }));
+}
+// Equal intervals include the gaps from each station to its nearest local.
+export function substationPlan94(line){
+ const plan=originalPlan94(line),groups=new Map();
+ for(const local of plan){if(!groups.has(local.segment))groups.set(local.segment,[]);groups.get(local.segment).push(local);}
+ for(const [segment,locals] of groups){const from=line.distances[segment],to=line.distances[segment+1];locals.sort((a,b)=>a.x-b.x||a.id.localeCompare(b.id));const step=(to-from)/(locals.length+1);for(let i=0;i<locals.length;i++){locals[i].x=from+(i+1)*step;locals[i].spacing254=step;locals[i].placement96='intervalos iguales entre estaciones · distribución ilustrativa';}}
+ return plan;
 }
 export function wallSpans94(from,to,side,plan){const cuts=plan.filter(p=>!p.exterior&&p.side===side&&p.x+p.width/2>from&&p.x-p.width/2<to).map(p=>[Math.max(from,p.x-p.width/2),Math.min(to,p.x+p.width/2)]).sort((a,b)=>a[0]-b[0]);let cursor=from;const out=[];for(const[a,b]of cuts){if(a>cursor)out.push([cursor,a]);cursor=Math.max(cursor,b);}if(cursor<to)out.push([cursor,to]);return out;}
 export function makeSubstation94(){
