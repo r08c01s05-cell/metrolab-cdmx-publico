@@ -60,3 +60,8 @@
 .tl248 select{font:500 12px system-ui;padding:4px 6px;border-radius:6px;border:1px solid #ffffff2e;background:#1d2a27;color:#f0efec}
 .tl248 input[type=range]{width:90px;accent-color:#f0b545}
 .tl248 output{font:600 11px ui-monospace,monospace;color:#f0efec}
+
+/* En análisis, la pausa mantiene gráficas y consulta de valores accesibles. */
+body[data-analysis250=true] #sim106-stopped{display:none!important}
+.ed245-actions{flex-wrap:wrap;justify-content:flex-end}
+.ed245 [data-ed250-pause][aria-pressed=true]{background:#e8c180;color:#162b30}

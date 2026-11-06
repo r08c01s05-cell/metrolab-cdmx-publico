@@ -62,7 +62,7 @@ export class ElectricDashboard245{
   this.button=doc.createElement('button');this.button.type='button';this.button.className='ed245-toggle';this.button.innerHTML='⚡ Análisis eléctrico';this.button.setAttribute('aria-expanded','false');this.button.onclick=()=>this.toggle();
   (tools||heading||host).append(this.button);
   this.root=doc.createElement('section');this.root.className='ed245';this.root.hidden=true;this.root.setAttribute('aria-label','Análisis eléctrico del tren');
-  this.root.innerHTML=`<header><div><small data-ed245-mode>ANÁLISIS ELÉCTRICO</small><h3 data-ed245-title>Tren</h3></div><div class="ed245-actions"><button type="button" data-ed245-reset>Reiniciar registro</button><button type="button" data-ed245-close aria-label="Cerrar">×</button></div></header>
+  this.root.innerHTML=`<header><div><small data-ed245-mode>ANÁLISIS ELÉCTRICO</small><h3 data-ed245-title>Tren</h3></div><div class="ed245-actions"><button type="button" data-ed250-pause>Pausar recorrido</button><button type="button" data-ed245-reset>Reiniciar registro</button><button type="button" data-ed245-close aria-label="Cerrar">×</button></div></header>
 <nav class="ed245-tabs" role="tablist"><button type="button" role="tab" data-ed245-tab="live" aria-selected="true">En vivo</button><button type="button" role="tab" data-ed245-tab="weight" aria-selected="false">Efecto del peso</button></nav>
 <div data-ed245-pane="live">
 <div class="ed245-train" data-ed245-train></div>
@@ -73,7 +73,7 @@ export class ElectricDashboard245{
 <details class="ed245-table"><summary>Consumo por interestación</summary><table><thead><tr><th>Tramo</th><th>Distancia</th><th>Tiempo</th><th>Tracción</th><th>Frenado eléctrico</th><th>kWh/km</th><th>Corriente pico</th></tr></thead><tbody data-ed245-rows><tr><td colspan="7">Sigue al tren de una estación a otra para registrar el primer tramo.</td></tr></tbody></table></details>
 </div>
 <div data-ed245-pane="weight" hidden>
-<div class="ed245-modes"><span>Cómo arranca:</span><button type="button" data-ed245-run="limit" aria-pressed="true">Con el límite de corriente (real)</button><button type="button" data-ed245-run="same" aria-pressed="false">Pidiendo la misma aceleración</button></div>
+<div class="ed245-modes"><span>Cómo arranca:</span><button type="button" data-ed245-run="limit" aria-pressed="true">Con el límite de corriente supuesto</button><button type="button" data-ed245-run="same" aria-pressed="false">Pidiendo la misma aceleración</button></div>
 <p class="ed245-hint" data-ed245-weight-note></p>
 <div class="ed245-legend" data-ed245-weight-legend></div>
 <div class="ed245-charts" data-ed245-weight-charts></div>
@@ -82,7 +82,7 @@ export class ElectricDashboard245{
 <details class="ed245-notes"><summary>Supuestos y fuentes</summary><div data-ed245-notes></div></details>`;
   host.append(this.root);
   const $=s=>this.root.querySelector(s);
-  $('[data-ed245-close]').onclick=()=>this.toggle(false);$('[data-ed245-reset]').onclick=()=>{this.reset();this.starts=[];this.draw();};
+  this.pauseHandler250=()=>{if(this.root.hidden||this.doc.body.dataset.gameScreen!=='simulation')return false;this.togglePause250();return true;};win.metroPauseAnalysis250=this.pauseHandler250;$('[data-ed250-pause]').onclick=()=>this.togglePause250();$('[data-ed245-close]').onclick=()=>this.toggle(false);$('[data-ed245-reset]').onclick=()=>{this.reset();this.starts=[];this.draw();};
   for(const b of this.root.querySelectorAll('[data-ed245-tab]'))b.onclick=()=>this.showTab(b.dataset.ed245Tab);
   for(const b of this.root.querySelectorAll('[data-ed245-run]'))b.onclick=()=>{this.mode248=b.dataset.ed245Run;for(const x of this.root.querySelectorAll('[data-ed245-run]'))x.setAttribute('aria-pressed',String(x===b));this.drawWeight();};
   this.tiles=$('[data-ed245-tiles]');
@@ -96,13 +96,15 @@ export class ElectricDashboard245{
   const c={key,label,unit,fig,weight,canvas:fig.querySelector('canvas'),now:fig.querySelector('[data-now]'),tip:fig.querySelector('.ed245-tip')};
   c.canvas.addEventListener('pointermove',e=>this.hover(c,e));c.canvas.addEventListener('pointerleave',()=>{this.hoverAt=null;this.hoverWeight=null;this.redraw(weight);});return c;}
  reset(){this.history=[];this.totals={tractionKWh:0,brakeKWh:0,auxKWh:0,km:0,peakA:0,time:0};this.segments=[];this.segment=null;this.lastT=null;this.lastV=null;this.start=null;}
- toggle(open=this.root.hidden){this.root.hidden=!open;this.button.setAttribute('aria-expanded',String(open));if(open)this.draw();}
+ toggle(open=this.root.hidden){this.root.hidden=!open;this.button.setAttribute('aria-expanded',String(open));this.doc.body.dataset.analysis250=String(open);if(open){this.syncPause250();this.draw();}}
+ togglePause250(){const state=this.win.metroViewState?.();if(!state?.engine)return;this.doc.getElementById('play')?.click();this.syncPause250();}
+ syncPause250(){const state=this.win.metroViewState?.(),paused=!state?.running||this.doc.body.dataset.pause105==='true';const b=this.root.querySelector('[data-ed250-pause]');if(b){b.textContent=paused?'Reanudar recorrido':'Pausar recorrido';b.setAttribute('aria-pressed',String(paused));}this.root.querySelector('[data-ed245-hint]').textContent=paused?'Recorrido pausado · registro congelado. Pasa el ratón por las gráficas para consultar sus valores.':'Pasa el ratón por una gráfica: todas marcan el mismo instante y los recuadros muestran sus valores.';}
  showTab(tab){this.tab=tab;for(const b of this.root.querySelectorAll('[data-ed245-tab]'))b.setAttribute('aria-selected',String(b.dataset.ed245Tab===tab));for(const p of this.root.querySelectorAll('[data-ed245-pane]'))p.hidden=p.dataset.ed245Pane!==tab;this.draw();}
  notes(){const d=DOCUMENTED245,p=this.params,box=this.root.querySelector('[data-ed245-notes]');
   box.innerHTML=`<p><b>Datos documentados.</b> Tracción a ${d.nominalV} V CD por barra guía. Un tren de 9 carros pesa ${fmt(d.emptyT,1)} t vacío y ${fmt(d.loadedT,1)} t a carga completa (4/4, con 70 kg por persona). Lleva 4 motores por carro motriz, 24 en total, y frenado eléctrico reostático y/o neumático. El control es chopper en el NM-79 y el MP-82, y VVVF en el NM-22.</p>
 <p><b>Supuestos del modelo.</b> No son datos del fabricante; cámbialos para ver qué pasa.</p>
 <div class="ed245-params">${[['forcePerA','Fuerza por ampere de motor','N/A',10,120,1],['motorLimitA','Corriente límite de los 24 motores','A',2000,20000,500],['maxKW','Potencia máxima de tracción','kW',500,8000,100],['efficiency','Rendimiento de la cadena de tracción','',.6,.99,.01],['motorOhm','Resistencia de cada motor','Ω',0,.2,.005],['auxKW','Auxiliares (aire, alumbrado, ventilación)','kW',0,400,10],['rollingNPerT','Resistencia de rodadura','N/t',5,60,1],['lineOhm','Resistencia de la alimentación','Ω',0,.08,.005]].map(([k,l,u,min,max,step])=>`<label>${l}<input type="number" data-ed245-param="${k}" value="${p[k]}" min="${min}" max="${max}" step="${step}"> <span>${u}</span></label>`).join('')}</div>
-<p><b>Sobre los 10 000 A.</b> Es el parámetro educativo motorLimitA: suma indicativa de 24 corrientes de motor (unos 417 A por motor si se reparte por igual). No es una corriente medida ni el máximo del tren tomado de la vía. En CA no se deben sumar corrientes de fase o de módulos para deducir corriente CC de línea. El máximo de captación real requiere el límite del fabricante, tensión mínima, auxiliares y límites de convertidores. Ejemplo exclusivamente aritmético: 10 000 A de línea a 750 V serían 7,5 MW eléctricos de entrada.</p><p><b>Dos corrientes distintas.</b> La de motores depende de la fuerza: al arrancar es la más alta, aunque el tren casi no se mueva. La de línea es la que toma el tren de la barra guía, igual a la potencia de entrada entre la tensión. Al arrancar, el control entrega mucha corriente a los motores con poca tensión, así que de la línea se toma poca. Conforme sube la velocidad, la corriente de línea crece hasta el límite de potencia.</p>
+<p><b>Sobre los 10 000 A.</b> Es el parámetro educativo motorLimitA: suma indicativa de 24 corrientes de motor (unos 417 A por motor si se reparte por igual). No es una corriente medida ni el máximo del tren tomado de la vía. En CA no se deben sumar corrientes de fase o de módulos para deducir corriente CC de línea. El máximo de captación real requiere el límite del fabricante, tensión mínima, auxiliares y límites de convertidores. Ejemplo exclusivamente aritmético: 10 000 A de línea a 750 V serían 7,5 MW eléctricos de entrada.</p><p><b>Dos corrientes distintas.</b> La de motores depende de la fuerza: al arrancar es la más alta, aunque el tren casi no se mueva. La de línea es la que toma el tren de la barra guía, igual a la potencia de entrada entre la tensión. El convertidor relaciona ambas corrientes mediante tensión, potencia y pérdidas. La demanda de línea durante el arranque depende del control y de sus límites; no se puede deducir un máximo real sumando las corrientes de motor.</p>
 <p><b>Ojo con la aceleración.</b> En el simulador el tren acelera parejo hasta su velocidad máxima. Un tren real está limitado por la corriente de sus motores y por su potencia. Cuando el movimiento pide más, el tablero marca «al límite» y calcula lo que el tren sí podría entregar. Los 3,400 kW de potencia máxima son la tracción documentada de los trenes férreos FM-86, FM-95, FE-07 y FE-10 del STC; para los neumáticos no hay dato publicado, así que se usan como comparación.</p>
 <p>En frenado, la energía mostrada es la que se disipa en el reóstato: no está documentado que estos trenes la regresen a la red, así que no se cuenta como ahorro.</p>
 <p>${d.sources.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${t}</a>`).join(' · ')}</p>`;
@@ -111,9 +113,9 @@ export class ElectricDashboard245{
  read(){const s=this.win.metroViewState?.();const e=s?.engine;if(!e)return null;const op=e.operator,t=e.trains?.find(x=>op?x.id===op.trainId:x.id===s.selectedTrain);if(!t)return null;return {e,op,t,s};}
  loadOf(t,e){const shown=this.win.trainLoad248?.displayed?.(t,e);return shown??t.load??0;}
  sample(now=(this.win.performance?.now?.()??Date.now())){
-  const r=this.read();if(!r){this.lastT=null;return;}const {e,op,t}=r,time=now/1000;if(this.trainId!==undefined&&this.trainId!==t.id+'@'+t.line){this.reset();this.starts=[];}this.trainId=t.id+'@'+t.line;
-  if(this.lastT==null||time-this.lastT>2){this.lastT=time;this.lastV=t.speed;this.lastPos=t.position;this.train=t;return;}
-  const dt=time-this.lastT;if(dt<=0)return;const raw=Math.max(-3,Math.min(3,(t.speed-this.lastV)/dt)),k=1-Math.exp(-dt/.8);this.acc=(this.acc??raw)+(raw-(this.acc??raw))*k;const a=this.acc,powered=!!e.power?.[t.line]&&!e.emergency;
+  const r=this.read();if(!r){this.lastT=null;return;}const {e,op,t}=r,time=e.time??now/1000;this.syncPause250();if(this.trainId!==undefined&&this.trainId!==t.id+'@'+t.line){this.reset();this.starts=[];}this.trainId=t.id+'@'+t.line;
+  if(this.lastT==null||time<this.lastT||time-this.lastT>2){this.lastT=time;this.lastV=t.speed;this.lastPos=t.position;this.train=t;return;}
+  const dt=time-this.lastT;if(dt<=0||r.s?.running===false||this.doc.body.dataset.pause105==='true')return;const raw=Math.max(-3,Math.min(3,(t.speed-this.lastV)/dt)),k=1-Math.exp(-dt/.8);this.acc=(this.acc??raw)+(raw-(this.acc??raw))*k;const a=this.acc,powered=!!e.power?.[t.line]&&!e.emergency;
   const load=this.loadOf(t,e),st=electricState245({v:t.speed,a,load,capacity:e.capacity||0,traction:op?op.throttle:(a>-.05&&t.speed>.3?1:0),brake:op?op.brake:0,powered},this.params);
   const km=Math.abs(t.position-(this.lastPos??t.position))/1000;
   this.totals.tractionKWh+=st.tractionKW*dt/3600;this.totals.brakeKWh+=st.brakeKW*dt/3600;this.totals.auxKWh+=st.auxKW*dt/3600;this.totals.km+=km;this.totals.time+=dt;this.totals.peakA=Math.max(this.totals.peakA,st.I);
@@ -181,7 +183,7 @@ export class ElectricDashboard245{
   if(c.weight){this.hoverWeight=(px-L)/(W-L-R)*45;this.drawWeight();return;}
   const last=this.history[this.history.length-1];if(!last)return;this.hoverAt=last.time-120+(px-L)/(W-L-R)*120;this.draw();}
  renderRows(){const body=this.root.querySelector('[data-ed245-rows]');body.innerHTML=this.segments.map(g=>`<tr><td>${g.from} → ${g.to}</td><td>${fmt(g.km*1000)} m</td><td>${fmt(g.time)} s</td><td>${fmt(g.tr,2)} kWh</td><td>${fmt(g.br,2)} kWh</td><td>${g.km>.05?fmt((g.tr)/g.km,2):'—'}</td><td>${fmt(g.peak)} A</td></tr>`).join('');}
- dispose(){this.win.clearInterval?.(this.timer);this.root.remove();this.button.remove();}
+ dispose(){this.win.clearInterval?.(this.timer);this.root.remove();this.button.remove();delete this.doc.body.dataset.analysis250;if(this.win.metroPauseAnalysis250===this.pauseHandler250)delete this.win.metroPauseAnalysis250;}
 }
 function nearest245(line,pos){const d=line?.distances||[];let k=0;for(let i=1;i<d.length;i++)if(Math.abs(d[i]-pos)<Math.abs(d[k]-pos))k=i;return k;}
 function niceStep245(x){if(!(x>0))return 1;const e=Math.pow(10,Math.floor(Math.log10(x))),f=x/e;return (f<=1?1:f<=2?2:f<=5?5:10)*e;}

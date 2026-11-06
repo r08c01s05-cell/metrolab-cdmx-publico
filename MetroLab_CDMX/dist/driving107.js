@@ -1,5 +1,5 @@
-import './simulation106.js?v=187';
-import {installElectricDashboard245} from './electric-dashboard245.js?v=249';
+import './simulation106.js?v=250';
+import {installElectricDashboard245} from './electric-dashboard245.js?v=250';
 import {installTrainLoad248} from './train-load248.js?v=248';
 export class DrivingConsole107{
  constructor(doc=document,win=window){this.doc=doc;this.win=win;this.$=id=>doc.getElementById(id);if(!this.$('sim106-shell')||this.$('drive107'))return;
