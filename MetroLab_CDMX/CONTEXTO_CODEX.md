@@ -93,3 +93,25 @@ Se amplía el laboratorio217 en revision/ensayos-visuales-fallos. fault-outcomes
 
 ## Fluidez 222
 Rama mejora/fluidez-general. cloneCharacter comparte un Skeleton entre las pieles de un mismo personaje con huesos e inversas idénticos (nunca entre personajes): 347→25 actualizaciones/subidas de huesos por cuadro en andén. Vidrio de puertas/testero del tren con forceSinglePass (placas delgadas, opacidad ≤.18). RenderBudget101 añade espera creciente (6–48 s) antes de volver a subir la resolución tras una bajada, para no reasignar el lienzo cada 2 s. Se integran los niveles 221 de pasajeros lejanos (34/78 m) y subidas parciales de instancias/contactos que estaban sin publicar. platform-collision169 protegido: no se tocó. Caché 222 con scripts/sync-runtime222.py. Prueba verificar_fluidez222 en la suite. Medición CPU en SwiftShader sin dibujo, no GPU. Ver docs/revision222.md.
+
+
+## Flujo de energía 249
+Rama revision/flujo-energia-via-captadores. Botón de flujo en recorrido: mapa curvo y offset de vías, captación aproximada de carros motrices, convertidor/carga y retorno, lectura del modelo eléctrico245. Inyección didáctica en estación próxima, no subestaciones/seccionamiento reales. No modifica física ni mapas. Corte de alimentación añade enlace CC y seis posiciones IGBT Q1–Q6 para VVVF comparativo; separables y seleccionables. 10 000 A del tablero es suma indicativa supuesta de motores, no máximo documentado de captación. Fuentes/pendientes y verificación en docs/revision249.md. No trasladar ese valor como dato de placa ni atribuir esquema genérico a cada coche.
+
+## Circuito continuo y pausa250
+Misma rama revision/flujo-energia-via-captadores / PR3. Barras completas por ambas vías, SR didácticas independientes de SAF (distribución supuesta cada dos estaciones), derivaciones cortas, pulsos discretos con buffers estáticos y búsqueda binaria. No cálculo de red/seccionamientos. Electrónica comparativa a escala uniforme0,5. Análisis pausa sin modal ni ocultar gráficas; muestreo por engine.time evita integrar consumo durante la pausa. Presentación80 revisada como referencia conceptual, sin copiar símbolos no verificados. Ver docs/revision250.md y prueba energia250.
+
+## Captación bilateral251
+SR ilustrativas trasladadas a puntos medios de interestaciones (no ubicaciones reales verificadas). No convertir SAF en rectificadoras. Doce pares de derivaciones para seis motrices, ambos lados y sentidos; ocho barras completas por ambas vías. Corte neumático también bilateral. No duplicar corriente ni atribuir reparto real. Ver docs/revision251.md.
+
+## Posición SR252
+Fuente didáctica co-ubicada por cada local real de la maqueta (substations94), anclaje x/z/lado e ID del edificio. Se retira z=13 y distribución independiente. Alimentador desde fachada, gabinete interior, rótulo encima; conservar ambos lados de captación. No cambia clasificación SAF ni certifica función real. Ver revision252.
+
+## Último coche253
+Trazos de vía prolongados90 m en terminales y distribución auxiliar esquemática hasta los nueve coches. Anclajes locales por caja; ambos sentidos. Captación motriz y consumos intactos. Ver revision253.
+
+## Intervalos254
+Locales L1/L8 distribuidos uniformemente en cada interestación (huecos incluyendo extremos), conservando cantidad/ID/lado/tipo. SR252 los siguen. Posición ilustrativa solicitada, no topografía real. Ver revision254 y verificar_intervalos254.
+
+## Integración255
+A petición del usuario, combinar249–254 con main be19ec9 mediante PR3. Conservados mandos de carga, detalles/puertas y flujo eléctrico de subestación nuevos en main. Dos modos de flujo de recorrido mutuamente excluyentes. URLs255. Ver docs/integracion255.md.

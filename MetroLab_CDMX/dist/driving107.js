@@ -1,7 +1,7 @@
-import './simulation106.js?v=187';
-import {installElectricDashboard245} from './electric-dashboard245.js?v=250';
-import {installTrainLoad248} from './train-load248.js?v=250';
-import {installTrackCurrent250} from './track-current250.js?v=250';
+import './simulation106.js?v=255';
+import {installElectricDashboard245} from './electric-dashboard245.js?v=255';
+import {installTrainLoad248} from './train-load248.js?v=255';
+import {installTrackCurrent250} from './track-current250.js?v=255';
 export class DrivingConsole107{
  constructor(doc=document,win=window){this.doc=doc;this.win=win;this.$=id=>doc.getElementById(id);if(!this.$('sim106-shell')||this.$('drive107'))return;
  const panel=doc.createElement('section');panel.id='drive107';panel.setAttribute('aria-label','Puesto de conducción');panel.innerHTML=`<div class="drive107-heading"><span>CONTROL DE MARCHA <output id="drive107-mobile-speed">0 km/h</output></span><b id="drive107-command">Freno aplicado</b></div><div class="drive107-layout"><section id="drive107-motion" aria-label="Tracción y frenado"></section><section class="drive107-instruments"><div id="drive107-speed"></div><div class="drive107-bars"><label>TRACCIÓN <output id="drive107-traction-value">0 %</output><meter id="drive107-traction" min="0" max="100" value="0"></meter></label><label>FRENO <output id="drive107-brake-value">100 %</output><meter id="drive107-brake" min="0" max="100" value="100"></meter></label></div></section><section class="drive107-passengers"><div class="drive107-door-state">PUERTAS <span id="drive107-door-state"></span></div><div id="drive107-doors"></div><div class="drive107-aux"><div id="drive107-voice"></div><div id="drive107-emergency"></div></div></section></div><div id="drive107-feedback" role="status"></div>`;this.$('sim106-shell').append(panel);this.trainLoad248=installTrainLoad248(doc,win);this.electric245=installElectricDashboard245(doc,win);this.trackCurrent250=installTrackCurrent250(doc,win);

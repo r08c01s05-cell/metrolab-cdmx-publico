@@ -79,3 +79,8 @@
 .pf250-panel li div{display:grid;gap:2px}.pf250-panel li span{color:#b9c6c1;line-height:1.35}
 .pf250-panel li[data-state=now] b{color:#ffd34d}
 .pf250-panel li:not([data-state=now]) span{display:none}
+
+/* En análisis, la pausa mantiene gráficas y consulta de valores accesibles. */
+body[data-analysis250=true] #sim106-stopped{display:none!important}
+.ed245-actions{flex-wrap:wrap;justify-content:flex-end}
+.ed245 [data-ed250-pause][aria-pressed=true]{background:#e8c180;color:#162b30}

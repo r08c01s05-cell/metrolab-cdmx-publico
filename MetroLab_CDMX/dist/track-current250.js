@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {trainTrack208} from './station-layout208.js?v=209';
 import {renderPosition203} from './presentation203.js?v=204';
 import {bogieHalf212} from './car-support212.js?v=212';
-import {FORMATION245} from './electric-dashboard245.js?v=250';
+import {FORMATION245} from './electric-dashboard245.js?v=255';
 
 // Flujo de corriente 250 en el seguimiento del tren. Con un botón se encienden partículas que
 // muestran el camino de la corriente de tracción: llega por las barras guía (+750 V CD), entra al
@@ -44,7 +44,7 @@ export class TrackCurrent250{
  }
  view(){return this.win.stationScene;}
  read(){const s=this.win.metroViewState?.(),e=s?.engine;if(!e)return null;const t=e.trains?.find(x=>e.operator?x.id===e.operator.trainId:x.id===s.selectedTrain);return t?{s,e,t}:null;}
- toggle(on=!this.on){this.on=on;this.button.setAttribute('aria-pressed',String(on));this.legend.hidden=!on;if(on){this.build();this.last=null;this.loop();}else{this.win.cancelAnimationFrame?.(this.frame);if(this.mesh)this.mesh.visible=false;}}
+ toggle(on=!this.on){if(on){const other=this.view()?.energyFlow249;if(other){other.active=false;other.button.setAttribute('aria-pressed','false');other.note.hidden=true;}}this.on=on;this.button.setAttribute('aria-pressed',String(on));this.legend.hidden=!on;if(on){this.build();this.last=null;this.loop();}else{this.win.cancelAnimationFrame?.(this.frame);if(this.mesh)this.mesh.visible=false;}}
  build(){const view=this.view();if(!view?.scene)return;if(this.mesh&&this.mesh.parent===view.scene)return;this.mesh?.removeFromParent();
   const mat=new THREE.MeshBasicMaterial({color:'#ffffff',toneMapped:false,transparent:true,opacity:.95,depthWrite:false});
   this.mesh=new THREE.InstancedMesh(new THREE.SphereGeometry(.055,8,6),mat,COUNT250);this.mesh.name='Flujo_corriente250';this.mesh.frustumCulled=false;this.mesh.renderOrder=5;
