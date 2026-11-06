@@ -30,19 +30,21 @@ const same=LOADS248.map(([f])=>startRun248(f,{mode:'same',accel:1}));assert(Math
 assert(same[3].rows[60].V<same[0].rows[60].V&&same[3].rows[60].motorA>same[0].rows[60].motorA,'Y a los 6 s el tren lleno toma más corriente y la tensión baja más');
 // Load selector: queue preparation and car sag.
 assert.equal(massT248(0),231.4);assert.equal(massT248(1),338.5);assert(SAG_MAX_M248>0&&SAG_MAX_M248<.1);
-{const els=[];const el=()=>{const o={hidden:false,value:'auto',children:[],append(){},after(){},remove(){},set innerHTML(v){},querySelector:()=>el(),textContent:''};els.push(o);return o;};
+{const els=[];const el=()=>{const o={hidden:false,value:'auto',children:[],append(){},after(){},remove(){},setAttribute(){},set innerHTML(v){},querySelector:()=>el(),querySelectorAll:()=>[],textContent:''};els.push(o);return o;};
  const doc={getElementById:()=>null,querySelector:()=>({append(){}}),createElement:el};
  const line={stations:[{id:'a'},{id:'b'},{id:'c'}],distances:[0,1000,2000]};
  const t={id:'L1-01',line:1,position:850,speed:10,wait:0,load:100,target:1};
  const e={trains:[t],lines:{1:line},waiting:{a:0,b:30,c:0},capacity:1200,dwell:30,stopDuration:()=>30,boardingLimit:()=>554};
  const car={userData:{carIndex:0},children:[{userData:{},position:{y:0}},{userData:{bogie212:1},position:{y:0}}]};
  const win={metroViewState:()=>({engine:e,selectedTrain:'L1-01'}),stationScene:{trainMeshes:new Map([['L1-01',{group:{children:[car]}}]])}};
- const tl=new TrainLoad248(doc,win);tl.select.value='100';tl.apply();tl.tick();
+ const tl=new TrainLoad248(doc,win);tl.choose('100');tl.tick();
  assert.equal(e.waiting.b,1200-(100-20),'Al acercarse al andén se forma la gente necesaria para llenarlo');
  t.position=1000;t.speed=0;t.wait=30;tl.tick();const plan=tl.plans.get('1:L1-01');assert(plan&&plan.to===100-20+554,'La parada sube a lo que permite el embarque normal');
  const before=tl.displayed(t,e);t.wait=10;const mid=tl.displayed(t,e);assert(mid>before,'Durante la parada la carga visible crece mientras entra la gente');
  for(let i=0;i<30;i++)tl.sag();assert(car.children[0].position.y<0&&car.children[1].position.y===0,'La caja baja y los bogies siguen en la vía');
- tl.select.value='0';tl.apply();t.wait=0;t.speed=8;t.position=1300;t.target=2;t.load=700;e.waiting.c=50;tl.tick();t.position=1800;tl.tick();
+ tl.choose('0');t.wait=0;t.speed=8;t.position=1300;t.target=2;t.load=700;e.waiting.c=50;tl.tick();t.position=1800;tl.tick();
  assert.equal(e.waiting.c,0,'Si se pide vaciar, en la siguiente parada nadie sube');const held=tl.held.get('1:L1-01');assert(held?.count===50,'Los que esperaban se guardan para el siguiente tren');
- t.target=0;t.position=1950;tl.tick();assert.equal(e.waiting.c,50,'Al irse el convoy, la gente vuelve al andén');tl.dispose();}
+ t.target=0;t.position=1950;tl.tick();assert.equal(e.waiting.c,50,'Al irse el convoy, la gente vuelve al andén');tl.choose('33');assert.equal(tl.value,'0','Solo se aceptan los porcentajes de los botones');
+ {const {LEVELS250}=await import('../dist/train-load248.js');assert.deepEqual(LEVELS250.map(l=>l[0]),['auto','0','10','25','50','75','100'],'Botones de carga: automática, 0, 10, 25, 50, 75 y 100 %');}
+ tl.dispose();}
 console.log('245/248 PASS: corriente de motores por fuerza (máxima al arrancar) y de línea por potencia; masa de 231.4 a 338.5 t según la carga; límites de corriente y potencia; comparación de arranques por carga (misma fuerza: menos aceleración; misma aceleración: más corriente y más caída de tensión); selector de carga con fila en el andén, embarque gradual, caja que baja y gente devuelta al andén.');
