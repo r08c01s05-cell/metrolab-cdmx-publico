@@ -56,10 +56,29 @@
 .ed245 .ed245-modes button[aria-pressed=true]{background:#f0b545!important;color:#1d1608!important;border-color:#f0b545!important}
 .ed245 .ed245-compare{margin-top:10px}
 .ed245 td[data-warn]{color:#ffd27a}
-.tl248{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#c3c2b7;white-space:nowrap}
-.tl248 select{font:500 12px system-ui;padding:4px 6px;border-radius:6px;border:1px solid #ffffff2e;background:#1d2a27;color:#f0efec}
-.tl248 input[type=range]{width:90px;accent-color:#f0b545}
-.tl248 output{font:600 11px ui-monospace,monospace;color:#f0efec}
+.tl248{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:9px;font:500 12px system-ui;color:#c3c2b7;pointer-events:auto}
+.tl248-title{font:700 10px system-ui;letter-spacing:.08em;text-transform:uppercase;color:#9fb3ad}
+.tl248-buttons{display:inline-flex;gap:4px;flex-wrap:wrap}
+#sim106-shell .tl248 button{min-height:0!important;padding:5px 9px!important;border-radius:999px!important;border:1px solid #ffffff33!important;background:#13232bdd!important;color:#e8eee9!important;font:600 12px system-ui!important;cursor:pointer}
+#sim106-shell .tl248 button[aria-pressed=true]{background:#f0b545!important;border-color:#f0b545!important;color:#1d1608!important}
+.tl248 output{flex-basis:100%;font:600 11px ui-monospace,monospace;color:#f0efec}
+.tc250-toggle[aria-pressed=true],.pf250-toggle[aria-pressed=true]{background:#ff7a2f!important;color:#1d1006!important;border-color:#ff7a2f!important}
+.tc250-legend{position:absolute;left:25px;bottom:150px;z-index:6;display:grid;gap:4px;max-width:300px;padding:10px 12px;border-radius:10px;background:#0d1a20e6;border:1px solid #ffffff22;color:#dfe8e3;font:12px system-ui;pointer-events:none}
+.tc250-legend[hidden]{display:none}
+.tc250-legend span{display:flex;align-items:center;gap:7px}.tc250-legend i,.pf250-panel li>i{width:10px;height:10px;border-radius:50%;flex:none;box-shadow:0 0 8px currentColor}
+.tc250-legend output{font:600 12px ui-monospace,monospace;color:#ffd34d}.tc250-legend small,.pf250-panel small{color:#93a39d;font-size:10.5px}
+.sr126-stage{position:relative}
+.pf250-panel{position:absolute;top:12px;left:12px;z-index:4;width:min(330px,calc(100% - 24px));max-height:calc(100% - 24px);overflow:auto;padding:10px 12px;border-radius:10px;background:#0d1a20eb;border:1px solid #ffffff22;color:#dfe8e3;font:12px system-ui}
+.pf250-panel[hidden]{display:none}
+.pf250-panel header{background:none!important;border:0!important;padding:0!important;min-height:0!important;position:static!important;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.pf250-panel header button{font:600 11px system-ui;padding:4px 10px;border-radius:999px;border:1px solid #ffffff33;background:#1d2f36;color:#e8eee9;cursor:pointer}
+.pf250-panel ol{list-style:none;margin:0 0 6px;padding:0;display:grid;gap:6px}
+.pf250-panel li{display:flex;gap:8px;align-items:flex-start;opacity:.35;transition:opacity .4s}
+.pf250-panel li>i{margin-top:3px}
+.pf250-panel li[data-state=done]{opacity:.75}.pf250-panel li[data-state=now]{opacity:1}
+.pf250-panel li div{display:grid;gap:2px}.pf250-panel li span{color:#b9c6c1;line-height:1.35}
+.pf250-panel li[data-state=now] b{color:#ffd34d}
+.pf250-panel li:not([data-state=now]) span{display:none}
 
 /* En análisis, la pausa mantiene gráficas y consulta de valores accesibles. */
 body[data-analysis250=true] #sim106-stopped{display:none!important}

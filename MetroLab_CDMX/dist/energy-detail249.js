@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {FlowPath249} from './energy-flow249.js?v=253';
+import {FlowPath249} from './energy-flow249.js?v=255';
 export class EnergyDetail249{
  constructor(model,type,architecture){this.model=model;this.paths=[new FlowPath249(model.root,'#ffae32'),new FlowPath249(model.root,'#43d8f1'),new FlowPath249(model.root,'#ffae32'),new FlowPath249(model.root,'#43d8f1')];this.electronics=new T.Group();this.electronics.name='Detalle electrónico comparativo';model.groups.get('power').add(this.electronics);this.owned=[];this.devices=[];
   const add=(name,p,size,color)=>{const g=new T.BoxGeometry(...size),m=new T.MeshStandardMaterial({color,metalness:.5,roughness:.45}),o=new T.Mesh(g,m);o.name=name;o.position.set(...p);this.electronics.add(o);this.owned.push(g,m);return o;};

@@ -1,4 +1,4 @@
-import './simulation106.js?v=250';
+import './simulation106.js?v=255';
 export class StationLife121{
  constructor(doc=document,win=window){
   this.doc=doc;this.win=win;this.$=id=>doc.getElementById(id);

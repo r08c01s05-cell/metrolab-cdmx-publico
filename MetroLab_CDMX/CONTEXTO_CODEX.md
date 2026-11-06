@@ -112,3 +112,6 @@ Trazos de vía prolongados90 m en terminales y distribución auxiliar esquemáti
 
 ## Intervalos254
 Locales L1/L8 distribuidos uniformemente en cada interestación (huecos incluyendo extremos), conservando cantidad/ID/lado/tipo. SR252 los siguen. Posición ilustrativa solicitada, no topografía real. Ver revision254 y verificar_intervalos254.
+
+## Integración255
+A petición del usuario, combinar249–254 con main be19ec9 mediante PR3. Conservados mandos de carga, detalles/puertas y flujo eléctrico de subestación nuevos en main. Dos modos de flujo de recorrido mutuamente excluyentes. URLs255. Ver docs/integracion255.md.

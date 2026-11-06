@@ -1,4 +1,4 @@
-import {EnergyDetail249} from './energy-detail249.js?v=253';
+import {EnergyDetail249} from './energy-detail249.js?v=255';
 import{RenderBudget101}from'./render-budget101.js?v=222';
 import * as T from 'three';
 import {detailedEnergy162} from './energy-assets162.js?v=222';

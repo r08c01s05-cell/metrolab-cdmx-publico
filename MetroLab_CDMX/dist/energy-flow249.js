@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {trainTrack208} from './station-layout208.js?v=209';
-import {electricState245,ASSUMED245} from './electric-dashboard245.js?v=250';
+import {electricState245,ASSUMED245} from './electric-dashboard245.js?v=255';
 
 function lengths250(points){const a=[0];for(let i=1;i<points.length;i++)a.push(a.at(-1)+points[i].distanceTo(points[i-1]));return a;}
 export function pointOnPath249(points,u,lengths=lengths250(points)){
@@ -17,7 +17,7 @@ export function rectifierPositions250(line){const d=line?.distances||[];if(d.len
 export function rectifierAnchors252(rooms=[]){return rooms.map((room,i)=>({id:room.userData?.id||String(i),x:room.userData?.x??room.position.x,z:room.position.z,side:room.userData?.side??(room.position.z<0?-1:1)}));}
 export class RouteEnergy249{
  constructor(view){this.view=view;this.root=new T.Group();this.root.name='Circuito de tracción · esquema educativo';view.scene.add(this.root);this.paths=[];for(let i=0;i<12;i++)this.paths.push([this.path('#efb75e'),this.path('#64bac5')]);this.auxPaths253=[this.path('#efb75e'),this.path('#64bac5')];this.buses=[];this.feeders=[];this.sources=new T.Group();this.root.add(this.sources);this.active=false;this.lastV=0;this.lastTime=null;
-  const host=document.querySelector('.sim106-view-tools')||document.getElementById('follow107-tools');this.button=document.createElement('button');this.button.textContent='Flujo de energía en vía';this.button.setAttribute('aria-pressed','false');host?.append(this.button);this.button.onclick=()=>{this.active=!this.active;this.button.setAttribute('aria-pressed',String(this.active));this.note.hidden=!this.active;};
+  const host=document.querySelector('.sim106-view-tools')||document.getElementById('follow107-tools');this.button=document.createElement('button');this.button.textContent='Flujo de energía en vía';this.button.setAttribute('aria-pressed','false');host?.append(this.button);this.button.onclick=()=>{this.active=!this.active;if(this.active&&window.trackCurrent250?.on)window.trackCurrent250.toggle(false);this.button.setAttribute('aria-pressed',String(this.active));this.note.hidden=!this.active;};
   this.note=document.createElement('p');this.note.hidden=true;this.note.style.cssText='position:absolute;bottom:18px;left:12px;max-width:510px;background:#10282eef;color:white;padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.5;pointer-events:none;z-index:8';document.getElementById('sim106-stage')?.append(this.note);
   const prior=view.scene.onBeforeRender;this.callback=(...args)=>{prior?.apply(view.scene,args);this.update();};view.scene.onBeforeRender=this.callback;this.prior=prior;
  }

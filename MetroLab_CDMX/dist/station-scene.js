@@ -1,4 +1,4 @@
-import {installRouteEnergy249} from './energy-flow249.js?v=253';
+import {installRouteEnergy249} from './energy-flow249.js?v=255';
 import {STATION_REFERENCES213} from './station-reference213.js?v=215';
 import {finishStation213,finishSurfaceArchitecture213,updateStationBounce213} from './station-finish213.js?v=215';
 import {bogieHalf212} from './car-support212.js?v=212';
@@ -22,7 +22,7 @@ import {refineSurfaceMaterials100,setupCabinLighting100,updateQualityLighting100
 import {tunnelProfile97,finishTunnel97} from './tunnel-finish97.js?v=122';
 import {createAlignment97,bakeInfrastructure97,renderCurved97} from './route-geometry97.js?v=212';
 import {buildTrack99,retireStationTracks99,buildStationSafety99,updateSignals99} from './track-details99.js?v=115';
-import {substationPlan94,wallSpans94,makeSubstation94} from './substations94.js?v=254';
+import {substationPlan94,wallSpans94,makeSubstation94} from './substations94.js?v=255';
 import {applyMotorRole90} from './motor-runtime90.js?v=111';
 import {loadCompressedGLB} from './compressed-assets89.js?v=204';
 import{WorkshopNavigation}from'./workshop-navigation.js?v=61';
