@@ -100,3 +100,6 @@ Rama revision/flujo-energia-via-captadores. Botón de flujo en recorrido: mapa c
 
 ## Circuito continuo y pausa250
 Misma rama revision/flujo-energia-via-captadores / PR3. Barras completas por ambas vías, SR didácticas independientes de SAF (distribución supuesta cada dos estaciones), derivaciones cortas, pulsos discretos con buffers estáticos y búsqueda binaria. No cálculo de red/seccionamientos. Electrónica comparativa a escala uniforme0,5. Análisis pausa sin modal ni ocultar gráficas; muestreo por engine.time evita integrar consumo durante la pausa. Presentación80 revisada como referencia conceptual, sin copiar símbolos no verificados. Ver docs/revision250.md y prueba energia250.
+
+## Captación bilateral251
+SR ilustrativas trasladadas a puntos medios de interestaciones (no ubicaciones reales verificadas). No convertir SAF en rectificadoras. Doce pares de derivaciones para seis motrices, ambos lados y sentidos; ocho barras completas por ambas vías. Corte neumático también bilateral. No duplicar corriente ni atribuir reparto real. Ver docs/revision251.md.
