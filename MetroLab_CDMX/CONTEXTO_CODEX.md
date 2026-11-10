@@ -115,3 +115,6 @@ Locales L1/L8 distribuidos uniformemente en cada interestación (huecos incluyen
 
 ## Integración255
 A petición del usuario, combinar249–254 con main be19ec9 mediante PR3. Conservados mandos de carga, detalles/puertas y flujo eléctrico de subestación nuevos en main. Dos modos de flujo de recorrido mutuamente excluyentes. URLs255. Ver docs/integracion255.md.
+
+## Red y protecciones256
+Rama mejora/red-subestacion256. grid-substation256.js: panel «Red y protecciones» en la SR (230 kV SF6 Metro-Energía, FP, anillo 15 kV supuesto, densímetros SF6 3D en celdas MT con fuga, 50/51 IEC, térmico del transformador, pérdidas de diodos). Anclas de densímetros se registran antes del batching (rectifier-assets127). SVG con estilos en línea por el estilo global del CAD171. Ver docs/revision256.md.
