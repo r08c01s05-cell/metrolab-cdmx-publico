@@ -121,3 +121,6 @@ Rama mejora/red-subestacion256. grid-substation256.js: panel «Red y proteccione
 
 ## Dinámica y frenado257
 Rama mejora/dinamica257. train-dynamics257.js añade pestaña «Dinámica y frenado» al ElectricDashboard245 (esfuerzo-velocidad, resistencia + pendiente, adherencia seca/mojada, freno combinado, energía a barra hasta 900 V EN 50163 o a resistencias, distancia de detención y curva ATP). Lee estado, no toca engine.js. Ver docs/revision257.md.
+
+## Sistemas a bordo258
+Rama mejora/a-bordo258. onboard258.js: botón «Sistemas a bordo» en seguimiento con cadena de potencia (VVVF/chopper, convertidor estático), TCMS y freno de urgencia (OR), puertas (AND) y bloque fijo/móvil con distancia real al tren de adelante. Tensiones auxiliares de la presentación marcadas sin fuente. Ver docs/revision258.md.
