@@ -124,3 +124,6 @@ Rama mejora/dinamica257. train-dynamics257.js añade pestaña «Dinámica y fren
 
 ## Sistemas a bordo258
 Rama mejora/a-bordo258. onboard258.js: botón «Sistemas a bordo» en seguimiento con cadena de potencia (VVVF/chopper, convertidor estático), TCMS y freno de urgencia (OR), puertas (AND) y bloque fijo/móvil con distancia real al tren de adelante. Tensiones auxiliares de la presentación marcadas sin fuente. Ver docs/revision258.md.
+
+## Rendimiento y acabado259
+Rama mejora/visual-rendimiento259. train-lod259.js (LOD por carro con capas, volúmenes lejanos), passenger-budget259.js (tope de GLB detallados por calidad), weathering259.js (desgaste procedural en mundo: túnel, vía, pisos, muros; barrido cada 90 cuadros desde StationScene.animate). Ver docs/revision259.md.

@@ -2,6 +2,7 @@ import {refinePassengers180} from './passenger-realism180.js?v=226';
 import {PASSENGERS145,passengerManifest145} from './passenger-assets145.js?v=225';
 import {PassengerContacts122} from './world-contact122.js?v=222';
 import {prepareImported137,selectPassenger137,attachInfant138} from './passenger-cast137.js?v=144';
+import {detailedBudget259} from './passenger-budget259.js?v=259';
 import {InstancedPassengers121,selectDetailed121} from './instanced-passengers121.js?v=225';
 import{avatarDetail119,applyCloth120}from'./passenger-cloth119.js?v=130';
 import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
@@ -186,7 +187,7 @@ export class CabinCharacters{
  animate203(time,running=true){const dt=Math.min(.05,Math.max(0,time-(this.visualAt203??time)));this.visualAt203=time;for(const item of this.pool){if(!item.root.visible||!item.actor203)continue;const a=item.actor203;let p=item.display203;if(!p||p.id!==a.id||Math.hypot(p.x-a.x,p.z-a.z)>3)p=item.display203={id:a.id,x:a.x,y:a.y,z:a.z,yaw:a.yaw||0};const k=a.location==='cabin'||!running?1:1-Math.exp(-22*dt);for(const axis of['x','y','z'])p[axis]+=(a[axis]-p[axis])*k;p.yaw+=Math.atan2(Math.sin((a.yaw||0)-p.yaw),Math.cos((a.yaw||0)-p.yaw))*k;poseCharacter(item,{...a,...p},time+(item.phase203||0));}}
  update(actors,time,running=true){
   if(!this.templates.length)return 0;
-  const detailed121=selectDetailed121(actors,this.camera119,24),liveActors121=actors.filter(a=>detailed121.has(a.id)),farEntries121=[];
+  const detailed121=selectDetailed121(actors,this.camera119,detailedBudget259(globalThis.stationScene?.cameraMode)),liveActors121=actors.filter(a=>detailed121.has(a.id)),farEntries121=[];
   const activeIds116=new Set(liveActors121.map(a=>a.id)),byId116=new Map(),free116=new Map();
   for(const item of this.pool){item.root.visible=false;byId116.set(item.actorId,item);if(!activeIds116.has(item.actorId)){if(!free116.has(item.template))free116.set(item.template,[]);free116.get(item.template).push(item);}}
   actors.forEach((actor,i)=>{
