@@ -127,3 +127,6 @@ Rama mejora/a-bordo258. onboard258.js: botón «Sistemas a bordo» en seguimient
 
 ## Rendimiento y acabado259
 Rama mejora/visual-rendimiento259. train-lod259.js (LOD por carro con capas, volúmenes lejanos), passenger-budget259.js (tope de GLB detallados por calidad), weathering259.js (desgaste procedural en mundo: túnel, vía, pisos, muros; barrido cada 90 cuadros desde StationScene.animate). Ver docs/revision259.md.
+
+## Rendimiento260 y guardar instrumento
+Rama mejora/rendimiento260. frame-budget260.js (congelar matrices de infraestructura, intervalo de multitud, costado lejano), 4 niveles de pasajeros instanciados, roster260 en caché. Guardar instrumento: ToolBag156.putAway176 + InstrumentPlacement180.store260 + storeInstrument238 con instrumento apoyado. Ver docs/revision260.md.

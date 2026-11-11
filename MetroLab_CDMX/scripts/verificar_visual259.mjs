@@ -19,7 +19,7 @@ function makeCar(index){const car=new THREE.Group();car.userData.carIndex=index;
 const group=new THREE.Group();for(let i=0;i<9;i++)group.add(makeCar(i));const roof=[],cutWalls=[];group.traverse(o=>{if(o.userData.familia_visual==='roof')roof.push(o);if(o.userData.familia_visual==='wallPos')cutWalls.push(o);});
 const sets=classifyCar259(group.children[0]);assert.deepEqual([sets.interior.length,sets.under.length,sets.seals.length,sets.bogies.length,sets.bogies[0].meshes.length],[2,2,2,2,2]);
 const view={camera:{position:new THREE.Vector3(0,60,170)},trainMeshes:new Map([['L1-01',{group,roof,cutWalls,detailed:true}]])};
-let s=updateTrainLod259(view);assert.deepEqual(s,{cars:9,interiorHidden:9,underHidden:9,sealsHidden:9},'Tren lejano: todo reducido');
+let s=updateTrainLod259(view);assert.deepEqual(s,{cars:9,interiorHidden:9,underHidden:9,sealsHidden:9,wallsHidden:9},'Tren lejano: todo reducido');
 const car=group.children[4],by=n=>car.getObjectByName(n);
 assert.equal(by('interior__batched').layers.mask,2);assert.equal(by('exterior__batched').layers.mask,1,'La carrocería se queda');assert.equal(by('Puerta_S1_1_Hoja_1').layers.mask,1,'Las hojas de puerta se quedan');assert.equal(by('Sello_metalico_puerta').layers.mask,2);
 const bogie=by('Bogie_articulado212_1'),proxy=bogie.getObjectByName('Bogie_lejano259');assert(proxy&&proxy.layers.mask===1&&bogie.children[0].layers.mask===2,'El bogie se cambia por un volumen simple');
