@@ -2,6 +2,7 @@ import {PhysicalBag157} from './physical-bag157.js?v=239';
 import * as THREE from 'three';
 import {ToolBelt239 as ToolWheel232,HOLD_MS239 as HOLD_MS232} from './tool-belt239.js?v=242';
 import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {stageTrain176} from './instrument-staging176.js?v=188';
 export const BELT_HINT238='Tab: portaherramientas · Q: guardar',BAG_HINT238='Tab: bolsa · mantén Tab: portaherramientas';
 export class ToolBag156{
  constructor({host,tools,doc=globalThis.document,getId=b=>b.dataset.tool,onEquip=()=>{},getContext=()=>null,belt=true}){
@@ -20,8 +21,15 @@ export class ToolBag156{
  }
  available194(){const v=this.getContext()?.view;if(v?.service128)return !!v.service128.active&&!!v.dialog?.open;if(v?.visible&&this.doc.body?.dataset.gameScreen==='maintenance')return true;return !!this.host.getClientRects?.().length;}
  title(id){const b=this.buttons.find(b=>this.getId(b)===id);return b?.querySelector('[data-tool145-label]')?.textContent||b?.textContent.replace(/^\s*\d+\s*/,'').trim()||'Manos libres';}
- putAway176(){this.close();const button=this.buttons.find(b=>this.getId(b)==='hand');button?.click();this.sync('hand');}
- sync(id){this.selected=id;this.store.hidden=['hand','inspect','test','spare'].includes(id);for(const[key,item]of this.browser?.items||[]){item.userData.outside196=key===id&&this.prepared176.has(id);item.visible=!item.userData.outside188&&!item.userData.outside196;}if(!this.open)this.status.textContent=['hand','inspect'].includes(id)?'Manos libres · guantes puestos':'En uso · '+this.title(id);}
+ // Guardar 260: con una herramienta en la mano, la guarda. Con las manos libres (o con el propio
+ // instrumento en uso), devuelve al portaherramientas el instrumento que quedó apoyado o sobre el banco.
+ putAway176(){const ctx=this.getContext(),ui=ctx?.view?.service128,was=this.selected,instrument=['hand','inspect','test','spare','meter','red','black'].includes(was||'hand');let stored=false;
+  if(this.belt238&&instrument&&this.prepared176.has('meter')){
+   if(ui){const carry=ui.carry188;stored=carry?.enabled?!!carry.storeInstrument238?.():!!ui.placement180?.store260?.();}
+   else if(ctx?.view){this.prepared176.delete('meter');stageTrain176(ctx.view);ctx.glove?.set?.('hand',false);ctx.onPrepared176?.('meter');stored=true;}
+  }
+  this.close();const button=this.buttons.find(b=>this.getId(b)==='hand');button?.click();this.sync('hand');if(stored)this.status.textContent='Instrumento guardado en el portaherramientas.';return true;}
+ sync(id){this.selected=id;const free260=['hand','inspect','test','spare'].includes(id),out260=this.belt238&&this.prepared176.has('meter');this.store.hidden=free260&&!out260;this.store.textContent=free260&&out260||['meter','red','black'].includes(id)?'Guardar instrumento · Q':'Guardar herramienta · Q';for(const[key,item]of this.browser?.items||[]){item.userData.outside196=key===id&&this.prepared176.has(id);item.visible=!item.userData.outside188&&!item.userData.outside196;}if(!this.open)this.status.textContent=['hand','inspect'].includes(id)?'Manos libres · guantes puestos':'En uso · '+this.title(id);}
  require176(id){if(['hand','inspect','test','spare'].includes(id)||this.prepared176.has(id))return true;if(['red','black'].includes(id)&&this.prepared176.has('meter'))return true;if(this.belt238){this.status.textContent='Mantén Tab y toma '+this.title(id)+' del portaherramientas';return false;}this.status.textContent='Abre la bolsa con Tab y prepara '+this.title(id);return false;}
  // Belt: take a tool straight to the hand, through the same path the bag uses when it hands one over.
  take238(id){const b=this.buttons.find(b=>this.getId(b)===id);if(!b||b.disabled)return false;const ctx=this.getContext(),carry=ctx?.view?.service128?.carry188||ctx?.view?.play199;if(carry?.held&&id!=='meter'){/* 244: el anemómetro vuelve solo al portaherramientas al tomar otra herramienta. */if(carry.held.kind!=='instrument'||!carry.storeInstrument238?.()){carry.message?.('Tienes un objeto en las manos. Apóyalo con E antes de tomar otra herramienta.');return false;}}this.committing238=true;try{b.click();}finally{this.committing238=false;}ctx?.glove?.set?.(id==='driver'?'screwdriver':['red','black'].includes(id)?'meter':id,true);this.status.textContent='En la mano · '+this.title(id);return true;}

@@ -1,6 +1,6 @@
 import {spareKind240} from './tool-props240.js?v=242';
 import {installIdleGuide201} from './idle-guide201.js?v=241';
-import {ToolBag156} from './tool-bag156.js?v=244';
+import {ToolBag156} from './tool-bag156.js?v=260';
 import * as THREE from 'three';
 import {angularStep116} from './maintenance-gestures116.js?v=116';
 const TOOL_KEYS136=['inspect','driver','brush','meter','red','black','spare','test','hand'];

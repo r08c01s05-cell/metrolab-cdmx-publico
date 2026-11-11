@@ -1,6 +1,10 @@
 import {trainTrack208,doorSide208,islandAt208,waitingSlot208,waitingZ208,islandId209} from './station-layout208.js?v=209';
 import {platformCount121,platformSlot121} from './platform-population121.js?v=121';
 import {eligibleForReserved91,allocateRoster91,portalAllowed91} from './reserved-zone91.js?v=92';
+// 260: the seat allocation only depends on the train and how many ride it; it used to be
+// recomputed (a sort per passenger) on every crowd update.
+const rosters260=new Map();
+export function roster260(trainId,onboard){const key=trainId+':'+onboard;let r=rosters260.get(key);if(!r){r=Object.freeze(allocateRoster91(Array.from({length:onboard},(_,i)=>({id:'inside:'+trainId+':'+i,modelType:i%2?'woman':'man',carryingBaby:i%9===3}))).map(Object.freeze));if(rosters260.size>64)rosters260.delete(rosters260.keys().next().value);rosters260.set(key,r);}return r;}
 import {cabinPlacement} from './passenger-seats.js?v=211';
 // Visual passenger groups follow real door portals. Engine counts remain authoritative.
 const clamp=v=>Math.max(0,Math.min(1,v));
@@ -87,7 +91,7 @@ export function buildPassengerFrame({engine,train,stationCenter,queue,portals=[]
  const complete=kind=>{const set=flows.filter(f=>f.kind===kind);return set.length?set.filter(f=>elapsed>=f.start+f.duration).length/set.length:0;};
  const cabinLoad=activePlan?Math.max(0,plan.initialLoad-plan.exiting*complete('alight')+plan.entering*complete('board')):train.load;
  const onboard=onboardCount(cabinLoad);
- for(const person of allocateRoster91(Array.from({length:onboard},(_,i)=>({id:'inside:'+train.id+':'+i,modelType:i%2?'woman':'man',carryingBaby:i%9===3}))))actors.push({...person,...cabinPlacement(train,person.slot),moving:false});
+ for(const person of roster260(train.id,onboard))actors.push({...person,...cabinPlacement(train,person.slot),moving:false});
  for(const f of flows){
   // Completed boarding groups become the distributed cabin population.
   if(f.kind==='board'&&elapsed>=f.start+f.duration+.45)continue;

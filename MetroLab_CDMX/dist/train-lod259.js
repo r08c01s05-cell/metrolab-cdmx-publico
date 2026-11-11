@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {visualState105} from './visual-settings105.js?v=105';
+import {farWallSign260} from './frame-budget260.js?v=260';
 
 // Nivel de detalle del tren 259. Un tren completo son unos 2.6 millones de triángulos y 1,600
 // llamadas de dibujo, y se pintaba entero aunque la cámara estuviera a 170 m. Aquí cada carro
@@ -18,13 +19,14 @@ let proxyGeometry,proxyMaterial;
 
 // Sort the meshes of one car once.
 export function classifyCar259(car){
- const sets={interior:[],under:[],seals:[],bogies:[]};
+ const sets={interior:[],under:[],seals:[],bogies:[],wallPos:[],wallNeg:[]};
  for(const child of car.children){
   if(child.userData.proxy259)continue;
   const family=child.userData.familia_visual||'';
   if(child.userData.bogie212!==undefined){const meshes=[];child.traverse(o=>{if(o.isMesh&&!o.userData.proxy259)meshes.push(o);});sets.bogies.push({pivot:child,meshes,proxy:null});}
   else if(child.isMesh&&INTERIOR.test(family))sets.interior.push(child);
   else if(child.isMesh&&UNDER.test(family))sets.under.push(child);
+  else if(child.isMesh&&(family==='wallPos'||family==='wallNeg'))sets[family].push(child);
   else if(!child.isMesh&&!family)child.traverse(o=>{if(o.isMesh&&SEAL.test(o.name))sets.seals.push(o);});
  }
  return sets;
@@ -48,7 +50,10 @@ function makeProxy(parent,meshes,name,shrink=.9){
  const proxy=new THREE.Mesh(proxyGeometry,proxyMaterial),size=box.getSize(new THREE.Vector3());
  proxy.name=name;proxy.userData.proxy259=true;proxy.raycast=()=>{};box.getCenter(proxy.position);proxy.scale.set(Math.max(.05,size.x*shrink),Math.max(.05,size.y*shrink),Math.max(.05,size.z*shrink));proxy.layers.mask=HIDDEN;parent.add(proxy);return proxy;
 }
-function apply(car,sets,tier){
+function apply(car,sets,tier,farWall=0){
+ // 260: with the interior omitted, the wall on the far side of the car cannot be seen either.
+ const hidePos=!!(tier&2)&&farWall>0,hideNeg=!!(tier&2)&&farWall<0;
+ for(const o of sets.wallPos)o.layers.mask=hidePos?HIDDEN:VISIBLE;for(const o of sets.wallNeg)o.layers.mask=hideNeg?HIDDEN:VISIBLE;
  for(const o of sets.seals)o.layers.mask=tier&1?HIDDEN:VISIBLE;
  for(const o of sets.interior)o.layers.mask=tier&2?HIDDEN:VISIBLE;
  const far=!!(tier&4);
@@ -62,7 +67,7 @@ function apply(car,sets,tier){
 // Call once per frame before rendering. Returns counters for the tests and the debug overlay.
 export function updateTrainLod259(view){
  const camera=view.camera?.position;if(!camera||!view.trainMeshes)return null;
- const scale=SCALE259[visualState105().quality]??1,stats={cars:0,interiorHidden:0,underHidden:0,sealsHidden:0};
+ const scale=SCALE259[visualState105().quality]??1,stats={cars:0,interiorHidden:0,underHidden:0,sealsHidden:0,wallsHidden:0};
  for(const model of view.trainMeshes.values()){
   const group=model.group;if(!group?.visible||!model.detailed)continue;
   let open;// a cut-away view (roof or walls removed) shows the interior on purpose
@@ -72,7 +77,9 @@ export function updateTrainLod259(view){
    const dx=Math.max(0,Math.abs(camera.x-(group.position.x+car.position.x))-CAR_HALF),dy=camera.y-2,dz=camera.z-(group.position.z+car.position.z),distance=Math.hypot(dx,dy,dz);
    if(distance>LOD259.interior*scale-LOD259.hysteresis&&open===undefined)open=!!(model.roof?.some(o=>!o.visible)||model.cutWalls?.some(o=>!o.visible));
    const tier=carTier259(distance,state.tier,scale,!!open);
-   if(tier!==state.tier||!state.applied){state.tier=tier;state.applied=true;apply(car,state.sets,tier);}
+   const farWall=tier&2?farWallSign260(group,car,camera.z):0;
+   if(tier!==state.tier||farWall!==state.farWall||!state.applied){state.tier=tier;state.farWall=farWall;state.applied=true;apply(car,state.sets,tier,farWall);}
+   if(farWall)stats.wallsHidden++;
    stats.cars++;if(tier&1)stats.sealsHidden++;if(tier&2)stats.interiorHidden++;if(tier&4)stats.underHidden++;
   }
  }

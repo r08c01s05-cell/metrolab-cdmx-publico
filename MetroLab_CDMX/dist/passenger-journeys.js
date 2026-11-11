@@ -1,6 +1,6 @@
 import {trainTrack208,doorSide208,waitingZ208,islandAt208} from './station-layout208.js?v=209';
 import {allocateRoster91,portalAllowed91} from './reserved-zone91.js?v=92';
-import {buildPassengerFrame,doorOpenness,onboardCount} from './passenger-flow.js?v=225';
+import {buildPassengerFrame,doorOpenness,onboardCount} from './passenger-flow.js?v=260';
 import {cabinPlacement} from './passenger-seats.js?v=211';
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 const mix=(a,b,u)=>a+(b-a)*u;

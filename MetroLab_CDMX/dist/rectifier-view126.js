@@ -15,7 +15,7 @@ import {createMetroEnvironment} from './metro-render.js?v=222';
 import {loadRectifier127} from './rectifier-assets127.js?v=256';
 import {PowerFlow250} from './power-flow250.js?v=250';
 import {GridPanel256} from './grid-substation256.js?v=256';
-import {SubstationMaintenanceUI128} from './substation-maintenance128.js?v=244';
+import {SubstationMaintenanceUI128} from './substation-maintenance128.js?v=260';
 export class RectifierView126{
  static async create(dialog){return new RectifierView126(dialog,await loadRectifier127());}
  constructor(dialog,model){

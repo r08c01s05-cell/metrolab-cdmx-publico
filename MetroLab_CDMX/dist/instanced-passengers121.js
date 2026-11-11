@@ -1,3 +1,4 @@
+import {visualState105} from './visual-settings105.js?v=105';
 import {passengerCarPose211} from './passenger-car211.js?v=212';
 import * as THREE from 'three';
 import {mergeGeometries} from './vendor/BufferGeometryUtils.js';
@@ -33,9 +34,11 @@ export function selectDetailed121(actors,camera,limit=64){
 // Fluidez: distance tiers re-cluster the distant silhouette (tier 0 is the
 // original instanced model). Distances in metres from the view camera, with
 // hysteresis so a person does not flicker between tiers at the boundary.
-export const LOD_DISTANCES221=[34,78],LOD_FACTORS221=[1,1.9,3.2],LOD_HYSTERESIS221=2.5;
-export function lodTier221(distance,previous=0){
- let tier=0;for(let i=0;i<LOD_DISTANCES221.length;i++){const edge=LOD_DISTANCES221[i]+(previous>i?-LOD_HYSTERESIS221:LOD_HYSTERESIS221);if(distance>edge)tier=i+1;}
+// 260: tiers start closer and a fourth, coarser one covers the far end of the platform; the
+// distances follow the chosen quality.
+export const LOD_DISTANCES221=[22,50,110],LOD_FACTORS221=[1,1.9,3.2,6],LOD_HYSTERESIS221=2.5,LOD_QUALITY260={performance:.75,balanced:1,cinematic:1.5};
+export function lodTier221(distance,previous=0,scale=1){
+ let tier=0;for(let i=0;i<LOD_DISTANCES221.length;i++){const edge=LOD_DISTANCES221[i]*scale+(previous>i?-LOD_HYSTERESIS221:LOD_HYSTERESIS221);if(distance>edge)tier=i+1;}
  return tier;
 }
 // Only instances whose transform or colour actually changed are copied to the
@@ -109,7 +112,7 @@ export class InstancedPassengers121{
  }
  tierFor221(actor){
   const camera=this.camera;if(!camera)return 0;
-  const previous=this.tiers221.get(actor.id)||0,tier=lodTier221(Math.hypot(actor.x-camera.position.x,(actor.y||0)-camera.position.y,actor.z-camera.position.z),previous);
+  const previous=this.tiers221.get(actor.id)||0,tier=lodTier221(Math.hypot(actor.x-camera.position.x,(actor.y||0)-camera.position.y,actor.z-camera.position.z),previous,LOD_QUALITY260[visualState105().quality]??1);
   if(tier!==previous){this.tiers221.set(actor.id,tier);if(this.tiers221.size>this.capacity*3)this.tiers221.delete(this.tiers221.keys().next().value);}
   return tier;
  }
@@ -118,7 +121,7 @@ export class InstancedPassengers121{
   for(const b of this.buckets.values())b.count=0;
   const rgb=this.rgb221;
   for(const {actor,template,hash} of entries){
-   const cycle=template.walkDuration137||1,phases=template.imported137?3:4,phase=actor.moving?Math.floor(((time+(hash%1000)/1000)%cycle)/cycle*phases):0,variant=template.newFemale119&&!template.imported137?(hash>>>9)&1:0,b=this.prototype(template,actor,phase,variant,this.tierFor221(actor)),n=b.count;
+   const cycle=template.walkDuration137||1,phases=template.imported137?3:4,phase=actor.moving?Math.floor(((time+(hash%1000)/1000)%cycle)/cycle*phases):0,variant=template.newFemale119&&!template.imported137?(hash>>>9)&1:0,tier260=this.tierFor221(actor),b=this.prototype(template,actor,tier260>=3?0:phase,tier260>=3?0:variant,tier260),n=b.count;
    const pose=passengerCarPose211(actor,route,train);this.position.set(pose?.x??actor.x,actor.y,pose?.z??actor.z);this.quaternion.setFromAxisAngle(this.axis,actor.yaw+(pose?.yaw||0));this.scale.setScalar(actor.modelType==='child'?.72:1);this.matrix.compose(this.position,this.quaternion,this.scale);
    let colours=this.colours121.get(actor.id);if(!colours){colours=wardrobeFor(actor.id);this.colours121.set(actor.id,colours);if(this.colours121.size>this.capacity*3)this.colours121.delete(this.colours121.keys().next().value);}
    // Cabin slots are moved again by syncPassengerInstances211 before drawing, so they are always uploaded.

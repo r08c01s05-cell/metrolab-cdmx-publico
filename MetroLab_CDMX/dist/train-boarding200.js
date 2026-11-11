@@ -1,6 +1,6 @@
 import {islandAt208,waitingZ208} from './station-layout208.js?v=209';
 import * as T from 'three';
-import {doorOpenness} from './passenger-flow.js?v=225';
+import {doorOpenness} from './passenger-flow.js?v=260';
 import {safePlatformPoint169} from './platform-collision169.js?v=225';
 const setText=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
 export class TrainBoarding200{
