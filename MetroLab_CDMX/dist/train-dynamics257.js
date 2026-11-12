@@ -1,5 +1,5 @@
 import {ASSUMED245,DOCUMENTED245,tractionCap248,FORMATION245} from './electric-dashboard245.js?v=255';
-import {inlineSvg256} from './grid-substation256.js?v=262';
+import {inlineSvg256} from './grid-substation256.js?v=263';
 
 // Dinámica y frenado 257. Pestaña nueva del análisis eléctrico con los temas de la presentación
 // que el simulador calculaba por dentro pero no mostraba: la curva de esfuerzo tractor contra

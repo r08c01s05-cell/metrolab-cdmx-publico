@@ -3,7 +3,7 @@ import {OrbitControls} from './vendor/OrbitControls.js';
 import {RenderBudget101} from './render-budget101.js?v=222';
 import {createMetroEnvironment} from './metro-render.js?v=222';
 import {photographicRenderer130} from './photographic130.js?v=205';
-import {loadFaultModel217} from './fault-model217.js?v=262';
+import {loadFaultModel217} from './fault-model217.js?v=263';
 import {FAULT_CASES217,FAULT_SOURCES217,FAULT_SCOPE217,FaultClock217} from './fault-catalog217.js?v=217';
 import {sampleOutcome218,variants218,EXTRA_SOURCES218} from './fault-outcomes218.js?v=218';
 import {studyShadows226} from './fault-realism226.js?v=229';

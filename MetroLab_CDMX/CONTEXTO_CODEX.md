@@ -136,3 +136,6 @@ Rama mejora/sr-real261. sr-real261.js: grupos reales de la S.R. (Intersec, trans
 
 ## Mando262
 Rama mejora/mando262. control262.js: puestos de mando (P.C.C., P.D.C. 5.º piso, sala de interruptores, T.C.D., P.C.L., C.E.E.), equipos telemandados, enclavamientos de 85 kV, telemando por hilo piloto y coordinación de maniobras de una S.R. Pestaña «Mando: P.C.C. y P.D.C.» en grid-substation256; la S.R. en maniobra entra a zones261.out. view.realOnly262 oculta battery y fire en rectifier-view126. Ver docs/revision262.md.
+
+## PCC263
+Rama mejora/pcc263. pcc263.js: botón «P.C.C.» (instalado desde driving107), esquema de línea con trenes, zonas y S.R. de Línea 1 (ZONE_STATE261 compartido con grid-substation256), flujos motor/generador/resistencias con snapshot263 y órdenes: HoldBook263 (retención por t.wait de trenes ya detenidos), energía de línea y emergencia por los botones existentes. No toca engine.js. Ver docs/revision263.md.

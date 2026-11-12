@@ -3,7 +3,7 @@ import {trainTrack208} from './station-layout208.js?v=209';
 import {renderPosition203} from './presentation203.js?v=204';
 import {bogieHalf212} from './car-support212.js?v=212';
 import {FORMATION245} from './electric-dashboard245.js?v=255';
-import {srPositions261,feedersAt261} from './sr-real261.js?v=261';
+import {srPositions261,feedersAt261} from './sr-real261.js?v=263';
 
 // Flujo de corriente 250 en el seguimiento del tren. Con un botón se encienden partículas que
 // muestran el camino de la corriente de tracción: llega por las barras guía (+750 V CD), entra al

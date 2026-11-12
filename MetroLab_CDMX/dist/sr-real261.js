@@ -76,3 +76,6 @@ export function zonesFed261(out=new Set(),openCs=new Set()){
 export const BUEN_TONO261=Object.freeze({kvIn:85,kvOut:15,transformers:4,mvaEach:38.5,feeders:['Jamaica (lado A)','Nonoalco (lado B)'],cable:'2 cables subterráneos en tubo de acero con aceite a presión, 800 MCM, 100 MVA cada uno',traction:'4 buses de tracción y 2 de alumbrado en 15 kV',breaker:'Interruptor general Oerlikon de 85 kV por lado; seccionadores Soulé por transformador; seccionador rotativo medio (S.R.M.) entre los lados A y B'});
 // 85 kV ring substations, from the table the user supplied (capacities as printed there).
 export const RING261=Object.freeze([['Nonoalco','CO','T86',120],['Peralvillo','AU','T221',180],['Merced','AU','T221',180],['Jamaica','CO','T28',300],['Iztapalapa','AU','T21',180],['Santa Cruz','AU','T421',1320]]);
+
+// Estado compartido de zonas (263): S.R. fuera de servicio y C.S. abiertos; lo usan el panel de la S.R. y el P.C.C.
+export const ZONE_STATE261={out:new Set(),open:new Set()};
