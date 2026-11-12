@@ -3,12 +3,12 @@ import {ventilationInterior202} from './ventilation-interior202.js?v=204';
 import {serviceControls148} from './service-controls148.js?v=148';
 import {drawInstrument146} from './instrument-readout146.js?v=148';
 import {serviceMotion145} from './service-motion145.js?v=188';
-import {serviceMeasurement143} from './service-measurement143.js?v=205';
-import {upgradeService142} from './instruments142.js?v=205';
-import {houseSubstation138} from './equipment-housing138.js?v=205';
+import {serviceMeasurement143} from './service-measurement143.js?v=264';
+import {upgradeService142} from './instruments142.js?v=264';
+import {houseSubstation138} from './equipment-housing138.js?v=264';
 import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 const cache=new Map();
 // The mounted asset retired its test panel. Keep a real, fixed sheet under
 // the four fasteners, with separate openings for the removable filter and fan.

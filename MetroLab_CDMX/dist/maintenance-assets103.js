@@ -1,5 +1,5 @@
-import {upgradeTrain142} from './instruments142.js?v=205';
-import {houseTrain138} from './equipment-housing138.js?v=205';
+import {upgradeTrain142} from './instruments142.js?v=264';
+import {houseTrain138} from './equipment-housing138.js?v=264';
 import {detailBench125,syncDetails125,syncWheelFasteners125} from './maintenance-detail125.js?v=187';
 import {finishBench122} from './maintenance-finish122.js?v=122';
 import{detailBench118}from'./maintenance-detail118.js?v=118';

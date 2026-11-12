@@ -1,8 +1,8 @@
 import {depotDetail205} from './depot-detail205.js?v=205';
 import * as THREE from 'three';
-import {trainAsset} from './depot86.js?v=222';
+import {trainAsset} from './depot86.js?v=264';
 import {batchTrainStatics} from './metro-render.js?v=222';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 const templates=new Map();
 async function template156(model,unit){const key=model+unit;if(!templates.has(key))templates.set(key,trainAsset(model,unit).then(source=>{const g=source.clone(true);batchTrainStatics(g);g.updateMatrixWorld(true);return g;}).catch(e=>{templates.delete(key);throw e;}));return templates.get(key);}
 function trim156(mesh,box){const src=mesh.geometry,raw=src.index?src.toNonIndexed():src.clone(),p=raw.attributes.position,kept=[],v=new THREE.Vector3(),a=new THREE.Vector3();for(let i=0;i<p.count;i+=3){v.set(0,0,0);for(let j=0;j<3;j++)v.add(a.fromBufferAttribute(p,i+j));v.multiplyScalar(1/3).applyMatrix4(mesh.matrixWorld);if(!box.containsPoint(v))kept.push(i,i+1,i+2);}if(kept.length===p.count){raw.dispose();return null;}const g=new THREE.BufferGeometry();for(const[key,a]of Object.entries(raw.attributes)){const values=new a.array.constructor(kept.length*a.itemSize);for(let i=0;i<kept.length;i++)for(let c=0;c<a.itemSize;c++)values[i*a.itemSize+c]=a.array[kept[i]*a.itemSize+c];g.setAttribute(key,new THREE.BufferAttribute(values,a.itemSize,a.normalized));}raw.dispose();if(kept.length){g.computeBoundingBox();g.computeBoundingSphere();}return g;}

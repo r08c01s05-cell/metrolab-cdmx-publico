@@ -1,7 +1,7 @@
-import {workMat195,disposeWorkMat195} from './work-mat195.js?v=205';
+import {workMat195,disposeWorkMat195} from './work-mat195.js?v=264';
 import {floorHazards192,findFloorPlace192,floorLevel192} from './work-area192.js?v=193';
 import * as T from 'three';
-import {shoulder196,INSTRUMENT_GRIP199} from './interaction-hand117.js?v=206';
+import {shoulder196,INSTRUMENT_GRIP199} from './interaction-hand117.js?v=264';
 import {drawInstrument146} from './instrument-readout146.js?v=148';
 const SENSOR196=new T.Vector3(0,.60,0),PALM196=INSTRUMENT_GRIP199.contact,HAND_ANCHOR196=new T.Vector3(.008,.028,.022),WRIST196=new T.Vector3(0,-.085,0),GRIP_Q196=INSTRUMENT_GRIP199.quaternion;
 const text196=(node,value)=>{value=String(value);if(node.textContent!==value)node.textContent=value;};

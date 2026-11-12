@@ -1,21 +1,21 @@
 import {RenderBudget101} from './render-budget101.js?v=222';
 import {Walk176} from './walk176.js?v=238';
-import {WalkTools236} from './walk-tools236.js?v=242';
+import {WalkTools236} from './walk-tools236.js?v=264';
 import {installCad168} from './substation-cad168.js?v=219';
 import {installSpread144,detailSpread144} from './substation-spread144.js?v=144';
 import {maquetteCamera137,architecture137,installMaquetteUI137} from './substation-maquette137.js?v=138';
-import {CabinetInteraction135} from './cabinet-interaction135.js?v=251';
+import {CabinetInteraction135} from './cabinet-interaction135.js?v=264';
 import {lightSubstation134,entryCamera134,inspectionCamera134} from './substation-view134.js?v=138';
 import {WorkshopNavigation} from './workshop-navigation.js?v=61';
 import {photographicRenderer130,inspectionShadows130,updateInspectionShadows130,shadowModel130} from './photographic130.js?v=205';
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {SR_PARTS126} from './rectifier-model126.js?v=261';
+import {SR_PARTS126} from './rectifier-model126.js?v=264';
 import {createMetroEnvironment} from './metro-render.js?v=222';
-import {loadRectifier127} from './rectifier-assets127.js?v=263';
+import {loadRectifier127} from './rectifier-assets127.js?v=264';
 import {PowerFlow250} from './power-flow250.js?v=261';
 import {GridPanel256} from './grid-substation256.js?v=263';
-import {SubstationMaintenanceUI128} from './substation-maintenance128.js?v=260';
+import {SubstationMaintenanceUI128} from './substation-maintenance128.js?v=264';
 export class RectifierView126{
  static async create(dialog){return new RectifierView126(dialog,await loadRectifier127());}
  constructor(dialog,model){

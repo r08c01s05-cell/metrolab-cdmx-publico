@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 // Peripheral cabin structure for the first-person console. No glass or destination
 // board crosses the viewing aperture. World/exterior models retain their own shell.
 const aperture155=[[-.91,-1.08],[.91,-1.08],[.94,.55],[.84,.85],[-.84,.85],[-.94,.55]];

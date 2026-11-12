@@ -1,9 +1,9 @@
 import {materialGrip206} from './material-grip206.js?v=206';
 import * as T from 'three';
 import {targets102,LABELS102} from './maintenance-session102.js?v=216';
-import {actionObject123} from './meter-leads123.js?v=205';
-import {createGlove104} from './repair-glove104.js?v=234';
-import {InteractionHand117} from './interaction-hand117.js?v=206';
+import {actionObject123} from './meter-leads123.js?v=264';
+import {createGlove104} from './repair-glove104.js?v=264';
+import {InteractionHand117} from './interaction-hand117.js?v=264';
 const text=(node,value)=>{if(node.textContent!==value)node.textContent=value;};
 // The workshop uses the same aimed, near-field work and carry loop as the substation.
 export class WorkshopPlay199{

@@ -2,9 +2,9 @@ import {layTools200} from './bag-layout200.js?v=204';
 import {floorHazards192,findFloorPlace192,floorLevel192} from './work-area192.js?v=193';
 import * as T from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
-import {repairTools139} from './repair-tools139.js?v=205';
-import {instrument142} from './instruments142.js?v=205';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {repairTools139} from './repair-tools139.js?v=264';
+import {instrument142} from './instruments142.js?v=264';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 let bagBytes;
 async function nativeBag(){
  bagBytes||=(async()=>{const r=await fetch('./models/revision157/bolsa157.glb.gz?v=157');if(!r.ok)throw Error('Bolsa Blender '+r.status);return new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();})().catch(e=>{bagBytes=null;throw e;});

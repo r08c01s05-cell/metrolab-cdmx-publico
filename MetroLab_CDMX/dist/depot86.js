@@ -5,7 +5,7 @@ import {preserveFinishUV124} from './surface-finish124.js?v=194';
 import{createMetroEnvironment}from'./metro-render.js?v=222';import{contactShadow105}from'./contact-shadow105.js?v=105';
 import {RenderBudget101} from './render-budget101.js?v=222';
 import {enhanceMetroMaterials} from './metro-render.js?v=222';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 import {carReference} from './train-formation.js?v=64';
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';

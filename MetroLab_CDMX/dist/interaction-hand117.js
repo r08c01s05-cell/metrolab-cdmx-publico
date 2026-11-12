@@ -1,5 +1,5 @@
 import {SCREW_GRIP202} from './screw-grip202.js?v=204';
-import {Arm177,WRIST195} from './arm177.js?v=205';
+import {Arm177,WRIST195} from './arm177.js?v=264';
 import * as THREE from'three';
 export const INSTRUMENT_GRIP199={contact:new THREE.Vector3(.39,-.14,.21),scaleX:-1,quaternion:new THREE.Quaternion().setFromEuler(new THREE.Euler(-.08,Math.PI,-.16))};
 const ease=t=>{t=THREE.MathUtils.clamp(t,0,1);return t*t*t*(10+t*(-15+6*t));};

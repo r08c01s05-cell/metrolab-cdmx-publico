@@ -1,8 +1,8 @@
-import {probeTemplate139,fitProbe139} from './repair-tools139.js?v=205';
+import {probeTemplate139,fitProbe139} from './repair-tools139.js?v=264';
 import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {mergeGeometries} from './vendor/BufferGeometryUtils.js';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 let cached;
 export async function loadHousing138(id){cached||=(async()=>{const r=await fetch('./models/proteccion138/bancos138.glb.gz?v=138');if(!r.ok)throw Error('Carcasa Blender '+r.status);return new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();})().catch(e=>{cached=null;throw e;});const gltf=await new GLTFLoader().parseAsync((await cached).slice(0),''),root=gltf.scene,group=root.getObjectByName('bench138_'+id);if(!group)throw Error('Carcasa desconocida: '+id);group.removeFromParent();const kept=new Set();group.traverse(o=>{if(o.material)kept.add(o.material);});const unused=new Set();root.traverse(o=>{o.geometry?.dispose();if(o.material&&!kept.has(o.material))unused.add(o.material);});for(const m of unused)m.dispose();
  refineSurfaceMaterials100(group);for(const anchor of group.children){const bins=new Map();anchor.updateWorldMatrix(true,true);const inv=anchor.matrixWorld.clone().invert();anchor.traverse(o=>{if(!o.isMesh)return;const key=o.material.uuid+Object.keys(o.geometry.attributes).join(),bin=bins.get(key)||{m:o.material,gs:[],meshes:[]};bin.gs.push(o.geometry.clone().applyMatrix4(inv.clone().multiply(o.matrixWorld)));bin.meshes.push(o);bins.set(key,bin);});for(const{m,gs,meshes}of bins.values()){const geometry=mergeGeometries(gs,false);gs.forEach(g=>g.dispose());if(!geometry)continue;for(const o of meshes){o.removeFromParent();o.geometry.dispose();}const o=new THREE.Mesh(geometry,m);o.name='Chapa plegada y herrajes138';anchor.add(o);}}
