@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {POSTS262,DEVICES262,CAUSES262,Maneuver262,canOperate262,SOURCE262} from './control262.js?v=262';
 import {SR_GROUPS261,SR_RATINGS261,MODEL_CHECK261,L1_ZONES261,L1_SR261,L1_CS261,zonesFed261,BUEN_TONO261,RING261,SOURCE261} from './sr-real261.js?v=261';
 
 // Red y protecciones 256. Lleva al simulador los temas de alimentación de la presentación que la
@@ -95,7 +96,7 @@ export function inlineSvg256(h){return h.replace(/<(line|circle|path|rect|text)\
 // ---------- Panel ----------
 const fmt=(x,d=0)=>Number(x).toLocaleString('es-MX',{maximumFractionDigits:d,minimumFractionDigits:d});
 const src=(...ids)=>`<p class="gp256-src">Fuentes: ${ids.map(id=>`<a href="${SOURCES256[id].url}" target="_blank" rel="noopener">${SOURCES256[id].publisher}</a>`).join(' · ')}</p>`;
-const TABS256=[['real','S.R. real'],['zonas','Línea 1: zonas y S.R.'],['red','Red de alta tensión'],['sf6','SF6 en 230 kV'],['prot','Protección 50/51'],['trafo','Calentamiento del transformador'],['diodos','Pérdidas en los diodos']];
+const TABS256=[['real','S.R. real'],['zonas','Línea 1: zonas y S.R.'],['mando','Mando: P.C.C. y P.D.C.'],['red','Red de alta tensión'],['sf6','SF6 en 230 kV'],['prot','Protección 50/51'],['trafo','Calentamiento del transformador'],['diodos','Pérdidas en los diodos']];
 const PART_NAMES261={mt:'Celdas de media tensión',transformer:'Transformador',rectifier:'Rectificador',dc:'Celdas de CD',control:'Control',aux:'Servicios auxiliares',roof:'Ventilación',battery:'Banco de baterías',fire:'Protección contra incendios',cables:'Canalizaciones',earth:'Puesta a tierra',civil:'Obra civil'};
 const CHAIN256=[
  ['rnt','Red Nacional de Transmisión','230 kV CA','La CFE entrega la energía en alta tensión. La subestación del proyecto Metro-Energía se conecta a la Red Nacional de Transmisión.',['seat']],
@@ -138,7 +139,8 @@ export class GridPanel256{
  // --- S.R. real (261) ---
  html_real(){return `<p class="gp256-lead">Esto es lo que tiene una subestación de rectificación (S.R.) de las líneas 1, 2 y 3 según el material del curso. Va en el orden en que la energía la atraviesa.</p><ol class="gp261-groups">${SR_GROUPS261.map((g,i)=>`<li><b>${i+1} · ${g.name}</b><em>${g.data}</em><span>${g.text}</span></li>`).join('')}</ol><p>${SR_RATINGS261.note}</p>
 <h4>Qué de esta maqueta existe y qué no</h4><ul class="gp261-check">${MODEL_CHECK261.map(c=>`<li class="${c.real?'ok':'no'}"><b>${c.real?'Existe':'No documentado'} · ${PART_NAMES261[c.part]}</b><span>${c.verdict}</span></li>`).join('')}</ul>
-<p class="gp256-assume">La forma de los gabinetes de la maqueta sigue siendo ilustrativa. Los datos de esta pestaña sí vienen del material citado.</p><p class="gp256-src">Fuente: ${SOURCE261.title}. ${SOURCE261.detail}</p>`;}
+<button type="button" data-gp262-realonly aria-pressed="${!!this.view.realOnly262}">${this.view.realOnly262?'Mostrar toda la maqueta':'Ocultar en la maqueta lo no documentado'}</button><p class="gp256-assume">La forma de los gabinetes de la maqueta sigue siendo ilustrativa. Los datos de esta pestaña sí vienen del material citado.</p><p class="gp256-src">Fuente: ${SOURCE261.title}. ${SOURCE261.detail}</p>`;}
+ bind_real(){this.$('[data-gp262-realonly]')?.addEventListener('click',()=>{this.view.realOnly262=!this.view.realOnly262;this.view.applyVisibility?.();this.show('real');});}
  // --- Línea 1: zonas y S.R. (261) ---
  html_zonas(){return `<p class="gp256-lead">La Línea 1 se alimenta por zonas. Cada zona tiene sus S.R.; en la frontera, una S.R. con contactor de seccionamiento (C.S.) une dos zonas vecinas. Toca una S.R. para sacarla de servicio o un C.S. para abrirlo.</p><svg viewBox="-45 0 610 250" class="gp256-ring" data-gp261-zones></svg><p data-gp261-note></p><button type="button" data-gp261-reset>Restablecer todo</button>
 <table class="gp261-table"><tr><th>Zona</th><th>Subestaciones de rectificación</th></tr>${L1_ZONES261.map(z=>`<tr><td>${z.zone}</td><td>${z.sr.map(s=>s.name+(s.cs?' (C.S. '+s.cs+')':'')).join(', ')}</td></tr>`).join('')}</table>
@@ -152,7 +154,21 @@ export class GridPanel256{
    for(const g of svg.querySelectorAll('[data-sr]'))g.addEventListener('click',()=>{const k=g.dataset.sr;st.out.has(k)?st.out.delete(k):st.out.add(k);draw();});
    for(const g of svg.querySelectorAll('[data-cs]'))g.addEventListener('click',()=>{const k=g.dataset.cs;st.open.has(k)?st.open.delete(k):st.open.add(k);draw();});};
   this.$('[data-gp261-reset]').addEventListener('click',()=>{st.out.clear();st.open.clear();draw();});draw();}
- // --- SF6 ---
+ // --- Mando y control (262) ---
+ html_mando(){const post=id=>POSTS262.find(p=>p.id===id)?.name.split(' · ')[0]||'Sin telemando';return `<p class="gp256-lead">La energía de tracción se manda desde el Puesto de Despacho de Carga (P.D.C.), en el 5.º piso del Puesto Central de Control. Las S.R. obedecen por el hilo piloto que viaja dentro de su cable de 15 kV.</p>
+<ol class="gp261-groups">${POSTS262.map(p=>`<li><b>${p.name}</b><em>${p.where}</em><span>${p.text}</span></li>`).join('')}</ol>
+<h4>Qué equipo se manda y desde dónde</h4><table class="gp261-table"><tr><th>Equipo</th><th>A distancia</th><th>Mandos y regla</th></tr>${DEVICES262.map(d=>`<tr><td>${d.name}</td><td>${d.remote?post(d.remote):'No'}</td><td>${d.modes.join('; ').replace(/\.$/,'')}. ${d.rule}</td></tr>`).join('')}</table>
+<h4>Tablero del P.D.C.: sacar y reponer una S.R. de Línea 1</h4><div class="gp256-row"><label>S.R. <select data-gp262-sr>${L1_SR261.map(s=>`<option>${s.name}</option>`).join('')}</select></label><label>Causa <select data-gp262-cause>${CAUSES262.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}</select></label><button type="button" data-gp262-start>Presentar la falla</button></div><div data-gp262-board></div>
+<h4>Enclavamientos en 85 kV</h4><div class="gp256-row"><label><input type="checkbox" data-gp262-arrival checked> Interruptor de llegada cerrado</label><label><input type="checkbox" data-gp262-load checked> Hay carga</label><label><input type="checkbox" data-gp262-bus> Un bus de 85 kV aislado</label></div><ul class="gp261-check" data-gp262-locks></ul>
+<p class="gp256-assume">El orden de los pasos es el que describe el material. Las siglas T.C.D. y P.C.L. aparecen ahí sin desarrollar, así que no se interpretan. El tablero es un ejercicio: no detiene los trenes del simulador.</p><p class="gp256-src">Fuente: ${SOURCE262.title}. ${SOURCE262.detail}</p>`;}
+ bind_mando(){this.zones261??={out:new Set(),open:new Set()};const board=this.$('[data-gp262-board]'),locks=this.$('[data-gp262-locks]');
+  const draw=()=>{const m=this.maneuver262;if(!m){board.innerHTML='<p>Todas las S.R. responden al telemando. Elige una S.R. y una causa.</p>';return;}const t=m.telemando;
+   board.innerHTML=`<div class="gp256-tiles"><span class="${m.out?'bad':'ok'}"><small>${m.sr}</small><b>${m.out?'Fuera de servicio':'En servicio'}</b>${m.cause.name}</span><span class="${t.ok?'ok':'bad'}"><small>Telemando</small><b>${t.ok?'Responde':'No responde'}</b>${t.why}</span></div><p>${m.cause.text}</p><ol class="gp262-steps">${m.steps.map((x,i)=>`<li class="${i<m.done?'done':i===m.done?'next':''}">${x}</li>`).join('')}</ol>${m.finished?'<p>Maniobra terminada. La S.R. volvió al servicio.</p>':'<button type="button" data-gp262-next>Hacer el paso siguiente</button>'}`;
+   board.querySelector('[data-gp262-next]')?.addEventListener('click',()=>{m.advance();if(m.finished)this.zones261.out.delete(m.sr);draw();});};
+  this.$('[data-gp262-start]').addEventListener('click',()=>{if(this.maneuver262?.out)this.zones261.out.delete(this.maneuver262.sr);this.maneuver262=new Maneuver262(this.$('[data-gp262-sr]').value,this.$('[data-gp262-cause]').value);this.zones261.out.add(this.maneuver262.sr);draw();});
+  const lock=()=>{const s={arrivalClosed:this.$('[data-gp262-arrival]').checked,load:this.$('[data-gp262-load]').checked,busIsolated:this.$('[data-gp262-bus]').checked};locks.innerHTML=[['oerlikon','Interruptor Oerlikon'],['soule','Seccionador Soulé'],['rotativo','Seccionador rotativo'],['srm','S.R.M.']].map(([id,n])=>{const r=canOperate262(id,s);return `<li class="${r.ok?'ok':'no'}"><b>${n}: ${r.ok?'puede maniobrar':'bloqueado'}</b><span>${r.why}</span></li>`;}).join('');};
+  for(const k of['arrival','load','bus'])this.$(`[data-gp262-${k}]`).addEventListener('change',lock);draw();lock();}
+// --- SF6 ---
  html_sf6(){return `<p class="gp256-lead">La subestación de 230 kV del proyecto Metro-Energía aísla y apaga el arco con hexafluoruro de azufre (SF6). En la subestación de rectificación no hay SF6: su grupo seccionador trabaja en aire. Este ejercicio simula el densímetro de una bahía de 230 kV.</p>
 <div class="gp256-tiles"><span><small>Rigidez dieléctrica</small><b>≈ 2.5 ×</b>la del aire a presión atmosférica</span><span><small>Arco eléctrico</small><b>se apaga rápido</b>el gas captura electrones libres</span><span><small>Efecto invernadero</small><b>GWP 23,900</b>vida atmosférica de 3,200 años</span></div>
 <h4>Simular una fuga</h4><div class="gp256-row"><label>Bahía <select data-gp256-cell>${(this.gauges.length?this.gauges:[0,1,2]).map((_,i)=>`<option value="${i}">Bahía ${i+1}</option>`).join('')}</select></label><label>Rapidez <input type="range" min=".01" max=".12" step=".01" value="${this.leak.rate}" data-gp256-rate></label><button type="button" data-gp256-leak>Iniciar fuga</button><button type="button" data-gp256-refill>Rellenar y reparar</button></div>

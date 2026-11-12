@@ -133,3 +133,6 @@ Rama mejora/rendimiento260. frame-budget260.js (congelar matrices de infraestruc
 
 ## S.R. real261
 Rama mejora/sr-real261. sr-real261.js: grupos reales de la S.R. (Intersec, transformador 2,750 kVA 15 kV/571 V, rectificador de 168 diodos, D.U.R. 5,000 A, seccionadores, control, ventilador, C.S.), revisión de la maqueta, 17 S.R. de Línea 1 en zonas A–F con 5 C.S. Pestañas «S.R. real» y «Línea 1: zonas y S.R.» en grid-substation256 (sustituyen al anillo de 15 kV; densímetros SF6 virtuales). Letreros de S.R. en vía desde track-current250. Geometría 3D sin remodelar. Ver docs/revision261.md.
+
+## Mando262
+Rama mejora/mando262. control262.js: puestos de mando (P.C.C., P.D.C. 5.º piso, sala de interruptores, T.C.D., P.C.L., C.E.E.), equipos telemandados, enclavamientos de 85 kV, telemando por hilo piloto y coordinación de maniobras de una S.R. Pestaña «Mando: P.C.C. y P.D.C.» en grid-substation256; la S.R. en maniobra entra a zones261.out. view.realOnly262 oculta battery y fire en rectifier-view126. Ver docs/revision262.md.

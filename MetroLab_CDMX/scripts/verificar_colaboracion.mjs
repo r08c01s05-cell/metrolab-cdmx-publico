@@ -8,7 +8,7 @@ const checks=[
      'espacio192','transporte188','juego187','mezcla187','materiales194',
      'controles181','anden181','tren_montado156','conduccion177',
      'agarre199','taller199','puertas200','embarque200','fluidez202','multitud202',
-     'destornillador202','interior202','personas203','presentacion203','realismo205','fluidez222','realismo224','fenomenos225','laboratorio229','guante230','portaherramientas232','animaciones235','portaherramientas236','puertas237','cinturon239','electrico245','flujos250','subestacion251','red256','dinamica257','a_bordo258','visual259','rendimiento260','sr_real261']
+     'destornillador202','interior202','personas203','presentacion203','realismo205','fluidez222','realismo224','fenomenos225','laboratorio229','guante230','portaherramientas232','animaciones235','portaherramientas236','puertas237','cinturon239','electrico245','flujos250','subestacion251','red256','dinamica257','a_bordo258','visual259','rendimiento260','sr_real261','mando262']
    .map(name=>['node','--experimental-loader','./scripts/test-loader.mjs',`scripts/verificar_${name}.mjs`]),
  ['python','scripts/verificar_servidor144.py']
 ];
