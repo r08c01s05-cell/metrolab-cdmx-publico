@@ -130,3 +130,6 @@ Rama mejora/visual-rendimiento259. train-lod259.js (LOD por carro con capas, vol
 
 ## Rendimiento260 y guardar instrumento
 Rama mejora/rendimiento260. frame-budget260.js (congelar matrices de infraestructura, intervalo de multitud, costado lejano), 4 niveles de pasajeros instanciados, roster260 en caché. Guardar instrumento: ToolBag156.putAway176 + InstrumentPlacement180.store260 + storeInstrument238 con instrumento apoyado. Ver docs/revision260.md.
+
+## S.R. real261
+Rama mejora/sr-real261. sr-real261.js: grupos reales de la S.R. (Intersec, transformador 2,750 kVA 15 kV/571 V, rectificador de 168 diodos, D.U.R. 5,000 A, seccionadores, control, ventilador, C.S.), revisión de la maqueta, 17 S.R. de Línea 1 en zonas A–F con 5 C.S. Pestañas «S.R. real» y «Línea 1: zonas y S.R.» en grid-substation256 (sustituyen al anillo de 15 kV; densímetros SF6 virtuales). Letreros de S.R. en vía desde track-current250. Geometría 3D sin remodelar. Ver docs/revision261.md.

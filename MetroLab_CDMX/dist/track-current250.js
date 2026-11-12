@@ -3,6 +3,7 @@ import {trainTrack208} from './station-layout208.js?v=209';
 import {renderPosition203} from './presentation203.js?v=204';
 import {bogieHalf212} from './car-support212.js?v=212';
 import {FORMATION245} from './electric-dashboard245.js?v=255';
+import {srPositions261,feedersAt261} from './sr-real261.js?v=261';
 
 // Flujo de corriente 250 en el seguimiento del tren. Con un botón se encienden partículas que
 // muestran el camino de la corriente de tracción: llega por las barras guía (+750 V CD), entra al
@@ -38,13 +39,13 @@ export class TrackCurrent250{
   this.button=doc.createElement('button');this.button.type='button';this.button.className='tc250-toggle';this.button.innerHTML='〰 Flujo de corriente';this.button.setAttribute('aria-pressed','false');this.button.title='Muestra por dónde circula la corriente de tracción';this.button.onclick=()=>this.toggle();
   (doc.querySelector('.sim106-view-tools')||doc.getElementById('sim106-shell')||doc.body)?.append(this.button);
   this.legend=doc.createElement('aside');this.legend.className='tc250-legend';this.legend.hidden=true;this.legend.setAttribute('aria-live','polite');
-  this.legend.innerHTML=`<b>Flujo de la corriente de tracción</b><span><i style="background:${COLORS250.positive}"></i>Barras guía +750 V CD hacia el tren</span><span><i style="background:${COLORS250.train}"></i>Escobillas de los carros motrices</span><span><i style="background:${COLORS250.ret}"></i>Retorno por los rieles de seguridad</span><output data-tc250-now></output><small>Esquema: las subestaciones se suponen a ambos lados del tren; su posición no es real.</small>`;
-  (doc.getElementById('sim106-stage')||doc.body)?.append(this.legend);this.now=this.legend.querySelector?.('[data-tc250-now]');
+  this.legend.innerHTML=`<b>Flujo de la corriente de tracción</b><span><i style="background:${COLORS250.positive}"></i>Barras guía +750 V CD hacia el tren</span><span><i style="background:${COLORS250.train}"></i>Escobillas de los carros motrices</span><span><i style="background:${COLORS250.ret}"></i>Retorno por los rieles de seguridad</span><output data-tc250-now></output><output data-tc261-sr></output><small>Las partículas son un esquema del recorrido. Los letreros naranjas marcan las subestaciones de rectificación de la Línea 1 según el material del curso.</small>`;
+  (doc.getElementById('sim106-stage')||doc.body)?.append(this.legend);this.now=this.legend.querySelector?.('[data-tc250-now]');this.srOut=this.legend.querySelector?.('[data-tc261-sr]');this.srCache=new Map();
   this.loop=()=>{if(!this.on)return;this.frame=win.requestAnimationFrame?.(this.loop);this.update();};
  }
  view(){return this.win.stationScene;}
  read(){const s=this.win.metroViewState?.(),e=s?.engine;if(!e)return null;const t=e.trains?.find(x=>e.operator?x.id===e.operator.trainId:x.id===s.selectedTrain);return t?{s,e,t}:null;}
- toggle(on=!this.on){if(on){const other=this.view()?.energyFlow249;if(other){other.active=false;other.button.setAttribute('aria-pressed','false');other.note.hidden=true;}}this.on=on;this.button.setAttribute('aria-pressed',String(on));this.legend.hidden=!on;if(on){this.build();this.last=null;this.loop();}else{this.win.cancelAnimationFrame?.(this.frame);if(this.mesh)this.mesh.visible=false;}}
+ toggle(on=!this.on){if(on){const other=this.view()?.energyFlow249;if(other){other.active=false;other.button.setAttribute('aria-pressed','false');other.note.hidden=true;}}this.on=on;this.button.setAttribute('aria-pressed',String(on));this.legend.hidden=!on;if(on){this.build();this.last=null;this.loop();}else{this.win.cancelAnimationFrame?.(this.frame);if(this.mesh)this.mesh.visible=false;if(this.markers261)this.markers261.visible=false;}}
  build(){const view=this.view();if(!view?.scene)return;if(this.mesh&&this.mesh.parent===view.scene)return;this.mesh?.removeFromParent();
   const mat=new THREE.MeshBasicMaterial({color:'#ffffff',toneMapped:false,transparent:true,opacity:.95,depthWrite:false});
   this.mesh=new THREE.InstancedMesh(new THREE.SphereGeometry(.055,8,6),mat,COUNT250);this.mesh.name='Flujo_corriente250';this.mesh.frustumCulled=false;this.mesh.renderOrder=5;
@@ -54,7 +55,7 @@ export class TrackCurrent250{
   const dt=this.last==null?0:Math.min(.1,(now-this.last)/1000);this.last=now;
   const {s,e,t}=r,st=this.win.electricDashboard245?.state,powered=!!e.power?.[t.line]&&!e.emergency,I=powered?(st?.I??0):0,level=flowLevel250(I);
   if(s.running)this.time+=dt*level.speed;
-  const pos=renderPosition203(t,s),paths=currentPaths250(t,pos),route=view.alignment97,m=new THREE.Matrix4(),c=new THREE.Color(),q=new THREE.Quaternion(),scale=new THREE.Vector3(),v=new THREE.Vector3();
+  this.feeders261(view,e,t);const pos=renderPosition203(t,s),paths=currentPaths250(t,pos),route=view.alignment97,m=new THREE.Matrix4(),c=new THREE.Color(),q=new THREE.Quaternion(),scale=new THREE.Vector3(),v=new THREE.Vector3();
   let n=0;
   for(const seed of this.seeds){const path=paths[seed.path%paths.length];if(!powered||seed.gate>level.share){continue;}
    const d=((seed.offset*path.length+this.time)%path.length),[ps,py,pz]=pointOn250(path,d),lateral=trainTrack208(t,ps)+pz,p=route?route.pose(ps,lateral):{x:ps,z:lateral};
@@ -63,6 +64,15 @@ export class TrackCurrent250{
   this.mesh.count=n;this.mesh.visible=n>0;this.mesh.instanceMatrix.needsUpdate=true;if(this.mesh.instanceColor)this.mesh.instanceColor.needsUpdate=true;
   if(this.now)this.now.textContent=!powered?'Sin energía en la línea: no circula corriente.':`Corriente de línea ${Math.round(I).toLocaleString('es-MX')} A${I<600?' · solo auxiliares o frenando':''}`;
   return n;}
- dispose(){this.toggle(false);this.mesh?.removeFromParent();this.button.remove();this.legend.remove();}
+ // Subestaciones de rectificación 261: letreros en la vía y, en la leyenda, las dos que alimentan al tren.
+ positions261(e,lineId){if(!this.srCache.has(lineId))this.srCache.set(lineId,srPositions261(e.lines?.[lineId]));return this.srCache.get(lineId);}
+ feeders261(view,e,t){const list=this.positions261(e,t.line);
+  if(this.srOut){if(!list.length)this.srOut.textContent='El material aportado solo ubica las subestaciones de rectificación de la Línea 1.';else{const f=feedersAt261(list,t.position),d=p=>Math.round(Math.abs(p.x-t.position)).toLocaleString('es-MX')+' m';this.srOut.textContent=`Zona ${f.zone} · S.R. más cercanas: `+[f.left&&`${f.left.name} (${d(f.left)} hacia Pantitlán)`,f.right&&`${f.right.name} (${d(f.right)} hacia Observatorio)`].filter(Boolean).join(' y ');}}
+  if(this.markersLine261!==t.line||this.markers261?.parent!==view.scene){this.markers261?.removeFromParent();this.markers261=null;this.markersLine261=t.line;if(list.length&&view.scene&&this.doc.createElement){const g=new THREE.Group();g.name='Subestaciones_rectificacion261';const route=view.alignment97;
+    for(const p of list){const c=this.doc.createElement('canvas');c.width=512;c.height=128;const x=c.getContext?.('2d');if(!x)continue;x.fillStyle='#ff7a2f';x.fillRect(0,0,512,128);x.fillStyle='#1d1006';x.font='bold 46px system-ui,sans-serif';x.textAlign='center';x.fillText('S.R. '+p.name.toUpperCase().slice(0,18),256,56);x.font='34px system-ui,sans-serif';x.fillText('Zona '+p.zone+(p.cs?' · C.S. '+p.cs:'')+(p.approximate?' · aprox.':''),256,104);
+     const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,toneMapped:false,depthWrite:false}));const w=route?route.pose(p.x,0):{x:p.x,z:0};sprite.position.set(w.x,4.25,w.z);sprite.scale.set(3.2,.8,1);sprite.name='Letrero_SR261_'+p.name;sprite.raycast=()=>{};g.add(sprite);}
+    view.scene.add(g);this.markers261=g;}}
+  if(this.markers261)this.markers261.visible=true;}
+ dispose(){this.toggle(false);this.mesh?.removeFromParent();this.markers261?.removeFromParent();this.button.remove();this.legend.remove();}
 }
 export function installTrackCurrent250(doc=document,win=window){if(doc.querySelector('.tc250-toggle'))return win.trackCurrent250;return win.trackCurrent250=new TrackCurrent250(doc,win);}
