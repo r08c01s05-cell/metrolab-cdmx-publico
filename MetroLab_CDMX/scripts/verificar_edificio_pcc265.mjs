@@ -1,0 +1,22 @@
+// Edificios de los P.C.C. 265: pisos del P.C.C. 1 como los rotulan las diapositivas, equipo por
+// piso, fachada y subestación de alumbrado y fuerza del P.C.C. 2.
+import assert from 'node:assert/strict';import fs from 'node:fs';
+import {FLOORS265,BUILDINGS265,ASSUMED265,floorBase265,floorHeight265,buildPcc1,buildPcc2} from '../dist/pcc-building265.js';
+assert.deepEqual(FLOORS265.map(f=>f.name),['Sótano','Planta baja','Primer piso','Segundo piso','Tercer piso','Cuarto piso','Quinto piso','Sexto piso']);
+const F=id=>FLOORS265.find(f=>f.id===id);
+assert(/Jamaica y Nonoalco/.test(F('sotano').slide)&&/TA1, TA2, TB1, TB2/.test(F('pb').slide)&&/Lockers/.test(F('p1').slide)&&/subestaciones de rectificación/.test(F('p2').slide)&&/Bodegas/.test(F('p3').slide)&&/Mando centralizado/.test(F('p4').slide)&&/Puesto Central de Control/.test(F('p5').slide)&&/BINOI/.test(F('p6').slide));
+assert(F('pb').items.some(x=>/80 toneladas/.test(x))&&F('p2').items.includes('Cuatro buses de tracción')&&F('p2').items.includes('Dos buses de alumbrado')&&F('p5').items.some(x=>/P\.D\.C\./.test(x)));
+assert.equal(floorBase265(0),-ASSUMED265.basement);assert.equal(floorBase265(1),0);for(let i=1;i<8;i++)assert(Math.abs(floorBase265(i)-floorBase265(i-1)-floorHeight265(i-1))<1e-9,'Los pisos apilan sin huecos');
+assert.deepEqual(BUILDINGS265.map(b=>b.id),['pcc1','pcc2']);assert(/1, 2, 3, 4, 5 y 6/.test(BUILDINGS265[0].lines));assert(/no dice/.test(BUILDINGS265[1].lines),'No se inventa qué líneas atiende el P.C.C. 2');
+const b=buildPcc1(),names=new Map();b.traverse(o=>{if(o.name)names.set(o.name,(names.get(o.name)||0)+1);});const has=(n,c=1)=>assert((names.get(n)||0)>=c,`Falta ${n} ×${c}`);
+assert.equal(b.userData.floors.length,8);b.userData.floors.forEach((f,i)=>{assert.equal(f.position.y,floorBase265(i));assert(f.userData.content.children.length>3,'Piso con equipo: '+f.name);});
+for(const n of['A','B']){has('Interruptor_Oerlikon_'+n);has('Bus_85kV_'+n,3);has('Mufa_llegada_'+n,3);has('TP_'+n,3);has('TC_'+n,3);has('Cuchilla_tierra_'+n);has('Tanque_CO2_'+n,2);has('Camara_Soule_'+n);has(`Seccionador_Soule_S${n}1`);has(`Seccionador_Soule_S${n}2`);}
+has('SRM_seccionador_rotativo_medio');has('Muro_divisor_buses');for(const t of['TA1','TA2','TB1','TB2','Reserva'])has('Transformador_'+t);has('Puente_grua_viajera_80t');has('Galeria_cables_15kV',2);has('Lockers',4);
+for(let k=1;k<=4;k++)has('Bus_traccion_'+k);has('Bus_alumbrado_1');has('Bus_alumbrado_2');assert(!names.has('Bus_alumbrado_3')&&!names.has('Bus_traccion_5'));has('Interruptor_15kV_fila1',10);
+has('Grupo_volante_volante');has('Sala_relevadores',20);has('Banco_baterias',6);has('Programa_general_trafico');has('Tablero_distribucion_PDC');for(let k=1;k<=3;k++)has('Oficina_gerencia_L'+k);has('Simulador');has('Conmutador_general',2);has('BINOI');has('Videovigilancia_muro');
+// The S.R.M. sits on the wall between both bus chambers; side A west, side B east; 85 kV in the north half.
+const srm=b.getObjectByName('SRM_seccionador_rotativo_medio');assert.equal(srm.position.x,0);assert(b.getObjectByName('Interruptor_Oerlikon_A').position.x<0&&b.getObjectByName('Interruptor_Oerlikon_B').position.x>0);assert(b.getObjectByName('Interruptor_Oerlikon_A').position.z<0&&b.getObjectByName('Tanque_aceite_cables_85kV').position.z>0);
+has('Azotea_roja');has('Domo_blanco');has('Celosia_vertical');has('Portico_columna',8);assert(b.userData.shell.name==='Fachada');
+const p2=buildPcc2(),n2=new Map();p2.traverse(o=>{if(o.name)n2.set(o.name,(n2.get(o.name)||0)+1);});assert.equal(n2.get('Transformador_500kVA'),2);assert.equal(n2.get('Cabina_N'),2);assert.equal(n2.get('Cabina_P'),1);assert(n2.has('Cable_15kV_AA_109')&&n2.has('Cable_15kV_AB_109')&&n2.has('Volumen_no_descrito'));
+const g=fs.readFileSync(new URL('../dist/game86.js',import.meta.url),'utf8');assert(/\['pcc','06','Puestos Centrales de Control'/.test(g)&&/mode==='pcc'\)\{await import\('\.\/pcc-building265\.js/.test(g));
+console.log('265 PASS: P.C.C. 1 con sótano, planta baja y seis pisos según las diapositivas (85 kV al norte, S.R.M. en el muro divisor, 4 transformadores y reserva, 4 buses de tracción y 2 de alumbrado, P.D.C. en el quinto piso), fachada y subestación de alumbrado y fuerza del P.C.C. 2.');

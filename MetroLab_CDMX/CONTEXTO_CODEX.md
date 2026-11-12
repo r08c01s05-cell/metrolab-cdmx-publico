@@ -142,3 +142,6 @@ Rama mejora/pcc263. pcc263.js: botón «P.C.C.» (instalado desde driving107), e
 
 ## Fondo264
 Rama mejora/fondo264. El fondo y la niebla de las estaciones cubiertas pasan de #18232a a #5d7482 (visual-quality100.js, palette122.covered) porque el usuario lo veía muy oscuro.
+
+## Edificio PCC265
+Rama mejora/edificio-pcc265. Menú «06 · Puestos Centrales de Control» (game86.js, modo 'pcc') carga pcc-building265.js: selector P.C.C. 1 / P.C.C. 2, edificio procedural con fachada, corte, armado animado y ocho niveles con equipo según las diapositivas (FLOORS265). P.C.C. 2 solo con su subestación de alumbrado y fuerza. Medidas y acomodo interno ilustrativos. Ver docs/revision265.md.
