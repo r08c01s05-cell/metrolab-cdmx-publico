@@ -1,6 +1,6 @@
 import {DOCUMENTED245,ASSUMED245,FORMATION245} from './electric-dashboard245.js?v=255';
-import {inlineSvg256} from './grid-substation256.js?v=256';
-import {atpCurve257,ASSUMED257,stoppingDistance257,ENGINE_RATES257} from './train-dynamics257.js?v=257';
+import {inlineSvg256} from './grid-substation256.js?v=261';
+import {atpCurve257,ASSUMED257,stoppingDistance257,ENGINE_RATES257} from './train-dynamics257.js?v=261';
 
 // Sistemas a bordo 258. Panel del seguimiento del tren con los temas de la presentación sobre lo que
 // va dentro del tren y que el simulador no explicaba: la cadena de potencia a bordo (escobillas,

@@ -6,13 +6,12 @@ import * as THREE from 'three';
 // diodos la convierte en corriente directa, y las celdas de CD la mandan a la vía como positivo
 // (+750 V CD a la barra guía); el retorno vuelve por los rieles al negativo de la planta.
 // Las rutas siguen la maqueta didáctica de este simulador (no son un plano de una instalación) y
-// usan los datos que ya cita el modelo: 15 kV / 540 V CA en el transformador según METRO.pdf
-// pp. 14–16 y 750 V CD de tracción.
+// usan los datos del material del curso (261): 15 kV / 571 V CA en el transformador y 750 V CD de tracción.
 export const STAGES250=[
- {id:'mt',color:'#ffb238',title:'1 · Entra la media tensión',text:'La acometida de CA llega a las celdas de media tensión, pasa por el seccionador y el interruptor, y sigue por cable al transformador.'},
- {id:'transformer',color:'#c47dff',title:'2 · El transformador baja la tensión',text:'El primario recibe la media tensión. Los dos secundarios entregan baja tensión de CA (540 V según la referencia histórica del modelo), cada uno a un puente rectificador.'},
- {id:'rectifier',color:'#ff4f3b',title:'3 · El rectificador la convierte en directa',text:'Dos puentes de seis pulsos, doce diodos en total, convierten la CA en corriente directa. La bobina de equilibrio reparte la carga entre los dos puentes.'},
- {id:'dc',color:'#ff4f3b',title:'4 · Sale a la vía como positivo',text:'Las celdas de CD, con sus interruptores ultrarrápidos, mandan el positivo de 750 V CD por los alimentadores hacia la barra guía.'},
+ {id:'mt',color:'#ffb238',title:'1 · Entra la media tensión',text:'El cable de 15 kV del P.C.C. llega al grupo seccionador (Intersec), pasa por el seccionador tripolar y sigue al transformador principal.'},
+ {id:'transformer',color:'#c47dff',title:'2 · El transformador baja la tensión',text:'El primario recibe la media tensión. Los dos secundarios, uno en delta y otro en estrella, entregan 571 V CA, cada uno a un puente rectificador.'},
+ {id:'rectifier',color:'#ff4f3b',title:'3 · El rectificador la convierte en directa',text:'Dos puentes de Graetz (168 diodos en la S.R. real de 2,500 kW) convierten la CA en corriente directa. La bobina de equilibrio reparte la carga entre los dos puentes.'},
+ {id:'dc',color:'#ff4f3b',title:'4 · Sale a la vía como positivo',text:'El disyuntor ultrarrápido (D.U.R.) y el seccionador de 5,000 A mandan el positivo de 750 V CD hacia la barra guía.'},
  {id:'return',color:'#36a6ff',title:'5 · Regresa por los rieles',text:'Después de pasar por los motores del tren, la corriente vuelve por los rieles de seguridad al negativo (CD−) de la planta y cierra el circuito en el rectificador.'}
 ];
 const TX=-1.85;

@@ -26,3 +26,11 @@
 .gp256-tiles .ok{border-color:#2e9d55}.gp256-tiles .warn{border-color:#e8b32a}.gp256-tiles .bad{border-color:#d64541}
 .gp256-chart,.gp256-ring{width:100%;height:auto;background:#10232a;border-radius:9px;margin:6px 0}
 @media(max-width:800px){.gp256{left:8px;right:8px;width:auto;top:8px;bottom:8px}.gp256-chain{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* S.R. real 261 */
+.gp261-groups{margin:6px 0;padding-left:0;list-style:none;display:grid;gap:6px}
+.gp261-groups li{display:grid;gap:2px;background:#16282e;border:1px solid #30484f;border-radius:9px;padding:7px 10px}
+.gp261-groups b{color:#ffd38a}.gp261-groups em{font-style:normal;font-size:11.5px;color:#9ee1ce}.gp261-groups span{font-size:12px;color:#c9d8d4}
+.gp261-check{list-style:none;margin:6px 0;padding:0;display:grid;gap:5px}
+.gp261-check li{display:grid;gap:1px;padding:6px 9px;border-radius:8px;background:#16282e;border:1px solid #2e9d55;font-size:12px}
+.gp261-check li.no{border-color:#e8b32a}.gp261-check li.no b{color:#ffd38a}.gp261-check span{color:#c9d8d4}
+.gp261-table{width:100%;border-collapse:collapse;margin:6px 0;font-size:12px}.gp261-table th,.gp261-table td{border:1px solid #30484f;padding:4px 7px;text-align:left}.gp261-table th{background:#16282e;color:#8bcbb8}

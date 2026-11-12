@@ -8,8 +8,8 @@ import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {mergeGeometries} from './vendor/BufferGeometryUtils.js';
 import {detailSubstation251} from './substation-detail251.js?v=251';
-import {recordSf6Anchors256} from './grid-substation256.js?v=256';
-import {SR_PARTS126} from './rectifier-model126.js?v=205';
+import {recordSf6Anchors256} from './grid-substation256.js?v=261';
+import {SR_PARTS126} from './rectifier-model126.js?v=261';
 let bytes;
 export async function loadRectifier127(){
  bytes||=(async()=>{const r=await fetch('./models/revision142/subestacion142.glb.gz?v=150');if(!r.ok)throw Error('No se pudo cargar el GLB de la subestación ('+r.status+').');return new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();})().catch(e=>{bytes=null;throw e;});

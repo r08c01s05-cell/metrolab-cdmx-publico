@@ -44,10 +44,10 @@ assert.equal(setGauge256(gauges[0],.86),'alarm');assert.equal(setGauge256(gauges
 // Panel with a minimal DOM.
 {const mk=()=>{const o={hidden:false,dataset:{},textContent:'',value:'1',checked:false,children:[],append(c){this.children.push(c);},remove(){},setAttribute(){},addEventListener(){},insertBefore(){},set innerHTML(v){this._h=v;},get innerHTML(){return this._h||'';},querySelector:()=>mk(),querySelectorAll:()=>[]};return o;};
  const view={dialog:{querySelector:()=>mk()},model:m,parts,status:{textContent:''}};const gp=new GridPanel256(view,{createElement:mk,body:mk()});
- assert.equal(gp.gauges,gauges,'El panel usa los densímetros de la planta');
- for(const t of['red','anillo','sf6','prot','trafo','diodos']){gp.show(t);assert(gp.body.innerHTML.length>200,'Contenido de '+t);}
+ assert(gp.gauges.length===3&&gp.gauges.every(g=>g.virtual),'261: el panel ya no pone densímetros en las celdas de la S.R.; el SF6 es de la subestación de 230 kV');
+ for(const t of['real','zonas','red','sf6','prot','trafo','diodos']){gp.show(t);assert(gp.body.innerHTML.length>200,'Contenido de '+t);}
  gp.show('sf6');assert(/Duval/.test(gp.body.innerHTML)&&/HF/.test(gp.body.innerHTML),'Corrige el triángulo de Duval: SF6 se revisa por subproductos, no por gases en aceite');
- gp.toggle(true);gp.leak={on:true,cell:1,rate:.05,clock:0};for(let i=0;i<40;i++)gp.update(.1);assert(gauges[1].rho<.85&&sf6State256(gauges[1].rho)==='block','La fuga baja la aguja hasta el bloqueo');assert.equal(gauges[0].rho,1,'Las otras celdas no cambian');
+ gp.toggle(true);gp.leak={on:true,cell:1,rate:.05,clock:0};for(let i=0;i<40;i++)gp.update(.1);assert(gp.gauges[1].rho<.85&&sf6State256(gp.gauges[1].rho)==='block','La fuga baja la aguja hasta el bloqueo');assert.equal(gp.gauges[0].rho,1,'Las otras bahías no cambian');
  gp.th.running=true;gp.th.K=1.2;gp.th.fanFail=true;for(let i=0;i<200;i++)gp.update(.1);assert(gp.thermal.tripped,'Simulación térmica: sin ventiladores dispara');
- gp.dispose();assert(!m.getObjectByName('Densimetro_SF6_256'),'Al cerrar se retiran los densímetros');}
+ gp.dispose();}
 console.log('256 PASS: 230 kV en SF6 (4 × 60 MVA), FP ≥ 0.95, curva IEC inversa + 50, ventilación/alarma/disparo del transformador, pérdidas de 12 diodos (Id/6), densímetros SF6 en 3 celdas MT con alarma y bloqueo, anillo de 15 kV.');
