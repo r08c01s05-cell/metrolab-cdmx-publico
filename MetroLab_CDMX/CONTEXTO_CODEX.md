@@ -145,3 +145,6 @@ Rama mejora/fondo264. El fondo y la niebla de las estaciones cubiertas pasan de 
 
 ## Edificio PCC265
 Rama mejora/edificio-pcc265. Menú «06 · Puestos Centrales de Control» (game86.js, modo 'pcc') carga pcc-building265.js: selector P.C.C. 1 / P.C.C. 2, edificio procedural con fachada, corte, armado animado y ocho niveles con equipo según las diapositivas (FLOORS265). P.C.C. 2 solo con su subestación de alumbrado y fuerza. Medidas y acomodo interno ilustrativos. Ver docs/revision265.md.
+
+## Acabados PCC266
+Rama mejora/texturas-pcc266. pcc-building265.js: paint266/kindOf266/dress266 aplican 9 texturas procedurales en gris (concreto, asfalto, metal, gabinete, radiador, celosía, madera, pantalla, porcelana) según el nombre de la pieza, más sombras PCFSoft, ACES, cielo en degradado y contornos. No cambia la geometría. Prueba en verificar_edificio_pcc265.mjs.
