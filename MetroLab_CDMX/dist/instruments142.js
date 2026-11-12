@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 let bytes;
 export async function instrument142(kind){
  bytes||=(async()=>{const r=await fetch('./models/revision142/instrumentos142.glb.gz?v=143');if(!r.ok)throw Error('No se pudo cargar el instrumento');return new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();})().catch(e=>{bytes=null;throw e;});

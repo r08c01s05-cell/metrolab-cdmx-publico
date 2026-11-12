@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 import {mergeGeometries} from './vendor/BufferGeometryUtils.js';
 export const SR_PARTS126=[
  ['mt','01 · Grupo seccionador (Intersec)','Llegada del cable de 15 kV','En la S.R. real aquí están la mufa terminal del cable de 15 kV, un seccionador tripolar que aísla la subestación y el transformador auxiliar de 15 kV / 220 V CA. El interruptor de 15 kV no está en la S.R.: está en el P.C.C. La maqueta lo dibuja como tres celdas con interruptor y relés, que es una licencia didáctica.'],

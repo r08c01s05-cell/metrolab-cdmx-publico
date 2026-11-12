@@ -5,7 +5,7 @@ import {prepareImported137,selectPassenger137,attachInfant138} from './passenger
 import {detailedBudget259} from './passenger-budget259.js?v=259';
 import {InstancedPassengers121,selectDetailed121} from './instanced-passengers121.js?v=260';
 import{avatarDetail119,applyCloth120}from'./passenger-cloth119.js?v=130';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {prepareWardrobe,applyWardrobe} from './passenger-wardrobe.js?v=225';

@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 
 // A thin fabric work mat, separate from the retired preparation board in the bag.
 export function workMat195(width,depth){

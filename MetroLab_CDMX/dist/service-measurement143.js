@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {probeTemplate139,fitProbe139} from './repair-tools139.js?v=205';
+import {probeTemplate139,fitProbe139} from './repair-tools139.js?v=264';
 import {ProbeMotion143,probeParking143,probeContact143,probeTail143} from './measurement-probes143.js?v=143';
 import {updateCable142} from './flexible-cable142.js?v=142';
 export async function serviceMeasurement143(bench,id){

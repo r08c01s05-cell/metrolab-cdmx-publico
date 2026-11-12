@@ -3,13 +3,13 @@ import {coverBattery177} from './battery-cover177.js?v=196';
 import {industrialFinish176} from './industrial-finish176.js?v=205';
 import {geometryTransform146} from './geometry-transform146.js?v=148';
 import {partitionSubstation144} from './substation-spread144.js?v=144';
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {mergeGeometries} from './vendor/BufferGeometryUtils.js';
 import {detailSubstation251} from './substation-detail251.js?v=251';
 import {recordSf6Anchors256} from './grid-substation256.js?v=263';
-import {SR_PARTS126} from './rectifier-model126.js?v=261';
+import {SR_PARTS126} from './rectifier-model126.js?v=264';
 let bytes;
 export async function loadRectifier127(){
  bytes||=(async()=>{const r=await fetch('./models/revision142/subestacion142.glb.gz?v=150');if(!r.ok)throw Error('No se pudo cargar el GLB de la subestación ('+r.status+').');return new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();})().catch(e=>{bytes=null;throw e;});

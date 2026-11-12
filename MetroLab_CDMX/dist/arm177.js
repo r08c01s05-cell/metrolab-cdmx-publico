@@ -1,4 +1,4 @@
-import {refineSurfaceMaterials100} from './visual-quality100.js?v=205';
+import {refineSurfaceMaterials100} from './visual-quality100.js?v=264';
 import * as T from 'three';
 // Clip the authored forearm at the wrist, including triangles that cross the
 // plane. Dropping complete triangles left a serrated edge around the cuff.

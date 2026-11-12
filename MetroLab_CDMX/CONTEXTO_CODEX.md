@@ -139,3 +139,6 @@ Rama mejora/mando262. control262.js: puestos de mando (P.C.C., P.D.C. 5.º piso,
 
 ## PCC263
 Rama mejora/pcc263. pcc263.js: botón «P.C.C.» (instalado desde driving107), esquema de línea con trenes, zonas y S.R. de Línea 1 (ZONE_STATE261 compartido con grid-substation256), flujos motor/generador/resistencias con snapshot263 y órdenes: HoldBook263 (retención por t.wait de trenes ya detenidos), energía de línea y emergencia por los botones existentes. No toca engine.js. Ver docs/revision263.md.
+
+## Fondo264
+Rama mejora/fondo264. El fondo y la niebla de las estaciones cubiertas pasan de #18232a a #5d7482 (visual-quality100.js, palette122.covered) porque el usuario lo veía muy oscuro.
