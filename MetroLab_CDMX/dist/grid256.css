@@ -34,3 +34,4 @@
 .gp261-check li{display:grid;gap:1px;padding:6px 9px;border-radius:8px;background:#16282e;border:1px solid #2e9d55;font-size:12px}
 .gp261-check li.no{border-color:#e8b32a}.gp261-check li.no b{color:#ffd38a}.gp261-check span{color:#c9d8d4}
 .gp261-table{width:100%;border-collapse:collapse;margin:6px 0;font-size:12px}.gp261-table th,.gp261-table td{border:1px solid #30484f;padding:4px 7px;text-align:left}.gp261-table th{background:#16282e;color:#8bcbb8}
+.gp262-steps{margin:6px 0;padding-left:20px;display:grid;gap:3px;font-size:12px;color:#93a39d}.gp262-steps li.done{color:#79dbc1;text-decoration:line-through}.gp262-steps li.next{color:#ffd38a;font-weight:600}

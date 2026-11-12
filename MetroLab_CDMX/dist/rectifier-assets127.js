@@ -8,7 +8,7 @@ import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {mergeGeometries} from './vendor/BufferGeometryUtils.js';
 import {detailSubstation251} from './substation-detail251.js?v=251';
-import {recordSf6Anchors256} from './grid-substation256.js?v=261';
+import {recordSf6Anchors256} from './grid-substation256.js?v=262';
 import {SR_PARTS126} from './rectifier-model126.js?v=261';
 let bytes;
 export async function loadRectifier127(){
