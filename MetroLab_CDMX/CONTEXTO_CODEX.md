@@ -148,3 +148,6 @@ Rama mejora/edificio-pcc265. Menú «06 · Puestos Centrales de Control» (game8
 
 ## Acabados PCC266
 Rama mejora/texturas-pcc266. pcc-building265.js: paint266/kindOf266/dress266 aplican 9 texturas procedurales en gris (concreto, asfalto, metal, gabinete, radiador, celosía, madera, pantalla, porcelana) según el nombre de la pieza, más sombras PCFSoft, ACES, cielo en degradado y contornos. No cambia la geometría. Prueba en verificar_edificio_pcc265.mjs.
+
+## PCC2 267
+Rama mejora/pcc2-267. pcc-building265.js: AREAS267 (sala de regulación con tableros de control óptico por línea, cuarto técnico de respaldo telecom/CBTC de la Nueva Línea 1, subestación de alumbrado y fuerza), PCC2_LINES267, PCC2_NOTES267 con discrepancias (Delicias 67 vs Zaragoza; Línea 12 solo en la infografía). Ver docs/revision267.md.
