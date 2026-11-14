@@ -151,3 +151,6 @@ Rama mejora/texturas-pcc266. pcc-building265.js: paint266/kindOf266/dress266 apl
 
 ## PCC2 267
 Rama mejora/pcc2-267. pcc-building265.js: AREAS267 (sala de regulación con tableros de control óptico por línea, cuarto técnico de respaldo telecom/CBTC de la Nueva Línea 1, subestación de alumbrado y fuerza), PCC2_LINES267, PCC2_NOTES267 con discrepancias (Delicias 67 vs Zaragoza; Línea 12 solo en la infografía). Ver docs/revision267.md.
+
+## Entorno PCC268
+Rama mejora/entorno-pcc268. pcc-building265.js: surroundings268 (grupo Entorno268, piezas E268_<tipo>_*), structure268/shell268 (estructura por piso, corte del P.C.C. 2) y detail268 (hijos D268_<tipo> en cada equipo). kindOf266 reconoce esos prefijos. Entorno y detalle son ilustrativos. Ver docs/revision268.md.
