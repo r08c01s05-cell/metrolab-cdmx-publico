@@ -39,3 +39,16 @@ console.log('265 PASS: P.C.C. 1 con sótano, planta baja y seis pisos según las
  assert.deepEqual(meshes,before,'No se agregan ni quitan piezas');assert(shadows>300&&edges>300);assert(!b1.getObjectByName('Terreno').castShadow);assert.equal(b1.getObjectByName('Transformador_TA1').userData.kind266,'metal');
  assert.notEqual(b1.getObjectByName('Transformador_TA1').material,b1.getObjectByName('Radiador_TA1').material);assert(dress266(buildPcc2())>10);
  console.log('266 PASS: acabados del apartado P.C.C. (9 texturas procedurales, sombras y contornos) sin cambiar las piezas.');}
+// 268: entorno urbano, estructura y detalle de equipos, sin alterar las piezas documentadas.
+{const {detail268,kindOf266}=await import('../dist/pcc-building265.js');
+ for(const[name,bb,minDetail]of[['pcc1',buildPcc1(),350],['pcc2',buildPcc2(),30]]){const env=bb.getObjectByName('Entorno268');assert(env,'Entorno en '+name);assert.equal(bb.userData.surroundings,env);const c=new Map();env.traverse(o=>{if(o.name)c.set(o.name,(c.get(o.name)||0)+(o.isInstancedMesh?o.count:1));});
+  assert(c.get('E268_bark_troncos')>=20,'Árboles');assert(c.get('E268_leaves_follaje')+c.get('E268_leaves_follaje2')===c.get('E268_bark_troncos')*4);assert(c.get('E268_windows_edificio')>=10,'Edificios vecinos');assert(c.get('E268_road_calle')===4&&c.get('E268_sidewalk_banqueta')>=8);assert(c.get('E268_paint_carriles')>20&&c.get('E268_paint_cebras')>20);assert(c.get('E268_auto')>=6&&c.get('E268_light_cabezas')>=6&&c.get('E268_metal_postes')>30);
+  assert(bb.userData.detailed268>=minDetail,'Equipos detallados en '+name+': '+bb.userData.detailed268);
+  // Ningún edificio vecino invade el predio.
+  const lim=name==='pcc1'?31:48;env.traverse(o=>{if(o.name==='E268_windows_edificio')assert(Math.abs(o.position.x)-o.scale.x/2>lim||Math.abs(o.position.z)-o.scale.z/2>28,'Vecino fuera del predio');});}
+ const b1=buildPcc1();for(const f of b1.userData.floors){assert(f.userData.structure,'Estructura en '+f.name);assert.equal(f.userData.structure.getObjectByName('E268_concrete_columnas').count,24,'12 columnas perimetrales con capitel');}
+ const ta=b1.getObjectByName('Transformador_TA1');assert(ta.children.filter(o=>/^D268_/.test(o.name)).length>=12,'Transformador con conservador, base, ventiladores y tablero');
+ const mufa=b1.getObjectByName('Mufa_llegada_A');assert(mufa.children.filter(o=>o.name==='D268_porcelain').length>=4,'Aislador con faldones');
+ assert.equal(kindOf266('E268_windows_edificio'),'windows');assert.equal(kindOf266('D268_porcelain'),'porcelain');assert.equal(kindOf266('E268_road_calle'),'asphalt');assert.equal(kindOf266('D268_glass'),null);
+ const again=detail268(buildPcc2());assert(again>=30);
+ console.log('268 PASS: entorno urbano (calles, banquetas, árboles, luminarias, autos y edificios vecinos), estructura por piso y equipos detallados en ambos P.C.C.');}
