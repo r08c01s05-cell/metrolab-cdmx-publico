@@ -33,6 +33,8 @@ export async function detailedEnergy162(base,type,id='NM22'){
  const materials=new Map(),owned=new Set(),bodyMaterials=new Set(),motorParts=[],groups=base.groups;
  function mat(source,part){const key=source.uuid+part;if(!materials.has(key)){const m=source.clone();inheritSurfaceDetail205(source,m);if(part==='body'){m.side=T.DoubleSide;bodyMaterials.add(m);}materials.set(key,m);owned.add(m);}return materials.get(key);}
  for(const key of['body','track',...(type==='pneumatic'?['collector']:[])])clear(groups.get(key));
+ // El cofre inicial solo define la maqueta provisional; se sustituyen sus interiores por el equipo de la arquitectura elegida.
+ for(const o of [...groups.get('power').children])if(!o.userData.cover160){o.geometry?.dispose();o.removeFromParent();}
  if(type==='pneumatic')clear(groups.get('bogie'));
  else{
   // An aerial supply is a didactic comparison. The available fleet bodies are
@@ -42,7 +44,7 @@ export async function detailedEnergy162(base,type,id='NM22'){
  source.updateMatrixWorld(true);const rotation=new T.Matrix4().makeRotationY(Math.PI/2),shift=new T.Matrix4().makeTranslation(5.7,.0,0),normalization=rotation.clone().multiply(shift);
  let actual=0;
  source.traverse(o=>{if(!o.isMesh)return;for(let n=o;n;n=n.parent)if(!n.visible)return;
-  const family=o.userData.familia_visual||'',category=partCategory(o.name,family),motor=category==='motors',collector=category==='collectors';
+  let family=o.userData.familia_visual||'';for(let parent=o.parent;!family&&parent;parent=parent.parent)family=parent.userData.familia_visual||'';const category=partCategory(o.name,family),motor=category==='motors',collector=category==='collectors';
   let part=collector?'collector':motor||category==='mechanics'?'bogie':'body';
   if(type!=='pneumatic'&&(collector||part==='bogie'&&!motor))return;
   const matrix=normalization.clone().multiply(o.matrixWorld),geo=cropGeometry162(o.geometry,matrix,-3,3);if(!geo)return;
