@@ -1,0 +1,15 @@
+#corte-electrico-metro {
+    display:grid; gap:calc(var(--font-size-base,14px)*.75);
+    --cem-ac:var(--blue,var(--viz-series-1));
+    --cem-dc:var(--orange,var(--viz-series-2));
+    --cem-ret:var(--green,var(--viz-series-3));
+  }
+  #corte-electrico-metro canvas { display:block; width:100%; height:clamp(158px,36vw,385px); }
+  #corte-electrico-metro .cem-key::before {
+    content:""; display:inline-block; width:1.2em; margin-right:.4em;
+    vertical-align:middle; border-top:2px solid var(--cem-key);
+  }
+  #corte-electrico-metro .cem-ac { --cem-key:var(--cem-ac); }
+  #corte-electrico-metro .cem-dc { --cem-key:var(--cem-dc); }
+  #corte-electrico-metro .cem-ret { --cem-key:var(--cem-ret); }
+  #corte-electrico-metro .cem-ret::before { border-top-style:dashed; }
