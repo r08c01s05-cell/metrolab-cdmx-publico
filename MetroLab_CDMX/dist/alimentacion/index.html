@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alimentación eléctrica del Metro · MetroLab</title>
+  <link rel="stylesheet" href="./pagina.css">
+  <link rel="stylesheet" href="./maqueta.css">
+  <script src="./maqueta.js" defer></script>
+  <script src="./activar-3d.js" defer></script>
+  <script type="importmap">
+    {"imports":{"three":"../vendor/three.module.js"}}
+  </script>
+  <script src="./practica.js" defer></script>
+</head>
+<body>
+  <header class="cabecera">
+    <div class="ancho barra">
+      <strong>MetroLab</strong>
+      <nav aria-label="Secciones de la página">
+        <a href="#explorar">Maqueta</a>
+        <a href="#practica">Práctica</a>
+        <a href="#fuentes">Fuentes</a>
+      </nav>
+    </div>
+  </header>
+  <main class="ancho">
+    <header class="introduccion">
+      <p class="rotulo">Alimentación eléctrica del Metro</p>
+      <h1>De CFE a la vía del Metro</h1>
+      <p>Sigue la energía desde la acometida hasta el tren y el retorno por los rieles. Cambia de línea para comparar cómo se alimentan la barra guía y la catenaria.</p>
+    </header>
+    <section id="explorar" aria-labelledby="titulo-maqueta">
+      <div id="corte-electrico-metro">
+        <div class="barra herramientas">
+          <h2 id="titulo-maqueta">Maqueta en corte</h2>
+          <label>Línea o configuración
+            <select data-system>
+              <option value="l1">Línea 1 · Metro-Energía</option>
+              <option value="l8">Línea 8 · Estrella</option>
+              <option value="lb">Línea B · Oceanía</option>
+              <option value="la">Línea A · Guelatao</option>
+              <option value="l12">Línea 12 · Estrella</option>
+              <option value="hist">Buen Tono histórico</option>
+            </select>
+          </label>
+        </div>
+        <div class="visor" data-visor>
+          <canvas data-scene role="img" aria-label="Corte del terreno con equipos de CFE, subestación, rectificador, vía y tren. Los botones de etapa identifican cada tramo."></canvas>
+        </div>
+        <div class="controles-3d" data-controles-3d hidden>
+          <button type="button" data-general>Vista general</button>
+          <button type="button" data-patio>Patio de transformación</button>
+          <button type="button" data-guias aria-pressed="true">Guías eléctricas</button>
+          <button type="button" data-acercar>Acercar equipo</button>
+          <button type="button" data-flujo>Pausar flujo</button>
+          <span>Arrastra para girar · Rueda para acercar · Clic sobre un equipo para seleccionarlo</span>
+        </div>
+        <p class="estado-3d" data-estado-3d role="status"></p>
+        <div class="leyenda" aria-label="Leyenda de conductores">
+          <span class="cem-key cem-ac">Corriente alterna</span>
+          <span class="cem-key cem-dc">Tracción en corriente continua</span>
+          <span class="cem-key cem-ret">Retorno por rieles</span>
+        </div>
+        <div class="etapas" role="group" aria-label="Etapas del recorrido eléctrico">
+          <button type="button" data-etapa="cfe" aria-pressed="true">Acometida CFE <span data-valor></span></button>
+          <button type="button" data-etapa="seat" aria-pressed="false">Subestación receptora <span data-valor></span></button>
+          <button type="button" data-etapa="cable" aria-pressed="false">Alimentador <span data-valor></span></button>
+          <button type="button" data-etapa="tr" aria-pressed="false">Transformador seco <span data-valor></span></button>
+          <button type="button" data-etapa="rec" aria-pressed="false">Rectificador y protección <span data-valor></span></button>
+          <button type="button" data-etapa="track" aria-pressed="false">Vía y captación <span data-valor></span></button>
+          <button type="button" data-etapa="return" aria-pressed="false">Retorno por rieles</button>
+          <button type="button" data-etapa="aux" aria-pressed="false">Alumbrado y fuerza <span data-valor></span></button>
+        </div>
+        <p class="lectura" data-detail aria-live="polite"></p>
+      </div>
+    </section>
+    <section id="practica" aria-labelledby="titulo-practica">
+      <h2 id="titulo-practica">Práctica de identificación</h2>
+      <form>
+        <fieldset>
+          <legend data-pregunta></legend>
+          <div data-opciones></div>
+        </fieldset>
+        <div class="acciones">
+          <button type="submit">Comprobar respuesta</button>
+          <button type="button" data-siguiente hidden>Siguiente pregunta</button>
+        </div>
+        <p data-resultado role="status"></p>
+      </form>
+    </section>
+    <section id="fuentes" aria-labelledby="titulo-fuentes">
+      <h2 id="titulo-fuentes">Fuentes técnicas</h2>
+      <ul>
+        <li><a target="_blank" rel="noopener" href="https://www.semovi.cdmx.gob.mx/storage/app/media/Publicaciones/6to_Infome_SEMOVI.pdf">SEMOVI · Metro-Energía y distribución de 15 kV</a></li>
+        <li><a target="_blank" rel="noopener" href="https://tesis.ipn.mx/jspui/bitstream/123456789/21448/1/TESIS%20FINAL.pdf">IPN · Grupo rectificador de 12 pulsos, figura 4.3</a></li>
+        <li><a target="_blank" rel="noopener" href="https://tesiunamdocumentos.dgb.unam.mx/pmig2016/0231542/0231542.pdf">UNAM · Distribución eléctrica de la Línea 8</a></li>
+        <li><a target="_blank" rel="noopener" href="https://zaloamati.azc.uam.mx/bitstreams/f81375b0-debd-459c-9400-34b53b9a99b0/download">UAM · Abastecimiento eléctrico de la Línea B</a></li>
+        <li><a target="_blank" rel="noopener" href="https://servidoresx3.finanzas.cdmx.gob.mx/egresos/cp2009/pdf/stv04.pdf">Cuenta Pública · Catenaria de la Línea A</a></li>
+        <li><a target="_blank" rel="noopener" href="https://www.metro.cdmx.gob.mx/storage/app/media/PROVETREN/PROCESO-DE-ADJUDICACION/3%20PROPUESTAS%20PRESENTADAS%20POR%20POSIBLES%20PROPONENTES/CARPETA%201%20SOLUCION%20TECNICA%20ALSTOM%20MEXICANA%20S.A.%20DE%20C.V/ANEXO%201%20ALSTOM.pdf">STC · Especificaciones de la Línea 12</a></li>
+      </ul>
+      <p>Maqueta didáctica con geometría esquemática. Las tensiones secundarias identificadas como ejemplos corresponden a equipos específicos.</p>
+    </section>
+  </main>
+</body>
+</html>
