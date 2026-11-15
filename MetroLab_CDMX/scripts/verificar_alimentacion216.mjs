@@ -13,7 +13,12 @@ for(const id of ['NM22','NM79','MP82'])for(const type of ['pneumatic','overhead'
  assert(model.root.userData.actualTrackMeshes162>0,'Existing detailed track is present');
  const source=[];model.root.traverse(o=>{if(o.isMesh&&o.userData.actualAsset162)source.push(o);});
  assert(source.some(o=>o.parent===model.groups.get('body')),'Actual car body retained');
- if(type==='pneumatic')assert(source.some(o=>o.parent===model.groups.get('bogie')),'Actual bogie retained');
+ if(type==='pneumatic'){
+  const motor=source.filter(o=>/^Motor_/.test(o.name));
+  assert(motor.length>0,'Motor de tracción del GLB visible en el corte para '+id);
+  assert(motor.every(o=>o.parent===model.groups.get('bogie')),'Piezas del motor clasificadas en bogie');
+  assert(motor.some(o=>id==='NM22'?/Rotor_jaula/.test(o.name):/Rotor_inducido/.test(o.name)),'Rotor correspondiente al tren '+id);
+ }
  const matrices=source.map(o=>o.matrix.clone());
  model.setSection(false);assert(source.filter(o=>o.parent===model.groups.get('body')).every(o=>!o.material.clippingPlanes?.length));
  model.setSection(true);assert(source.filter(o=>o.parent===model.groups.get('body')).some(o=>o.material.clippingPlanes?.length),'Actual car is sectioned');
