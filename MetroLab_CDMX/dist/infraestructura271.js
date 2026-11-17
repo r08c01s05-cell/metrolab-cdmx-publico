@@ -17,23 +17,44 @@ function createTunnelDialog(doc) {
  dialog.setAttribute('aria-labelledby','infra271-title');
  dialog.innerHTML = `<header><h2 id="infra271-title">Tipos de túnel</h2><button type="button" data-close>Volver</button></header>
  <div class="infra271-choices" aria-label="Sección transversal"><button type="button" data-form="cajon">Tipo cajón</button><button type="button" data-form="circular">Circular</button></div>
- <div class="infra271-grid"><figure><div class="infra271-section" aria-hidden="true"><div class="infra271-duct"></div><div class="infra271-train"></div><div class="infra271-track"></div><div class="infra271-walk"></div><div class="infra271-drain"></div></div>
- <figcaption>Corte transversal esquemático · sin escala<br><span>Gris: revestimiento y vía · naranja: tren · amarillo: pasarela · azul: drenaje</span></figcaption></figure>
+ <div class="infra271-grid"><figure><div class="infra273-stage"><canvas aria-label="Modelo 3D del túnel"></canvas><output role="status" data-model-status></output></div>
+ <div class="infra271-choices" aria-label="Orientación del modelo"><button type="button" data-view="front">Corte frontal</button><button type="button" data-view="orbit">Vista ¾</button></div>
+ <figcaption><span data-model-info></span><br>Arrastra para girar · rueda para acercar<br>Amarillo: borde de pasarela · azul: drenaje</figcaption></figure>
  <article aria-live="polite"><h3></h3><dl><dt>Sección y estructura</dt><dd></dd><dt>Construcción</dt><dd></dd><dt>Operación e inspección</dt><dd></dd></dl></article></div>
- <p>La forma y el método constructivo se eligen según el proyecto. Los cortes muestran una sola vía para facilitar la comparación.</p>
+ <p>La forma y el método constructivo se eligen según el terreno, los accesos de obra y el espacio interior requerido.</p>
  <p><a href="https://highways.dot.gov/sites/fhwa.dot.gov/files/FHWA-IF-05-002.pdf" target="_blank" rel="noopener noreferrer">Fuente técnica · Manual de inspección de túneles carreteros y ferroviarios, FHWA, tabla 2.1</a></p>`;
+ let view, opening=0;
+ const status=dialog.querySelector('[data-model-status]');
  const show = form => {
   const data = TUNELES[form];
   dialog.dataset.form = form;
   dialog.querySelector('h3').textContent = data.title;
+  dialog.querySelector('[data-model-info]').textContent = form==='cajon'?'Cajón de dos vías · basado en el tramo de Línea 1 del simulador':'Tubo de una vía · modelo ilustrativo con dovelas';
   dialog.querySelectorAll('dd').forEach((dd,i) => { dd.textContent = [data.structure,data.method,data.operation][i]; });
   dialog.querySelectorAll('[data-form]').forEach(button => button.setAttribute('aria-pressed',String(form===button.dataset.form)));
+  view?.show(form);
  };
  dialog.querySelector('[data-close]').onclick = () => dialog.close();
  dialog.querySelectorAll('[data-form]').forEach(button => { button.onclick = () => show(button.dataset.form); });
+ dialog.querySelectorAll('[data-view]').forEach(button => { button.onclick = () => view?.orient(button.dataset.view); });
+ dialog.addEventListener('close',()=>{opening++;view?.close();view=null;});
  show('cajon');
  doc.body.append(dialog);
- return dialog;
+ return async () => {
+  if(dialog.open)return;
+  dialog.showModal();
+  const token=++opening;
+  status.textContent='Preparando visor 3D…';
+  try {
+   const {openTunnelView273}=await import('./tunnel-view273.js?v=273');
+   if(!dialog.open||token!==opening)return;
+   view=openTunnelView273(dialog.querySelector('canvas'),status);
+   void view.show(dialog.dataset.form);
+  } catch(error) {
+   if(dialog.open&&token===opening)status.textContent='No se pudo iniciar el visor 3D.';
+   console.error(error);
+  }
+ };
 }
 
 export function installInfraestructura271(shell, doc, win) {
@@ -69,6 +90,6 @@ export function installInfraestructura271(shell, doc, win) {
   update();
  };
  clear.onclick = () => { win.metroViewState?.()?.engine.clearIncident271(); update(); };
- host.querySelector('[data-tunnel]').onclick = () => { dialog ??= createTunnelDialog(doc); dialog.showModal(); };
+ host.querySelector('[data-tunnel]').onclick = () => { dialog ??= createTunnelDialog(doc); void dialog(); };
  return update;
 }
