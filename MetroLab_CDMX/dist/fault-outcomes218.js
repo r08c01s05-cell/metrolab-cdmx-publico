@@ -1,8 +1,15 @@
 import {sampleFault217,FAULT_CASES217,KEYFRAMES217} from './fault-catalog217.js?v=270';
 
+export const fatalSteps271 = [
+ 'Servicio normal antes del incidente.',
+ 'Una persona cae a la vía. Se activa el aviso y comienza el frenado.',
+ 'La circulación queda bloqueada mientras se protege la zona.',
+ 'El personal de atención confirma el fallecimiento en esta recreación. El servicio permanece suspendido.'
+];
 const clamp=x=>Math.max(0,Math.min(1,x));
 const ramp=(p,a,b)=>{const t=clamp((p-a)/(b-a));return t*t*(3-2*t);};
 export function variants218(id){
+ if(id==='train-person')return [['fatal','Caída con desenlace fatal'],['reference','Detención y atención de la persona']];
  if(id==='sr-cooling')return [['reference','Protección térmica disponible'],['unprotected','Protección no actúa · hipótesis adicional']];
  if(id==='train-brake')return [['reference','Complemento de fricción · supuesto'],['slide','Adherencia reducida + rueda bloqueada · hipótesis adicional']];
  return [['reference','Secuencia de referencia']];
@@ -45,7 +52,9 @@ export function sampleOutcome218(id,progress,variant='reference'){
  if(id==='train-air')result=p>=.2?'Compresor detenido; baja la reserva. Tren inmóvil por condición inicial del ensayo, no por una lógica de freno deducida.':'Tren detenido; compresor disponible.';
  if(id==='train-supply')result=p>=.2?'Sin alimentación de tracción: el esfuerzo decae y el vagón continúa por inercia con las ruedas girando.':'Vagón en movimiento con alimentación disponible.';
  if(id==='train-brake')result=sliding?(p>=.48?'Vagón deslizándose con ruedas bloqueadas: condición adicional supuesta, no efecto universal del fallo eléctrico.':'Se aproxima una condición supuesta de baja adherencia y bloqueo.'):(p>=.92?'El vagón se detiene con el complemento de fricción supuesto.':'El vagón desacelera; las ruedas mantienen rodadura en esta comparación.');
+ const fatal=id==='train-person'&&variant==='fatal';
+ if(fatal){s.note=fatalSteps271[s.phase];result=s.note;}
  const breakerOpening=breakerOpen?.12+.88*ramp(p,.75,.80):0;
  const compressorAngle=Math.min(p,.2)*Math.PI*80;
- return {...s,outcome:{distance,wheelDistance,fanAngle,fanRunning,breakerOpen,breakerOpening,compressorAngle,damage,doorOpening,sliding:sliding&&p>=.48,moving:speed(id,p,variant)>.001,result,unprotected}};
+ return {...s,outcome:{fatal,distance,wheelDistance,fanAngle,fanRunning,breakerOpen,breakerOpening,compressorAngle,damage,doorOpening,sliding:sliding&&p>=.48,moving:speed(id,p,variant)>.001,result,unprotected}};
 }

@@ -3,8 +3,11 @@
 // answers score points and stars, and the best result per scenario is remembered in this browser.
 import {FAULT_CASES217} from './fault-catalog217.js?v=270';
 
+import {fatalSteps271} from './fault-outcomes218.js?v=271';
+
 const CHECKPOINTS229=[[.2,1],[.5,2],[.75,3]];
 const VARIANT_STEPS229={
+ 'train-person:fatal':fatalSteps271,
  'sr-cooling:unprotected':{3:'La protección no actúa: el calentamiento continúa y el aislamiento puede dañarse.'},
  'train-brake:slide':{3:'Con baja adherencia las ruedas se bloquean y el vagón se desliza.'}
 };

@@ -13,7 +13,7 @@
     "surface-crowd210.js": "afceb3f5af462801c3f8f790ed3d874ef190cd65464496f3914bb29879c04416",
     "train-boarding200.js": "09a92aa29357d1ec5da67de70c3647437c2ba04ece4b5d8f5e37bd6faeea4654",
     "track-details99.js": "5ebb8cd4a1cf3ab0a7085ddd0f753eb4dba58fbeda96cd981823860ece72c35e",
-    "engine.js": "af9c45425642b69e1a7b6a5867ab865c6658da9497ef8d4eb40b9d359f2a81f5"
+    "engine.js": "8bd93ac5ff96bedc2a188862416c69c6729b23ab88088293f7f9e383c05b0089"
   },
   "cambios_autorizados": [
     {
@@ -25,6 +25,11 @@
       "revision": 270,
       "archivo": "engine.js",
       "motivo": "Solicitud de revisar condiciones por línea: solo cambia rainScope inicial de line a exterior. Sin cambios de trazado, apoyos ni integración física. Cubierto por verificar_revision270 y verificar_clima103."
+    },
+    {
+      "revision": 271,
+      "archivo": "engine.js",
+      "motivo": "El ejercicio de persona en vía frena y retiene solo la línea afectada."
     }
   ]
 }
