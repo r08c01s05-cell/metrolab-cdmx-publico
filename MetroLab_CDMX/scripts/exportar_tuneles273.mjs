@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import * as Three from '../dist/vendor/three.module.js';
 
 const colors = {
- concreto: '#a9aaa0', dovela: '#aaa9a2', junta: '#616763', losa: '#797e7e',
+ concreto: '#a9aaa0', dovela: '#aaa9a2', junta: '#616763', losa: '#797e7e', baseVia: '#a2a39b',
  traviesa: '#555451', acero: '#abb5b9', pasarela: '#92978e', borde: '#e8b844',
  drenaje: '#567e96', charola: '#364450', luminaria: '#f9ebc5'
 };
@@ -50,9 +50,9 @@ function exportGLB(name, build) {
  fs.writeFileSync(new URL('../dist/models/'+name+'.glb',import.meta.url),Buffer.concat([header,jsonChunk,binHeader,...chunks]));
 }
 
-function track(box,x) {
- for(const side of [-1,1])box('Riel',[.09,.13,depth],[x+side*.70,.15,0],'acero');
- for(let z=-5.7;z<6;z+=.6)box('Traviesa',[1.85,.095,.24],[x,.045,z],'traviesa');
+function track(box,x,elevation=0) {
+ for(const side of [-1,1])box('Riel',[.09,.13,depth],[x+side*.70,.15+elevation,0],'acero');
+ for(let z=-5.7;z<6;z+=.6)box('Traviesa',[1.85,.095,.24],[x,.045+elevation,z],'traviesa');
 }
 function walkway(box,x) {
  box('Pasarela',[.72,.23,depth],[x,.19,0],'pasarela');
@@ -94,5 +94,8 @@ exportGLB('Tunel_circular273',(box,mesh)=>{
  }
  box('Solera',[4.55,.42,depth],[0,-.22,0],'losa');
  box('Colector de drenaje bajo la solera',[.38,.19,depth],[0,-.61,0],'drenaje');
- track(box,-.20);walkway(box,1.63);installations(box,2.62,4.75);
+ const trackX=-.20, supportHeight=.19, slabTop=-.01;
+ box('Base continua de concreto bajo la vía',[2.2,supportHeight,depth],[trackX,slabTop+supportHeight/2,0],'baseVia');
+ track(box,trackX,slabTop+supportHeight+.0025);
+ walkway(box,1.63);installations(box,2.62,4.75);
 });

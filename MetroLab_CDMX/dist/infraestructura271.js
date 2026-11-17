@@ -46,7 +46,7 @@ function createTunnelDialog(doc) {
   const token=++opening;
   status.textContent='Preparando visor 3D…';
   try {
-   const {openTunnelView273}=await import('./tunnel-view273.js?v=273');
+   const {openTunnelView273}=await import('./tunnel-view273.js?v=274');
    if(!dialog.open||token!==opening)return;
    view=openTunnelView273(dialog.querySelector('canvas'),status);
    void view.show(dialog.dataset.form);

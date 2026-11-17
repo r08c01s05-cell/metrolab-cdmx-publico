@@ -5,7 +5,7 @@ import {RenderBudget101} from './render-budget101.js?v=222';
 
 const MODELS = {
  cajon: './models/Tunel_cajon273.glb',
- circular: './models/Tunel_circular273.glb'
+ circular: './models/Tunel_circular273.glb?v=274'
 };
 
 function disposeModel(model) {
