@@ -1,7 +1,7 @@
 // Laboratorio jugable 229: the 3D view fills the window and the controls live over it as a game
 // HUD. A "Reto" mode pauses before each phase and asks the player to predict what happens next;
 // answers score points and stars, and the best result per scenario is remembered in this browser.
-import {FAULT_CASES217} from './fault-catalog217.js?v=217';
+import {FAULT_CASES217} from './fault-catalog217.js?v=270';
 
 const CHECKPOINTS229=[[.2,1],[.5,2],[.75,3]];
 const VARIANT_STEPS229={

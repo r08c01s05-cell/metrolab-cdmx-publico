@@ -27,6 +27,16 @@ for(const id of ['NM22','NM79','MP82']){
  const animation=new FaultAnimation218(model,'train',scene);assert.equal(animation.doors.length,2,'A real pair of complete leaves: '+id);assert.equal(animation.wheels.length,8,'Eight actual wheel rims: '+id);
  for(const d of animation.doors){assert(d.pivot.children.some(o=>/cristal/i.test(o.name)),'Window moves with leaf');assert(d.pivot.children.some(o=>/acero/i.test(o.name)),'Steel moves with leaf');}
  for(let cycle=0;cycle<3;cycle++){
+  for(const p of [0,.2,.4,.6,1,0]){
+   animation.apply(sampleOutcome218('train-person',p));
+   assert(animation.persona270.root.visible);
+   assert.equal(animation.persona270.person.visible,p>=.2);
+   const trainBox=model.bounds(),personBox=new T.Box3().setFromObject(animation.persona270.person);
+   assert(!trainBox.intersectsBox(personBox),'No hay contacto entre tren y persona: '+id);
+   assert(animation.bounds().containsBox(trainBox),'Encuadre completo del tren');
+   if(p===1)assert(animation.persona270.responders.every(g=>g.visible));
+  }
+
   animation.apply(sampleOutcome218('train-doors',1));assert(animation.doors.every(d=>Math.abs(d.pivot.position.x-d.x)>.5));
   animation.apply(sampleOutcome218('train-brake',.7,'slide'));const angle=animation.wheels[0].pivot.rotation.z,x=model.root.position.x;
   animation.apply(sampleOutcome218('train-brake',1,'slide'));assert(model.root.position.x>x);assert.equal(animation.wheels[0].pivot.rotation.z,angle);

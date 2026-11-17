@@ -62,7 +62,7 @@ export class TrainDynamics257{
   this.pane=doc.createElement('div');this.pane.dataset.ed245Pane='dyn257';this.pane.hidden=true;this.pane.className='dy257';
   this.pane.innerHTML=`<p class="ed245-hint">Calculado sobre el tren que sigues. No cambia cómo se mueve: muestra lo que su tracción, sus neumáticos y sus frenos pueden hacer en este momento.</p>
 <h4>Esfuerzo, resistencia y adherencia</h4>
-<div class="dy257-row"><label>Pendiente <input type="range" min="-40" max="40" step="5" value="0" data-dy257-grade><output data-dy257-grade-out></output></label><label>Vía <select data-dy257-track><option value="auto">Según el clima del simulador</option><option value="dry">Seca</option><option value="wet">Mojada</option></select></label><label>μ mojado <input type="range" min=".15" max=".6" step=".05" value="${ASSUMED257.muWet}" data-dy257-mu><output data-dy257-mu-out></output></label></div>
+<div class="dy257-row"><label>Pendiente <input type="range" min="-40" max="40" step="5" value="0" data-dy257-grade><output data-dy257-grade-out></output></label><label>Vía <select data-dy257-track><option value="auto">Clima y exposición del tramo</option><option value="dry">Seca</option><option value="wet">Mojada · hipótesis manual</option></select></label><label>μ mojado <input type="range" min=".15" max=".6" step=".05" value="${ASSUMED257.muWet}" data-dy257-mu><output data-dy257-mu-out></output></label></div>
 <svg viewBox="0 0 460 250" class="dy257-chart" data-dy257-effort></svg><div class="dy257-tiles" data-dy257-effort-tiles></div>
 <h4>Freno combinado y destino de la energía</h4>
 <div class="dy257-row"><label>Línea receptiva <select data-dy257-receptive><option value="auto">Según trenes acelerando cerca</option><option value="yes">Sí</option><option value="no">No</option></select></label></div>
@@ -82,11 +82,11 @@ export class TrainDynamics257{
   this.timer=win.setInterval?.(()=>{if(!this.pane.hidden)this.render();},250);
  }
  read(){const s=this.win.metroViewState?.(),e=s?.engine;if(!e)return null;const op=e.operator,t=e.trains?.find(x=>op?x.id===op.trainId:x.id===s.selectedTrain);if(!t)return null;return{s,e,t};}
- wet(e){return this.track==='wet'||(this.track==='auto'&&e?.weather==='rain');}
+ wet(e,t){return this.track==='wet'||(this.track==='auto'&&e?.weather==='rain'&&!!t&&!!e.weatherExposure?.(t));}
  // Trains of the same line, within 2 km and gaining speed, can take regenerated energy.
  nearbyTraction(e,t){let n=0;for(const o of e.trains||[]){if(o===t||o.line!==t.line)continue;const prev=this.prevSpeeds.get(o.id);this.prevSpeeds.set(o.id,o.speed);if(prev!=null&&o.speed>prev+1e-3&&Math.abs(o.position-t.position)<2000)n++;}return n;}
  render(){
-  const r=this.read(),st=this.dash?.state;const v=r?.t.speed||0,massT=st?.massT??DOCUMENTED245.emptyT,wet=this.wet(r?.e),mu=wet?this.muWet:ASSUMED257.muDry;
+  const r=this.read(),st=this.dash?.state;const v=r?.t.speed||0,massT=st?.massT??DOCUMENTED245.emptyT,wet=this.wet(r?.e,r?.t),mu=wet?this.muWet:ASSUMED257.muDry;
   this.$('[data-dy257-mu-out]').textContent=fmt(this.muWet,2);this.$('[data-dy257-grade-out]').textContent=`${this.grade>0?'+':''}${this.grade} ‰`;
   // Effort chart.
   const X=k=>40+400*k/90,Yf=F=>220-200*F/800e3;let grid='';for(const k of[0,20,40,60,80])grid+=`<line x1="${X(k)}" x2="${X(k)}" y1="20" y2="220" stroke="#ffffff1c"/><text x="${X(k)}" y="236" fill="#93a39d" font-size="10" text-anchor="middle">${k} km/h</text>`;

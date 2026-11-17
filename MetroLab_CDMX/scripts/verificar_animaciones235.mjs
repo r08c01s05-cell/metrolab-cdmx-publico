@@ -21,6 +21,16 @@ for(const domain of ['substation','train']){
  const fx=new FaultAnimation218(model,domain,scene),show=fx.show235;
  for(const scenario of FAULT_CASES217.filter(c=>c.domain===domain)){
   const sample=(p,v='reference')=>({...sampleOutcome218(scenario.id,p,v),scenario,progress:p});
+  if(scenario.id==='train-person'){
+   fx.apply(sample(1));
+   assert(fx.persona270.root.visible&&fx.persona270.person.visible);
+   assert(fx.persona270.responders.every(g=>g.visible));
+   assert(!show.root.visible,'No se añaden chispas o efectos de avería a una persona');
+   const position=fx.persona270.person.position.clone();
+   fx.apply(sample(0));assert(!fx.persona270.person.visible);
+   fx.apply(sample(1));assert(fx.persona270.person.position.equals(position));
+   continue;
+  }
   assert(show.effects.has(scenario.id),`Efecto propio para ${scenario.id}`);
   fx.apply(sample(.5));const e=show.effects.get(scenario.id);
   assert(e.group.visible&&[...show.effects].every(([k,f])=>k===scenario.id||!f.group.visible),`${scenario.id}: solo su efecto está visible`);

@@ -1,9 +1,9 @@
-import './simulation106.js?v=255';
+import './simulation106.js?v=270';
 import {installElectricDashboard245} from './electric-dashboard245.js?v=255';
 import {installTrainLoad248} from './train-load248.js?v=255';
 import {installTrackCurrent250} from './track-current250.js?v=263';
-import {installTrainDynamics257} from './train-dynamics257.js?v=263';
-import {installOnboard258} from './onboard258.js?v=263';
+import {installTrainDynamics257} from './train-dynamics257.js?v=270';
+import {installOnboard258} from './onboard258.js?v=270';
 import {installPcc263} from './pcc263.js?v=263';
 export class DrivingConsole107{
  constructor(doc=document,win=window){this.doc=doc;this.win=win;this.$=id=>doc.getElementById(id);if(!this.$('sim106-shell')||this.$('drive107'))return;
