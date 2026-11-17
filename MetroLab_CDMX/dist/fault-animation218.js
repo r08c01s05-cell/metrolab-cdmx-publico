@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {PersonaVia270} from './persona-via270.js?v=271';
+import {PersonaVia270} from './persona-via270.js?v=272';
 import {scorchMaterial226,releaseScorch226,puffTexture226,Smoke226} from './fault-realism226.js?v=229';
 import {pocketLeaf237} from './door-pocket237.js?v=237';
 import {FaultShow235} from './fault-show235.js?v=235';
