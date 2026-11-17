@@ -43,7 +43,7 @@ assert(maxAccel257(15,full,ASSUMED257.muDry,40)<maxAccel257(15,full,ASSUMED257.m
  const dy=new TrainDynamics257({createElement:mk},win);dy.tab.onclick();assert.equal(shown,'dyn257','La pestaña se abre en el tablero');
  let out=dy.render();assert.equal(out.dist,350,'Distancia a la siguiente parada');assert.equal(out.mu,ASSUMED257.muDry);
  engine.trains[1].speed=8;engine.trains[2].speed=9;out=dy.render();assert(/1 tren acelerando/.test(els['[data-dy257-blend-tiles]'].innerHTML),'Solo cuenta el tren cercano que acelera');
- engine.weather='rain';out=dy.render();assert.equal(out.mu,ASSUMED257.muWet,'Con lluvia en el simulador la vía se toma mojada');
+ engine.weather='rain';engine.weatherExposure=()=>false;out=dy.render();assert.equal(out.mu,ASSUMED257.muDry,'El túnel no se moja por lluvia exterior');engine.weatherExposure=()=>true;out=dy.render();assert.equal(out.mu,ASSUMED257.muWet,'La lluvia moja un tramo expuesto');
  for(const k of['effort','blend','atp'])assert(/style="/.test(els[`[data-dy257-${k}]`].innerHTML),'Gráfica '+k+' con estilos en línea');
  dy.dispose();}
 console.log('257 PASS: resistencia con pendiente, adherencia seca/mojada (6/9 de la masa), freno combinado eléctrico + fricción, energía a la barra hasta 900 V o a resistencias, distancia de detención (≈191 m del ejemplo) y curva ATP arriba de la de servicio.');

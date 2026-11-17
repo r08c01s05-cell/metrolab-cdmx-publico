@@ -1,4 +1,4 @@
-import {sampleFault217,FAULT_CASES217,KEYFRAMES217} from './fault-catalog217.js?v=217';
+import {sampleFault217,FAULT_CASES217,KEYFRAMES217} from './fault-catalog217.js?v=270';
 
 const clamp=x=>Math.max(0,Math.min(1,x));
 const ramp=(p,a,b)=>{const t=clamp((p-a)/(b-a));return t*t*(3-2*t);};
@@ -15,17 +15,19 @@ export const EXTRA_SOURCES218={
 // Absolute-time sampling: seeking backwards and different display FPS give the
 // same geometry. Distances/angles below belong to a study scene, not a solver.
 function speed(id,p,variant){
+ if(id==='train-person')return 1-ramp(p,.2,.6);
  if(id==='train-supply')return sampleFault217(id,p).signals.speed;
  if(id==='train-brake')return variant==='slide'?1-.64*ramp(p,.25,1):1-ramp(p,.2,.92);
  return 0;
 }
 function rampIntegral(p,a,b){const u=clamp((p-a)/(b-a));return (b-a)*(u*u*u-.5*u*u*u*u)+Math.max(0,p-b);}
 function signalIntegral(id,key,p){const m=FAULT_CASES217.find(c=>c.id===id).metrics.find(m=>m.id===key);if(!m)return 0;let sum=0;for(let i=0;i<4;i++){const h=Math.max(0,Math.min(p,KEYFRAMES217[i+1])-KEYFRAMES217[i]),span=KEYFRAMES217[i+1]-KEYFRAMES217[i];sum+=h*m.values[i]+(m.step?0:h*h*(m.values[i+1]-m.values[i])/(2*span));}return sum;}
-function distanceIntegral(id,p,variant){if(id==='train-supply')return signalIntegral(id,'speed',p);if(id==='train-brake')return variant==='slide'?p-.64*rampIntegral(p,.25,1):p-rampIntegral(p,.2,.92);return 0;}
+function distanceIntegral(id,p,variant){if(id==='train-person')return .75*(p-rampIntegral(p,.2,.6));if(id==='train-supply')return signalIntegral(id,'speed',p);if(id==='train-brake')return variant==='slide'?p-.64*rampIntegral(p,.25,1):p-rampIntegral(p,.2,.92);return 0;}
 export function sampleOutcome218(id,progress,variant='reference'){
  const s=sampleFault217(id,progress),p=s.progress;
  const unprotected=id==='sr-cooling'&&variant==='unprotected',sliding=id==='train-brake'&&variant==='slide';
  if(unprotected){s.signals.supply=1;if(p>=.75)s.signals.heat=.82+.18*(p-.75)/.25;s.note=p<.5?s.note:'Hipótesis adicional: no actúa la protección; persiste el calentamiento y puede dañarse el aislamiento.';}
+ if(id==='train-person')s.signals.speed=speed(id,p,variant);
  const distance=8*distanceIntegral(id,p,variant);
  const wheelDistance=8*distanceIntegral(id,sliding?Math.min(p,.48):p,variant);
  const fanAngle=signalIntegral(id,'flow',p)*Math.PI*64;
@@ -34,6 +36,7 @@ export function sampleOutcome218(id,progress,variant='reference'){
  const damage=unprotected?ramp(p,.66,1):0;
  const doorOpening=id==='train-doors'?ramp(p,.2,.48):0;
  let result='';
+ if(id==='train-person')result=p<.2?'Aproximación ilustrativa; aún no hay aviso.':p<.6?'Aviso de persona en vía: tracción inhibida y frenado progresivo.':p<.75?'Tren detenido antes de la persona. Se mantiene el bloqueo de circulación.':'Personal en el andén; acceso a vías y reposición pendientes de verificación y autorización. No bajes a las vías.';
  if(id==='sr-cooling')result=unprotected?(damage>0?'Daño térmico potencial: aislamiento oscurecido y humo ilustrativo. Protección supuesta inoperante.':'Ventilación perdida; se supone que la protección no actúa.'):(breakerOpen?'Protección abierta: transformador desconectado e íntegro. El calor residual no desaparece al abrir.':p>=.2?'El ventilador pierde giro; aumenta el calentamiento.':'Ventilación en servicio; protección cerrada.');
  if(id==='sr-rectifier')result=breakerOpen?'Se abre la protección; rectificador fuera de servicio, sin destrucción supuesta.':p>=.2?'El giro del ventilador disminuye hasta detenerse.':'Refrigeración y alimentación disponibles.';
  if(id==='sr-feeder')result=breakerOpen?'Interruptor abierto: separación visible de contactos y rama aislada.':p>=.2?'Cortocircuito conceptual: la protección todavía no ha abierto en esta fase.':'Contactos cerrados: rama alimentada.';

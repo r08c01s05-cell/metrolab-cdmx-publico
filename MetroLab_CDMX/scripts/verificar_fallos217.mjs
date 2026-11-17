@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';import fs from 'node:fs';
 import {FAULT_CASES217,FAULT_SOURCES217,FaultClock217,sampleFault217} from '../dist/fault-catalog217.js';
 import {loadFaultModel217} from '../dist/fault-model217.js';
 import {trainAsset} from '../dist/depot86.js?v=212';
-assert.equal(FAULT_CASES217.length,8);assert.equal(new Set(FAULT_CASES217.map(c=>c.id)).size,8);
-for(const domain of ['train','substation'])assert.equal(FAULT_CASES217.filter(c=>c.domain===domain).length,4);
+assert.equal(FAULT_CASES217.length,9);assert.equal(new Set(FAULT_CASES217.map(c=>c.id)).size,9);
+for(const domain of ['train','substation'])assert.equal(FAULT_CASES217.filter(c=>c.domain===domain).length,domain==='train'?5:4);
 for(const c of FAULT_CASES217){assert(c.evidence&&c.inference&&c.pending);assert.equal(c.steps.length,4);for(const id of c.sources){const s=FAULT_SOURCES217[id];assert(s?.scope&&s?.locator);assert.equal(new URL(s.url).protocol,'https:');}for(let n=0;n<=100;n++){const s=sampleFault217(c.id,n/100);for(const v of Object.values(s.signals))assert(Number.isFinite(v)&&v>=0&&v<=1);assert.equal(s.alarm,n>=50);}assert.equal(sampleFault217(c.id,NaN).progress,0);}
 assert.throws(()=>sampleFault217('not-a-case',.5));
 const doors=sampleFault217('train-doors',.3);assert.equal(doors.signals.closed,0);assert.equal(doors.signals.permission,0);assert(doors.signals.command>0,'Command does not bypass the simulated interlock');
@@ -23,4 +23,4 @@ for(const id of ['NM22','NM79','MP82']){
  console.log('217 PASS study-model isolation',id);
 }
 const station=await loadFaultModel217('substation');for(const c of FAULT_CASES217.filter(c=>c.domain==='substation')){assert(station.targets.get(c.target)?.children.length);assert(!station.bounds(c.target).isEmpty());station.tint(c.target,.5);}station.dispose();
-console.log('217 PASS: eight sourced cases, causal indications, normalized signals, FPS-independent pause/seek/background playback, three actual trains and four substation assemblies; no maintenance actions.');
+console.log('217 PASS: nine sourced cases, causal indications, normalized signals, FPS-independent pause/seek/background playback, three actual trains and four substation assemblies; no maintenance actions.');

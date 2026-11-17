@@ -1,6 +1,7 @@
 // Public primary sources reviewed 2026-11-01. Only summaries and links are
 // distributed, never copies of withdrawn project documents or manufacturer PDFs.
 export const FAULT_SOURCES217=Object.freeze({
+ incident:{title:'Modelo operativo de Línea 1 · proyecto 2020',publisher:'Gobierno de la Ciudad de México',url:'https://metro.cdmx.gob.mx/storage/app/media/Banners/aclaraciones170920/bases/anexo%20I/Doc_Act/Documento%201.8%20Modelo%20Operativo.pdf',locator:'Tratamiento de una persona caída a vías; parada de movimientos y corte de corriente',scope:'Documento de proyecto, no certificación de equipos instalados ni protocolo vigente de rescate. La animación solo ilustra detección, detención y asistencia.'},
  stc:{title:'Conformación de un tren',publisher:'STC Metro · Gobierno CDMX',url:'https://www.metro.cdmx.gob.mx/operacion/conformacion-de-un-tren',locator:'Equipos bajo la caja; alimentación de carros motrices',scope:'Descripción general del STC; no es el esquema eléctrico particular de NM-22, NM-79 o MP-82.'},
  cooling:{title:'Forced ventilation on TRIHAL dry-type transformers',publisher:'Schneider Electric · FA32903',url:'https://www.se.com/nl/en/faqs/FA32903/',locator:'Ventilación forzada y calentamiento de devanados',scope:'Ejemplo de fabricante, no identificación del transformador instalado en el STC.'},
  rectifier:{title:'ACS880 diode supply control program',publisher:'ABB · manual público',url:'https://library.e.abb.com/public/e0884101599d4c96a136ff5f1e389266/EN_ACS880_diode_supply_ctrl_prg_FW_F_A4.pdf',locator:'Fault tracing: entradas AE14 y 4E03',scope:'Unidad industrial con diodos. Solo se traslada el mecanismo térmico; no códigos, ajustes ni topología al rectificador del Metro.'},
@@ -11,6 +12,12 @@ export const FAULT_SOURCES217=Object.freeze({
 });
 const metric=(id,label,values,step=false)=>({id,label,values,step});
 export const FAULT_CASES217=Object.freeze([
+ {id:'train-person',domain:'train',title:'Persona en vía · respuesta de emergencia',target:'motors',component:'Detención, aviso y protección de la zona',sources:['incident'],
+ evidence:'El modelo operativo de proyecto contempla detener movimientos y cortar alimentación ante una persona caída a vías.',
+ inference:'Se parte de la detección, sin representar salto, impacto ni lesiones. El tren frena antes de la persona por construcción del ejemplo; no se garantiza que esa distancia baste en una situación real.',
+ pending:'Detección real, tiempo de reacción, masa, adherencia, distancia disponible, delimitación del corte, ausencia de tensión verificada y autorización del personal competente.',
+ steps:['Aproximación ilustrativa: escenario preparado para observar la respuesta.','Persona detectada en vía: aviso e inicio de frenado; no se muestra cómo llegó allí.','Tracción retirada y frenado hasta detenerse antes de la persona. El corte no frena instantáneamente.','Personal de atención en el andén. Circulación y tracción permanecen bloqueadas; rescate y reposición pendientes de autorización.'],
+ flow:['Detección','Aviso','Frenado y corte','Atención'],metrics:[metric('speed','Velocidad ilustrativa',[1,1,.25,0,0]),metric('supply','Tracción disponible',[1,0,0,0,0],true),metric('blocked','Circulación bloqueada',[0,1,1,1,1],true)]},
  {id:'sr-cooling',domain:'substation',title:'Pérdida de ventilación forzada',target:'transformer',component:'Devanados y refrigeración del transformador seco',sources:['cooling'],
  evidence:'El fabricante relaciona la ventilación forzada con el control del calentamiento de los devanados.',
  inference:'Se representa pérdida de caudal bajo carga constante y una respuesta térmica progresiva. La alarma y apertura final son supuestos del ensayo.',

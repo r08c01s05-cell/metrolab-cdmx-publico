@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {PersonaVia270} from './persona-via270.js?v=270';
 import {scorchMaterial226,releaseScorch226,puffTexture226,Smoke226} from './fault-realism226.js?v=229';
 import {pocketLeaf237} from './door-pocket237.js?v=237';
 import {FaultShow235} from './fault-show235.js?v=235';
@@ -9,7 +10,7 @@ export class FaultAnimation218{
   this.model=model;this.domain=domain;this.scene=scene;this.root=new T.Group();this.root.name='Detalle ilustrativo de consecuencias218';scene.add(this.root);
   this.geometry=new Set();this.materials=new Set();this.textures=new Set();this.restore=[];this.pivots=[];this.doors=[];this.wheels=[];this.smoke=[];this.basePosition=model.root.position.clone();
   this.envelope=model.bounds().clone();this.initialBounds=this.envelope.clone();
-  if(domain==='train')this.train();else this.substation();
+  if(domain==='train'){this.train();this.persona270=new PersonaVia270(this);}else this.substation();
   this.show235=new FaultShow235(this);
   if(globalThis.location?.search?.includes('depurar225'))globalThis.faultFx225=this;
  }
@@ -119,16 +120,17 @@ export class FaultAnimation218{
    sp.needsUpdate=true;sc.needsUpdate=true;}
  }
  apply(sample){
-  const a=sample.outcome;this.model.root.position.copy(this.basePosition);if(this.domain==='train')this.model.root.position.x+=a.distance;
+  const a=sample.outcome;this.model.root.position.copy(this.basePosition);if(this.domain==='train')this.model.root.position.x+=(sample.scenario.id==='train-person'?-1:1)*a.distance;
   const moved=this.model.root.position.clone().sub(this.basePosition);for(const d of this.doors){d.pivot.position.x=d.x+d.sign*.52*a.doorOpening;d.pocket.follow(moved);}
-  for(const w of this.wheels)w.pivot.rotation.z=-a.wheelDistance/w.radius;
+  for(const w of this.wheels)w.pivot.rotation.z=(sample.scenario.id==='train-person'?1:-1)*a.wheelDistance/w.radius;
   for(const {o,x,y,z,i}of this.smoke){o.visible=a.damage>.02;const rise=(sample.progress*3+i/7)%1;o.position.set(x+Math.sin(i+sample.progress*9)*.15,y+rise*.85,z);o.scale.setScalar(.4+rise*.9);o.material.opacity=a.damage*(1-rise)*.55;}
   this.coolingApply225(sample);
   this.show235?.apply(sample);
+  this.persona270?.apply(sample);
   if(a.damage&&sample.scenario?.id!=='sr-cooling')for(const row of this.model.rows)if(row.part==='transformer'&&row.base&&/resina|aislamiento/i.test(row.material.name))row.material.color.multiplyScalar(1-a.damage*.72);
   this.model.root.updateMatrixWorld(true);
  }
- bounds(part){if(part==='doors'&&this.doors.length){const box=new T.Box3();for(const d of this.doors)box.union(new T.Box3().setFromObject(d.pivot));return box;}return part?this.model.bounds(part):this.envelope.clone();}
+ bounds(part){if(!part&&this.persona270?.root.visible)return this.persona270.bounds.clone();if(part==='doors'&&this.doors.length){const box=new T.Box3();for(const d of this.doors)box.union(new T.Box3().setFromObject(d.pivot));return box;}return part?this.model.bounds(part):this.envelope.clone();}
  dispose(){
   this.model.root.position.copy(this.basePosition);for(const d of this.doors)d.pocket.restore();for(const r of this.restore){r.parent.add(r.o);r.o.matrix.copy(r.matrix);}for(const p of this.pivots)p.removeFromParent();
   for(const coil of this.fx225?.coils||[]){coil.material.emissive.copy(coil.emissive);coil.material.emissiveIntensity=coil.intensity;releaseScorch226(coil.material);}
