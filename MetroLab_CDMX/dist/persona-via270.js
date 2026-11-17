@@ -45,11 +45,16 @@ export class PersonaVia270 {
   const p = sample.progress;
   const fatal = sample.outcome.fatal;
   const fall = T.MathUtils.smoothstep(p,.2,.32);
-  this.person.visible = fatal ? p >= .2 && fall < 1 : p >= .2;
-  this.person.rotation.x = fatal ? -1.05 * fall : 0;
-  this.person.position.set(this.x,this.floor + (fatal ? .61*(1-fall) : 0),fatal ? 2.15*(1-fall) : 0);
+  this.person.visible = p >= .2;
+  if (fatal) {
+   // La figura gira hacia el eje de la vía y queda tendida entre los rieles.
+   this.person.rotation.set(-Math.PI/2*fall,Math.PI/2*fall,0,'YXZ');
+   this.person.position.set(this.x,this.floor+T.MathUtils.lerp(.61,.15,fall),2.15*(1-fall));
+  } else {
+   this.person.rotation.set(0,0,0);
+   this.person.position.set(this.x,this.floor,0);
+  }
   this.beacon.visible = p >= .2;
-  // El paso a la respuesta oculta la figura antes de mostrar lesiones.
   this.responders.forEach((g,i) => {
    g.visible = p >= .75;
    g.position.set(this.x+4 - Math.min(1,Math.max(0,(p-.75)/.25))*2+i*.7,this.floor+.61,3.1);

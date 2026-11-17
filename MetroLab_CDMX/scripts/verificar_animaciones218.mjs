@@ -37,6 +37,13 @@ for(const id of ['NM22','NM79','MP82']){
    if(p===1)assert(animation.persona270.responders.every(g=>g.visible));
   }
 
+  animation.apply(sampleOutcome218('train-person',1,'fatal'));
+  const body=animation.persona270.person;
+  assert(body.visible&&body.rotation.x===-Math.PI/2,'El cuerpo sigue visible y tendido al final');
+  const bodyBox=new T.Box3().setFromObject(body);
+  assert(bodyBox.min.z>-1&&bodyBox.max.z<1&&bodyBox.min.y>=animation.persona270.floor,'El cuerpo queda entre los rieles sobre la vía');
+  assert(!model.bounds().intersectsBox(bodyBox),'El cuerpo queda fuera del volumen del tren');
+  animation.apply(sampleOutcome218('train-person',.5));assert.equal(body.rotation.x,0,'La otra variante recupera la postura de pie');
   animation.apply(sampleOutcome218('train-doors',1));assert(animation.doors.every(d=>Math.abs(d.pivot.position.x-d.x)>.5));
   animation.apply(sampleOutcome218('train-brake',.7,'slide'));const angle=animation.wheels[0].pivot.rotation.z,x=model.root.position.x;
   animation.apply(sampleOutcome218('train-brake',1,'slide'));assert(model.root.position.x>x);assert.equal(animation.wheels[0].pivot.rotation.z,angle);
