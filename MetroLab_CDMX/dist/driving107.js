@@ -1,4 +1,4 @@
-import './simulation106.js?v=273';
+import './simulation106.js?v=274';
 import {installElectricDashboard245} from './electric-dashboard245.js?v=255';
 import {installTrainLoad248} from './train-load248.js?v=255';
 import {installTrackCurrent250} from './track-current250.js?v=263';
