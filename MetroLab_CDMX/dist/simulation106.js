@@ -1,5 +1,5 @@
 import './game105.js?v=270';
-import {installInfraestructura271} from './infraestructura271.js?v=271';
+import {installInfraestructura271} from './infraestructura271.js?v=273';
 export class SimulationGame106{
  constructor(doc=document,win=window){this.doc=doc;this.win=win;this.$=id=>doc.getElementById(id);const sim=this.$('simulation');if(!sim||this.$('sim106-shell'))return;
  const required=['scene-viewport','scene-train','driver-speedometer','easy-controls','operator-emergency','operator-door-message','map','station-list','audio-toggle','camera-full','camera-train','time-scale'];for(const id of required)if(!this.$(id))throw Error('Falta control '+id);
