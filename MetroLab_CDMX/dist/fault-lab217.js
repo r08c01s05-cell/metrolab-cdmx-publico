@@ -6,11 +6,11 @@ import {createMetroEnvironment} from './metro-render.js?v=222';
 import {photographicRenderer130} from './photographic130.js?v=205';
 import {loadFaultModel217} from './fault-model217.js?v=264';
 import {FAULT_CASES217,FAULT_SOURCES217,FAULT_SCOPE217,FaultClock217} from './fault-catalog217.js?v=270';
-import {sampleOutcome218,variants218,EXTRA_SOURCES218} from './fault-outcomes218.js?v=270';
+import {sampleOutcome218,variants218,EXTRA_SOURCES218} from './fault-outcomes218.js?v=271';
 import {studyShadows226} from './fault-realism226.js?v=229';
-import {FaultHud229} from './fault-hud229.js?v=270';
+import {FaultHud229} from './fault-hud229.js?v=271';
 import {FaultStage225,cameraTween225} from './fault-stage225.js?v=230';
-import {FaultAnimation218,createConsequence218} from './fault-animation218.js?v=270';
+import {FaultAnimation218,createConsequence218} from './fault-animation218.js?v=271';
 const NS='http://www.w3.org/2000/svg',svg=(tag,attrs)=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));return e;};
 export class FaultLab217{
  constructor(doc=document){
@@ -28,7 +28,7 @@ export class FaultLab217{
  cases(){const domain=this.$('[data-f217-domain]').value,select=this.$('[data-f217-case]');select.replaceChildren();for(const c of FAULT_CASES217.filter(c=>c.domain===domain)){const o=this.doc.createElement('option');o.value=c.id;o.textContent=c.title;select.append(o);}this.$('[data-f217-model-label]').hidden=domain!=='train';}
  async open(domain='train',opener){
   if(this.dialog.open)return;this.opener=opener;this.priorFlag=this.doc.body.dataset.faultLab217;this.doc.body.dataset.faultLab217='true';this.priorPause=this.doc.body.dataset.pause105;this.openedAt=performance.now();this.doc.body.dataset.pause105='true';this.$('[data-f217-domain]').value=domain;
-  const id=globalThis.window?.workshopGame?.selectedModel216;if(['NM22','NM79','MP82'].includes(id))this.$('[data-f217-model]').value=id;
+  const id=opener?.dataset.faultModel271||globalThis.window?.workshopGame?.selectedModel216;if(['NM22','NM79','MP82'].includes(id))this.$('[data-f217-model]').value=id;
   this.cases();this.dialog.showModal();try{this.init3D();await this.change();}catch(e){this.$('[data-f217-load]').textContent='La vista 3D no pudo iniciarse. Cierra y vuelve a abrir para reintentar.';console.error('Ensayos visuales:',e);}this.start();
  }
  init3D(){if(this.renderer)return;this.renderer=new T.WebGLRenderer({canvas:this.$('canvas'),antialias:true,powerPreference:'high-performance'});this.renderer.localClippingEnabled=true;photographicRenderer130(this.renderer);this.budget=new RenderBudget101(this.renderer,{fps:60});this.scene=new T.Scene();this.scene.background=new T.Color('#edf0ed');this.stage225=new FaultStage225(this.scene);this.env=createMetroEnvironment(this.renderer,'workshop');this.scene.environment=this.env.texture;this.scene.environmentIntensity=.85;this.scene.add(new T.HemisphereLight('#fff9ed','#52605c',1.6));const key=new T.DirectionalLight('#fff4e1',2.5);key.position.set(-6,9,7);this.scene.add(key);this.scene.add(key.target);this.key226=key;this.camera=new T.PerspectiveCamera(38,1,.03,250);this.controls=new OrbitControls(this.camera,this.$('canvas'));this.controls.enableDamping=true;this.controls.dampingFactor=.09;this.controls.maxPolarAngle=Math.PI*.495;this.controls.addEventListener('change',()=>this.dirty=true);this.controls.minDistance=.35;this.controls.maxDistance=60;this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(this.$('.f217-stage'));this.resize();}
@@ -40,6 +40,7 @@ export class FaultLab217{
   }catch(e){if(token===this.generation)this.$('[data-f217-load]').textContent='No se pudo cargar el modelo. Selecciona otro ámbito o modelo para reintentar.';console.error('Modelo de ensayo:',e);}
  }
  describe(){const c=this.scenario;for(const[key,value]of Object.entries({component:c.component,evidence:c.evidence,inference:c.inference,pending:c.pending}))this.$('[data-f217-'+key+']').textContent=value;
+  if(this.variant==='fatal')this.$('[data-f217-inference]').textContent='Esta variante representa una caída con lesiones fatales. La confirmación del fallecimiento es parte del guion. La animación omite lesiones visibles y la caída a vía también puede tener otros desenlaces.';
   if(this.variant==='unprotected')this.$('[data-f217-inference]').textContent='Se añade una protección que no actúa. El calentamiento prolongado puede dañar el aislamiento: oscurecimiento y humo ilustrativos, sin explosión ni tiempo físico de fallo. No se deduce destrucción de la sola pérdida de ventilación.';if(this.variant==='slide')this.$('[data-f217-inference]').textContent='Se añaden baja adherencia y bloqueo de ruedas. La carrocería continúa trasladándose con ruedas detenidas. Es una comparación cualitativa, no una prestación ni distancia calculada para trenes neumáticos del STC.';const sources=this.$('[data-f217-sources]');sources.replaceChildren();const extra=c.id==='sr-cooling'?[EXTRA_SOURCES218.thermal]:c.id==='train-brake'?[EXTRA_SOURCES218.adhesion]:[];for(const s of [...c.sources.map(id=>FAULT_SOURCES217[id]),...extra]){const a=this.doc.createElement('a'),p=this.doc.createElement('p');a.href=s.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=s.publisher+' · '+s.title;p.append(a);const note=this.doc.createElement('small');note.textContent=s.locator+'. '+s.scope;p.append(note);sources.append(p);}
   this.nodes=[];const chain=this.$('.f217-chain');chain.replaceChildren();for(const title of c.flow){const n=this.doc.createElement('span');n.textContent=title;chain.append(n);this.nodes.push(n);}
   const colors=['#0d5e7a','#85480a','#6d347f'];this.metricNodes=[];const host=this.$('.f217-signals');host.replaceChildren();for(const[m,i]of c.metrics.map((m,i)=>[m,i])){const n=this.doc.createElement('div'),label=this.doc.createElement('span'),value=this.doc.createElement('output'),bar=this.doc.createElement('meter');label.textContent=(i+1)+' · '+m.label;bar.min=0;bar.max=1;bar.value=m.values[0];bar.setAttribute('aria-label',m.label+' · índice gráfico');n.style.setProperty('--signal217',colors[i]);n.append(label,value,bar);host.append(n);this.metricNodes.push({value,bar});}

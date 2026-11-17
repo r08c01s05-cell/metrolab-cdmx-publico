@@ -1,0 +1,27 @@
+.infra271-network { display: grid; gap: .4rem; }
+.infra271-network[hidden], .infra271-report[hidden] { display: none; }
+.infra271-actions, .infra271-choices { display: flex; flex-wrap: wrap; gap: .4rem; }
+.infra271-report { padding: .6rem; border: 1px solid #cf8c60; border-radius: .45rem; background: #231e1a; }
+.infra271-report p { margin: 0; font-size: .85rem; line-height: 1.45; color: #ffe9d7; }
+.infra271-dialog { width: min(840px, 94vw); max-height: 90dvh; overflow: auto; color: #edf4f4; background: #12232c; border: 1px solid #58717c; border-radius: .8rem; padding: clamp(1rem, 3vw, 2rem); }
+.infra271-dialog::backdrop { background: #071117bb; }
+.infra271-dialog header { display: flex; align-items: center; justify-content: space-between; gap: .8rem; margin-bottom: 1rem; }
+.infra271-dialog h2, .infra271-dialog h3 { margin: 0; }
+.infra271-dialog button { padding: .55rem .85rem; }
+.infra271-dialog button[aria-pressed="true"] { background: #ecc287; color: #182126; }
+.infra271-dialog a { color: #a1ddff; }
+.infra271-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,270px),1fr)); gap: 1.5rem; margin-top: 1.2rem; }
+.infra271-grid figure { margin: 0; display: grid; place-items: center; align-content: start; gap: .8rem; }
+.infra271-grid figcaption { font-size: .8rem; line-height: 1.5; text-align: center; color: #c8d8dd; }
+.infra271-grid dt { font-weight: 700; }
+.infra271-grid dd { margin: 0 0 .65rem; line-height: 1.45; }
+.infra271-section { position: relative; width: min(100%,260px); aspect-ratio: 1.25; overflow: hidden; border: 10px solid #9ba6ab; background: #202d35; border-radius: .25rem; }
+.infra271-dialog[data-form="circular"] .infra271-section { aspect-ratio: 1; border-radius: 50%; }
+.infra271-section > div { position: absolute; }
+.infra271-train { left: 25%; bottom: 25%; width: 42%; height: 42%; border-radius: 22% 22% 8% 8%; background: #e9964b; border: 3px solid #ffc18f; }
+.infra271-train::before { content: ''; position: absolute; inset: 18% 13% 39%; background: #223946; border-radius: 20% 20% 10% 10%; }
+.infra271-track { inset: auto 0 0; height: 23%; background: #69757d; border-top: 4px solid #adb7bc; }
+.infra271-track::before { content: ''; position: absolute; left: 32%; bottom: 100%; width: 28%; height: .4rem; border-inline: 4px solid #d3dadd; }
+.infra271-walk { right: 9%; bottom: 23%; width: 16%; height: 9%; background: #e5c063; }
+.infra271-duct { left: 37%; top: 12%; width: 22%; height: 7%; background: #9ba6ab; border-radius: 1rem; }
+.infra271-drain { left: 44%; bottom: 9%; width: 12%; height: 5%; background: #83d6fa; border-radius: 0 0 1rem 1rem; }
