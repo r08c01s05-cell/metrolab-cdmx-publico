@@ -1,0 +1,48 @@
+#game-home #tour275-start {
+ display:flex; align-items:center; gap:.85rem; width:fit-content; max-width:100%; text-align:left;
+ background:#f0b469; color:#231710; border:1px solid #ffcb8b; border-radius:.7rem;
+ padding:.65rem 1rem; margin:0 0 .9rem; box-shadow:0 5px 22px #1b0b0266;
+}
+#game-home #tour275-start:hover { background:#ffd299; }
+#tour275-start > span:first-child { font-size:1.15rem; }
+#tour275-start b, #tour275-start small { display:block; }
+#tour275-start small { margin-top:.16rem; color:#473022; }
+#game-home #game-home-menu button small { line-height:1.4; white-space:normal; }
+
+#tour275 { padding:0; border:1px solid #60798675; width:min(1480px,96vw); max-width:none; max-height:95dvh; border-radius:1rem; background:#101a23; color:#f8f5ef; }
+#tour275::backdrop { background:#050910e8; }
+#tour275.tour275-expanded { width:100vw; max-width:100vw; height:100dvh; max-height:100dvh; border:0; border-radius:0; }
+#tour275.tour275-expanded .tour275-shell { min-height:100%; }
+#tour275 .tour275-shell { --tour-accent:#f0b469; width:100%; min-height:min(780px,86dvh); display:flex; flex-direction:column; }
+#tour275 .tour275-shell:fullscreen { width:100%; height:100%; background:#101a23; overflow:auto; }
+.tour275-header, .tour275-controls { padding:clamp(.65rem,1.6vw,1.35rem) clamp(.8rem,2.6vw,2.4rem); }
+.tour275-header { display:flex; justify-content:space-between; align-items:center; gap:.75rem; border-bottom:1px solid #a1bec42d; }
+.tour275-header div, .tour275-controls > div, .tour275-controls nav { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+.tour275-header b { font-size:clamp(.9rem,2vw,1.22rem); }
+.tour275-header span, .tour275-controls span { font-size:.83rem; color:#b8cad2; }
+#tour275 button { background:#223442; border:1px solid #627c89; border-radius:.5rem; color:#f7f6f0; padding:.43rem .68rem; }
+#tour275 button:hover, #tour275 button:focus-visible { border-color:var(--tour-accent); }
+#tour275 button:disabled { opacity:.42; }
+#tour275 button[aria-current="step"], #tour275 [data-play] { background:var(--tour-accent); color:#182029; border-color:var(--tour-accent); }
+.tour275-stage { display:grid; grid-template-columns:minmax(15rem, .85fr) minmax(0, 1.8fr); grid-template-areas:'caption model'; align-items:center; flex:1; min-height:min(570px,64dvh); position:relative; background:radial-gradient(ellipse at 70% 50%,#3c5362,#131f2a 67%); }
+.tour275-stage canvas { grid-area:model; width:100%; height:min(565px,62dvh); display:block; opacity:0; }
+.tour275-ready canvas { animation:tour275-reveal .48s ease forwards; }
+.tour275-status { position:absolute; top:1rem; right:1rem; font-size:.85rem; color:#e2e9ed; }
+.tour275-caption { grid-area:caption; position:relative; padding:clamp(1rem,3.6vw,3.5rem); }
+.tour275-caption [data-location] { color:var(--tour-accent); margin:0 0 .85rem; font-size:.85rem; font-weight:700; letter-spacing:.08em; }
+.tour275-caption h2 { color:#fff; font-size:clamp(1.7rem,4vw,3.8rem); line-height:1; letter-spacing:-.04em; margin:0 0 .9rem; max-width:13ch; }
+.tour275-caption [data-story] { color:#e3edf0; font-size:clamp(.94rem,1.4vw,1.2rem); line-height:1.55; margin:0; }
+.tour275-timeline { height:.31rem; background:#263749; }
+.tour275-timeline progress { width:100%; display:block; height:100%; border:0; background:#263749; color:var(--tour-accent); accent-color:var(--tour-accent); }
+.tour275-timeline progress::-webkit-progress-bar { background:#263749; }
+.tour275-timeline progress::-webkit-progress-value { background:var(--tour-accent); }
+.tour275-controls { display:flex; flex-direction:column; gap:.9rem; }
+.tour275-controls [data-clock] { font-variant-numeric:tabular-nums; }
+@keyframes tour275-reveal { from { opacity:0; } to { opacity:1; } }
+@media (max-width: 700px) {
+ .tour275-stage { grid-template-columns:1fr; grid-template-areas:'model' 'caption'; }
+ .tour275-stage canvas { height:clamp(180px,34dvh,360px); }
+ .tour275-caption h2 { max-width:100%; }
+ .tour275-caption [data-location] { margin-bottom:.4rem; }
+}
+@media (prefers-reduced-motion: reduce) { .tour275-ready canvas { animation:none; opacity:1; } }
