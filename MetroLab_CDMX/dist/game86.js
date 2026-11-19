@@ -9,55 +9,20 @@ function route197(mode){return new Promise(resolve=>{const d=document.createElem
 async function choose(mode,line197=null){if(mode==='power-supply'){const { abrirAlimentacion }=await import('./alimentacion269.js');abrirAlimentacion();return;}if(['operator','automatic'].includes(mode)){line197??=await route197(mode);if(!line197)return;}if(mode==='substations'||mode==='pcc')return choose142(mode);const result=await gate142('Preparando '+({explore:'la flota',maintenance:'el taller',operator:'la cabina',automatic:'el recorrido',substations:'la subestación'}[mode]||mode),async()=>{if(line197){await waitUntil142(()=>window.workshopGame,'el selector de tren');await window.workshopGame.selectModel(line197===1?'NM22':selection==='MP82'?'MP82':'NM79');}await choose142(mode);if(mode==='explore'){await depot.load();if(TRAIN_BAYS.some(b=>!depot.items.get(b.id)?.userData.complete))throw Error('No se terminó de preparar la flota');await prepareFrame142(depot);}else if(mode==='maintenance')await window.workshopGame.readyMaintenance142();else if(['operator','automatic'].includes(mode)){await waitUntil142(()=>window.stationScene,'la vista del recorrido');await window.stationScene.ready142();}return true;});if(mode==='maintenance'&&result===true)window.metroMission117?.choose197();return result;}
 async function choose142(mode){if(mode==='pcc'){await import('./pcc-building265.js?v=268');await window.metroPcc265.open();return;}if(mode==='substations'){await import('./rectifier126.js?v=264');await window.metroSubstations127.open();return;}if(mode==='explore'){window.pauseTrainExperience?.();if(document.body.dataset.workspace==='simulation')$('return-workshop').click();screen('depot');ensureDepot();return;}if(!window.workshopGame){$('game-depot-status').textContent='Preparando controles…';await waitUntil142(()=>window.workshopGame,'los controles del taller',10000);}if(['operator','automatic'].includes(mode)&&typeof window.launchTrainExperience!=='function'){const token=++generation;pendingSimulation95=mode;screen('loading');$('game-loading-name').textContent='SIMULADOR';$('game-loading-message').textContent='Cargando datos, controles y recorrido…';$('game-loading-retry').hidden=true;try{await waitForSimulation95(window);if(token!==generation)return;pendingSimulation95=null;}catch(error){if(token!==generation)return;$('game-loading-message').textContent=error.message;$('game-loading-retry').hidden=false;return;}}if(document.body.dataset.workspace==='simulation')$('return-workshop').click();screen(mode==='maintenance'?'maintenance':'simulation');const nav=document.querySelector(`.experience-nav [data-experience="${mode}"]`);nav?.click();if(mode==='maintenance'){document.body.dataset.repairView='bench';$('maintenance-hands-panel').hidden=false;$('maintenance-hands-panel').scrollIntoView({block:'start',behavior:'auto'});} }
 $('game-home-menu').innerHTML=[
- [
-  "explore",
-  "01",
-  "Explorar la flota",
-  "Inspecciona el exterior, la cabina y los componentes de los trenes."
- ],
- [
-  "maintenance",
-  "02",
-  "Misiones de taller",
-  "Practica el desmontaje, la inspección y la instalación de piezas."
- ],
- [
-  "operator",
-  "03",
-  "Tomar los mandos",
-  "Conduce desde la cabina, frena, alinéate y opera las puertas."
- ],
- [
-  "automatic",
-  "04",
-  "Observar la red",
-  "Sigue trenes de las líneas 1 y 8. Explora estaciones, túneles y cámaras."
- ],
- [
-  "substations",
-  "05",
-  "Explorar subestaciones",
-  "Abre los equipos y consulta cómo se transforma y rectifica la energía."
- ],
- [
-  "pcc",
-  "06",
-  "Puestos Centrales de Control",
-  "Recorre los edificios del PCC y conoce sus salas y equipos."
- ],
- [
-  "power-supply",
-  "07",
-  "Alimentación eléctrica",
-  "Observa la transmisión y el suministro de energía hasta el tren."
- ]
+ ['explore','01','Explorar la flota','Inspecciona el exterior, la cabina y los componentes de los trenes.'],
+ ['maintenance','02','Misiones de taller','Practica el desmontaje, la inspección y la instalación de piezas.'],
+ ['operator','03','Tomar los mandos','Conduce desde la cabina, frena, alinéate y opera las puertas.'],
+ ['automatic','04','Observar la red','Sigue trenes de las líneas 1 y 8. Explora estaciones, túneles y cámaras.'],
+ ['substations','05','Explorar subestaciones','Abre los equipos y consulta cómo se transforma y rectifica la energía.'],
+ ['pcc','06','Puestos Centrales de Control','Recorre los edificios del PCC y conoce sus salas y equipos.'],
+ ['power-supply','07','Alimentación eléctrica','Observa la transmisión y el suministro de energía hasta el tren.']
 ].map(([id,n,title,description])=>`<button data-game-mode="${id}"><span class="game-menu-number">${n}</span><span><b>${title}</b><small>${description}</small></span><i aria-hidden="true">↗</i></button>`).join('');
 const tourButton=$('tour275-start');
 if(tourButton)tourButton.onclick=async()=>{
  if(tourButton.disabled)return;
  tourButton.disabled=true;
  try {
-  const {openTour275}=await import('./recorrido275.js?v=275');
+  const {openTour275}=await import('./recorrido275.js?v=276');
   openTour275();
  } catch(error) {
   $('tour275-home-status').textContent='No se pudo abrir el recorrido. Vuelve a intentarlo.';
