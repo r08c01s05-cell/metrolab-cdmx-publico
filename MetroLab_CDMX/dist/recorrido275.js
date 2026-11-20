@@ -1,6 +1,6 @@
 import * as Three from 'three';
 import {RenderBudget101} from './render-budget101.js?v=222';
-import {chapters,buildChapter,disposeChapter} from './recorrido-escenas275.js?v=276';
+import {chapters,buildChapter,disposeChapter} from './recorrido-escenas275.js?v=277';
 
 const totalSeconds = chapters.reduce((total,chapter)=>total+chapter.duration,0);
 const formatTime = seconds => `${Math.floor(seconds/60)}:${String(Math.floor(seconds%60)).padStart(2,'0')}`;

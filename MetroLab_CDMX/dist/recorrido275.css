@@ -1,8 +1,10 @@
 #game-home #tour275-start {
  display:flex; align-items:center; gap:.85rem; width:fit-content; max-width:100%; text-align:left;
  background:#f0b469; color:#231710; border:1px solid #ffcb8b; border-radius:.7rem;
- padding:.65rem 1rem; margin:0 0 .9rem; box-shadow:0 5px 22px #1b0b0266;
+ padding:.65rem 1rem; margin:0 0 .9rem; box-shadow:0 5px 22px #1b0b0266; pointer-events:auto;
 }
+#game-home #game-home-menu :is([data-game-mode="pcc"],[data-game-mode="power-supply"]) .game92-mode-icon { display:block; order:1; margin-inline-start:auto; color:#edb58d; }
+#game-home #game-home-menu :is([data-game-mode="pcc"],[data-game-mode="power-supply"]) > i { order:2; margin-inline-start:0; }
 #game-home #tour275-start:hover { background:#ffd299; }
 #tour275-start > span:first-child { font-size:1.15rem; }
 #tour275-start b, #tour275-start small { display:block; }
