@@ -154,3 +154,6 @@ Rama mejora/pcc2-267. pcc-building265.js: AREAS267 (sala de regulación con tabl
 
 ## Entorno PCC268
 Rama mejora/entorno-pcc268. pcc-building265.js: surroundings268 (grupo Entorno268, piezas E268_<tipo>_*), structure268/shell268 (estructura por piso, corte del P.C.C. 2) y detail268 (hijos D268_<tipo> en cada equipo). kindOf266 reconoce esos prefijos. Entorno y detalle son ilustrativos. Ver docs/revision268.md.
+
+## Control y energía 279
+Rama mejora/control-energia279. balance-reactor279.js (reactor de equilibrio 3D detrás del rectificador, se quita la bobina interna en rectifier-assets127; pestaña 'reactor' en grid-substation256). braking279.js (freno por modelo: NM-79/MP-82 solo reostático) usado por pcc263, train-dynamics257 y track-current250 (partículas regen/reo y bancos de resistencias). regulacion279.js + consola279.js montados en pcc-centro277: regímenes PA/CMC/CML, ATP, hombre muerto, bloque fijo L8 y CBTC L1, restricciones, regulación del intervalo, registrador de eventos, trenes por línea y velocidad. agenda2030-279.js: ODS 7/9/11/13 con FESEN 2024. Sobrescribe speedLimit solo en la instancia del centro. Ver docs/revision279.md.

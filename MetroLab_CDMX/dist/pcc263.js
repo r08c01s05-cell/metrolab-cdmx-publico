@@ -4,6 +4,7 @@
 // freno de emergencia. No modifica engine.js.
 import {electricState245,DOCUMENTED245,ASSUMED245} from './electric-dashboard245.js?v=255';
 import {srPositions261,feedersAt261,zonesFed261,ZONE_STATE261,L1_ZONES261} from './sr-real261.js?v=263';
+import {brakeInfo279} from './braking279.js?v=279';
 
 export const ASSUMED263=Object.freeze({coastBand:.06,holdSeconds:30,note:'Supuestos del ejercicio: la energía regenerada se aprovecha solo si otro tren de la misma línea está consumiendo en ese instante; el resto va a las resistencias de frenado. En una zona sin tensión, el P.C.C. retiene en estación a los trenes que estén detenidos ahí.'});
 export const MODES263=Object.freeze({traccion:{label:'Tracción · motor',color:'#ffb238'},deriva:{label:'Marcha por inercia',color:'#93a39d'},regenera:{label:'Frenado · generador',color:'#3fd17f'},detenido:{label:'Detenido',color:'#5b7f8a'}});
@@ -17,10 +18,11 @@ export function snapshot263(engine,lineId,memo=new Map(),zones=ZONE_STATE261){
  for(const t of engine.trains){if(t.line!==lineId)continue;const m=memo.get(t.id),dt=m?engine.time-m.time:0;let a=m?.a??0;if(dt>1e-6){a=(t.speed-m.speed)/dt;memo.set(t.id,{time:engine.time,speed:t.speed,a});}else if(!m)memo.set(t.id,{time:engine.time,speed:t.speed,a:0});
   const zone=positions.length?feedersAt261(positions,t.position).zone:null,zoneLive=zone==null||fed.has(zone),mode=trainMode263(t.speed,a);
   const st=electricState245({v:t.speed,a,load:t.load,capacity:engine.capacity||0,traction:mode==='traccion'?1:0,brake:mode==='regenera'?1:0,powered:powered&&zoneLive});
-  rows.push({id:t.id,train:t,x:t.position,direction:t.direction,speedKmh:t.speed*3.6,a,mode,zone,zoneLive,state:t.state,inStation:t.wait>0,drawKW:st.inKW,brakeKW:st.brakeKW,regenKW:0,rheoKW:0});}
- // Receptividad: lo que frena un tren lo toman los demás que consumen; el resto va a resistencias.
- const demand=rows.reduce((s,r)=>s+r.drawKW,0),brake=rows.reduce((s,r)=>s+r.brakeKW,0);
- for(const r of rows){if(r.brakeKW<=0)continue;const others=demand-r.drawKW,share=brake>0?r.brakeKW/brake:0,used=powered?Math.min(r.brakeKW,Math.max(0,others)*share):0;r.regenKW=used;r.rheoKW=r.brakeKW-used;}
+  const brake=brakeInfo279(t.model);rows.push({id:t.id,train:t,model:t.model,brakeType:brake.type,brakeLabel:brake.short,x:t.position,direction:t.direction,speedKmh:t.speed*3.6,a,mode,zone,zoneLive,state:t.state,inStation:t.wait>0,drawKW:st.inKW,brakeKW:st.brakeKW,regenKW:0,rheoKW:0});}
+ // Receptividad: lo que frena un tren regenerativo lo toman los demás que consumen; el resto va a
+ // resistencias. Los trenes chopper (NM-79, MP-82) solo frenan de forma reostática (braking279).
+ const demand=rows.reduce((s,r)=>s+r.drawKW,0),brake=rows.reduce((s,r)=>s+(r.brakeType==='regen'?r.brakeKW:0),0);
+ for(const r of rows){if(r.brakeKW<=0)continue;if(r.brakeType!=='regen'){r.rheoKW=r.brakeKW;continue;}const others=demand-r.drawKW,share=brake>0?r.brakeKW/brake:0,used=powered&&r.zoneLive?Math.min(r.brakeKW,Math.max(0,others)*share):0;r.regenKW=used;r.rheoKW=r.brakeKW-used;}
  const regen=rows.reduce((s,r)=>s+r.regenKW,0),rheo=rows.reduce((s,r)=>s+r.rheoKW,0);
  return{lineId,rows,positions,fed,powered,totals:{demandKW:demand,brakeKW:brake,regenKW:regen,rheoKW:rheo,srKW:Math.max(0,demand-regen),amps:Math.max(0,demand-regen)*1000/DOCUMENTED245.nominalV}};}
 
@@ -47,7 +49,7 @@ export class Pcc263{
   this.panel.innerHTML=`<header><div><small>PUESTO CENTRAL DE CONTROL</small><b data-pcc-title>Línea</b></div><button type="button" data-pcc-close aria-label="Cerrar">×</button></header>
 <div class="pcc263-orders"><button type="button" data-pcc-holdall>Retener todos en estación</button><button type="button" data-pcc-release>Liberar todos</button><button type="button" data-pcc-power>Cortar energía de la línea</button><button type="button" data-pcc-emergency class="danger">Freno de emergencia</button><button type="button" data-pcc-zones>Restablecer zonas</button></div>
 <svg data-pcc-map viewBox="0 0 1000 250" preserveAspectRatio="xMidYMid meet"></svg>
-<div class="pcc263-legend"><span style="--c:#ffb238">De la S.R. al tren (motor)</span><span style="--c:#3fd17f">Del tren a la barra guía (generador)</span><span style="--c:#ff6b5e">A resistencias de frenado</span><span style="--c:#5b7f8a">Retenido</span></div>
+<div class="pcc263-legend"><span style="--c:#ffb238">De la S.R. al tren (motor)</span><span style="--c:#3fd17f">Del tren a la barra guía (generador)</span><span style="--c:#ff6b5e">Frenado reostático: calor en las resistencias del tren</span><span style="--c:#5b7f8a">Retenido</span></div>
 <div class="pcc263-tiles" data-pcc-tiles></div><table data-pcc-table></table><p class="pcc263-note" data-pcc-note></p>`;
   (host||doc.getElementById('sim106-stage')||doc.body)?.append(this.panel);const q=s=>this.panel.querySelector?.(s);
   if(host){q('[data-pcc-close]').hidden=true;q('[data-pcc-emergency]').hidden=true;}
@@ -69,7 +71,7 @@ export class Pcc263{
   if(this.host||screen?.gameScreen!=='simulation'||screen.driving==='true'){this.toggle();return;}
   this.button.disabled=true;
   try{
-   const {open}=await import('./pcc-building265.js?v=278');
+   const {open}=await import('./pcc-building265.js?v=279');
    await open({building:this.state()?.currentLine===8?'pcc2':'pcc1'});
   }catch(error){
    console.warn('No se pudo abrir el edificio del P.C.C.',error);
@@ -78,7 +80,9 @@ export class Pcc263{
  }
  toggle(on=!this.on){this.on=on;this.button.setAttribute('aria-pressed',String(on));this.panel.hidden=!on;if(on)this.tick();}
  tick(){const s=this.state();if(!s?.engine)return;const active=this.on||this.holds.manual.size||this.zones.out.size||this.zones.open.size||this.holds.auto.size;if(!active)return;
-  const snap=this.last=snapshot263(s.engine,s.currentLine,this.memo,this.zones);this.holds.setAuto(snap.rows);this.holds.apply(s.engine);if(this.on){this.phase=(this.phase+3)%24;this.render(snap,s.engine);}}
+  const snap=this.last=snapshot263(s.engine,s.currentLine,this.memo,this.zones);this.accumulate279(snap,s.engine);this.holds.setAuto(snap.rows);this.holds.apply(s.engine);if(this.on){this.phase=(this.phase+3)%24;this.render(snap,s.engine);}}
+ // Energía acumulada desde que se abrió el tablero (kWh), integrando con el reloj del motor.
+ accumulate279(snap,engine){const E=this.energy279??={time:engine.time,drawKWh:0,regenKWh:0,rheoKWh:0,srKWh:0},dt=Math.max(0,Math.min(5,engine.time-E.time))/3600;E.time=engine.time;const T=snap.totals;E.drawKWh+=T.demandKW*dt;E.regenKWh+=T.regenKW*dt;E.rheoKWh+=T.rheoKW*dt;E.srKWh+=T.srKW*dt;snap.energy=E;return E;}
  render(snap,engine){const q=s=>this.panel.querySelector(s),line=engine.lines[snap.lineId],X=x=>50+x/line.total*900,busY=92,trackY=150;
   q('[data-pcc-title]').textContent=`Línea ${snap.lineId} · ${snap.rows.length} trenes · ${snap.powered?'con tensión':engine.emergency?'freno de emergencia':'sin energía de tracción'}`;
   q('[data-pcc-power]').textContent=engine.power[snap.lineId]?'Cortar energía de la línea':'Restablecer energía';q('[data-pcc-zones]').hidden=!snap.positions.length;
@@ -96,13 +100,13 @@ export class Pcc263{
   for(const r of snap.rows){const x=X(r.x),held=this.holds.held(r.id),c=held?'#5b7f8a':MODES263[r.mode].color,y=trackY-(r.direction>0?13:-1)-6,dash=`stroke-dasharray:5 4;stroke-dashoffset:`;
    if(snap.powered&&r.zoneLive&&r.drawKW>1&&r.mode!=='regenera')h+=`<line x1="${x}" y1="${busY+5}" x2="${x}" y2="${trackY-14}" style="stroke:#ffb238;stroke-width:${r.mode==='traccion'?3:1.2};${dash}${-this.phase}"/>`;
    if(r.regenKW>1){h+=`<line x1="${x}" y1="${busY+5}" x2="${x}" y2="${trackY-14}" style="stroke:#3fd17f;stroke-width:3;${dash}${this.phase}"/>`;const to=takers.filter(o=>o.id!==r.id).sort((a,b)=>Math.abs(a.x-r.x)-Math.abs(b.x-r.x))[0];if(to){const x2=X(to.x);h+=`<path d="M${x} ${busY+9} Q${(x+x2)/2} ${busY+34} ${x2} ${busY+9}" style="fill:none;stroke:#3fd17f;stroke-width:2;${dash}${-this.phase}"/>`;}}
-   if(r.rheoKW>1)h+=`<line x1="${x}" y1="${trackY+8}" x2="${x}" y2="${trackY+22}" style="stroke:#ff6b5e;stroke-width:3;${dash}${-this.phase}"/>`;
+   if(r.rheoKW>1){const k=Math.min(1,r.rheoKW/2500),zz=`M${x-9} ${trackY+15} l3 -4 l3 8 l3 -8 l3 8 l3 -8 l3 4`;h+=`<g data-pcc-rheo="${r.id}"><title>${r.id} · ${r.model}: ${Math.round(r.rheoKW)} kW en resistencias de frenado</title><path d="${zz}" style="fill:none;stroke:#ff6b5e;stroke-width:2.2"/>${[0,1,2].map(j=>`<path d="M${x-6+j*6} ${trackY+22} q3 4 0 8 q-3 4 0 8" style="fill:none;stroke:#ff9f5e;stroke-width:1.4;opacity:${(.35+.65*k).toFixed(2)};stroke-dasharray:3 3;stroke-dashoffset:${this.phase/2}"/>`).join('')}</g>`;}
    h+=`<g data-pcc-train="${r.id}" style="cursor:pointer"><title>${r.id}: ${held?'retenido':MODES263[r.mode].label}</title><rect x="${x-11}" y="${y}" width="22" height="11" rx="3" style="fill:${c};stroke:${this.selectedTrain===r.id?'#fff':'#0d1a20'};stroke-width:${this.selectedTrain===r.id?2:1}"/><text x="${x}" y="${y+8.5}" text-anchor="middle" style="fill:#0d1a20;font-size:8px;font-weight:700">${r.direction>0?'▶':'◀'}${r.id.slice(-2)}</text></g>`;}
   q('[data-pcc-map]').innerHTML=h;const T=snap.totals;
-  q('[data-pcc-tiles]').innerHTML=`<span><small>Piden los trenes</small><b>${fmt(T.demandKW)} kW</b>tracción y auxiliares</span><span><small>Entregan las S.R.</small><b>${fmt(T.srKW)} kW</b>≈ ${fmt(T.amps)} A a 750 V</span><span class="ok"><small>Regresa a la barra guía</small><b>${fmt(T.regenKW)} kW</b>motores como generadores</span><span class="${T.rheoKW>1?'warn':''}"><small>Se quema en resistencias</small><b>${fmt(T.rheoKW)} kW</b>sin tren que la reciba</span>`;
-  q('[data-pcc-table]').innerHTML=`<tr><th>Tren</th><th>Zona</th><th>km/h</th><th>Modo</th><th>kW</th><th>Estado</th><th>Orden</th></tr>`+snap.rows.map(r=>{const held=this.holds.held(r.id),auto=this.holds.auto.has(r.id)&&!this.holds.manual.has(r.id),kw=r.mode==='regenera'?-(r.regenKW+r.rheoKW):r.drawKW;return `<tr><td>${r.id}</td><td>${r.zone??'·'}${r.zoneLive?'':' ⚠'}</td><td>${fmt(r.speedKmh)}</td><td style="color:${MODES263[r.mode].color}">${MODES263[r.mode].label}</td><td>${fmt(kw)}</td><td>${auto?'Retenido: zona sin tensión':held&&r.inStation?'Retenido por el P.C.C.':held?'Se retendrá al llegar':r.state}</td><td><button type="button" data-pcc-hold="${r.id}" aria-pressed="${this.holds.manual.has(r.id)}">${this.holds.manual.has(r.id)?'Liberar':'Retener'}</button></td></tr>`;}).join('');
+  q('[data-pcc-tiles]').innerHTML=`<span><small>Piden los trenes</small><b>${fmt(T.demandKW)} kW</b>tracción y auxiliares</span><span><small>Entregan las S.R.</small><b>${fmt(T.srKW)} kW</b>≈ ${fmt(T.amps)} A a 750 V</span><span class="ok"><small>Regresa a la barra guía</small><b>${fmt(T.regenKW)} kW</b>motores como generadores</span><span class="${T.rheoKW>1?'warn':''}"><small>Frenado reostático</small><b>${fmt(T.rheoKW)} kW</b>calor en resistencias del tren</span>${snap.energy?`<span class="ok"><small>Recuperado desde que abriste el tablero</small><b>${fmt(snap.energy.regenKWh,1)} kWh</b>de ${fmt(snap.energy.drawKWh,1)} kWh consumidos</span><span class="${snap.energy.rheoKWh>.05?'warn':''}"><small>Disipado en resistencias</small><b>${fmt(snap.energy.rheoKWh,1)} kWh</b>energía que no regresa a la red</span>`:''}`;
+  q('[data-pcc-table]').innerHTML=`<tr><th>Tren</th><th>Zona</th><th>km/h</th><th>Modo</th><th>kW</th><th>Estado</th><th>Orden</th></tr>`+snap.rows.map(r=>{const held=this.holds.held(r.id),auto=this.holds.auto.has(r.id)&&!this.holds.manual.has(r.id),kw=r.mode==='regenera'?-(r.regenKW+r.rheoKW):r.drawKW,label=r.mode==='regenera'?(r.rheoKW>r.regenKW?'Frenado reostático':'Frenado regenerativo'):MODES263[r.mode].label,col=r.mode==='regenera'&&r.rheoKW>r.regenKW?'#ff6b5e':MODES263[r.mode].color;return `<tr><td>${r.id}<small> ${r.model||''}</small></td><td>${r.zone??'·'}${r.zoneLive?'':' ⚠'}</td><td>${fmt(r.speedKmh)}</td><td style="color:${col}">${label}</td><td>${fmt(kw)}</td><td>${auto?'Retenido: zona sin tensión':held&&r.inStation?'Retenido por el P.C.C.':held?'Se retendrá al llegar':r.state}</td><td><button type="button" data-pcc-hold="${r.id}" aria-pressed="${this.holds.manual.has(r.id)}">${this.holds.manual.has(r.id)?'Liberar':'Retener'}</button></td></tr>`;}).join('');
   const dead=[...L1_ZONES261.map(z=>z.zone)].filter(z=>snap.positions.length&&!snap.fed.has(z));
   const help=this.presentation?'':this.host?'Selecciona un tren para identificarlo en el tablero. ':'Toca una S.R. para sacarla de servicio y un tren para seguirlo con la cámara. ';
-  q('[data-pcc-note]').textContent=(dead.length?`Zona ${dead.join(', ')} sin tensión: sus trenes detenidos quedan retenidos; los que van entre estaciones siguen hasta la siguiente porque el corte por zona no existe en el motor del simulador. `:'')+help+ASSUMED263.note;}
+  q('[data-pcc-note]').textContent=(dead.length?`Zona ${dead.join(', ')} sin tensión: sus trenes detenidos quedan retenidos; los que van entre estaciones siguen hasta la siguiente porque el corte por zona no existe en el motor del simulador. `:'')+help+ASSUMED263.note+' Los NM-79 y MP-82 (chopper) solo frenan de forma reostática; el NM-22 regenera si la línea es receptiva.';}
  dispose(){this.win.clearInterval?.(this.timer);this.button.remove?.();this.panel.remove?.();}}
 export function installPcc263(doc=document,win=window){if(win.pcc263)return win.pcc263;return win.pcc263=new Pcc263(doc,win);}

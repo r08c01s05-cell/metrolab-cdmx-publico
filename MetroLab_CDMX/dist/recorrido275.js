@@ -1,6 +1,6 @@
 import * as Three from 'three';
 import {RenderBudget101} from './render-budget101.js?v=222';
-import {chapters,buildChapter,disposeChapter} from './recorrido-escenas275.js?v=278';
+import {chapters,buildChapter,disposeChapter} from './recorrido-escenas275.js?v=279';
 import {tractionFrame278} from './recorrido-traccion278.js?v=278';
 
 const totalSeconds = chapters.reduce((total,chapter)=>total+chapter.duration,0);
@@ -143,7 +143,7 @@ export function openTour275() {
    controlBox.append(message,host);
    const timeout=setTimeout(()=>request.abort(),18000);
    try{
-    const {mountControl277}=await import('./pcc-centro277.js?v=278');
+    const {mountControl277}=await import('./pcc-centro277.js?v=279');
     request.signal.throwIfAborted();
     const result=await mountControl277(host,{signal:request.signal,presentation:true});
     if(closed||loading!==request||request.signal.aborted){result.dispose();return;}
