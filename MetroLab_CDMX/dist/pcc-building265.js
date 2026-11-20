@@ -267,19 +267,63 @@ class PccView265{
  show(mode){this.buildT=null;this.floor=mode;this.apply();const fl=this.root.userData.floors;if(mode==null)this.frame(this.id==='pcc1'?[78,40,104]:[30,46,84],this.id==='pcc1'?[0,12,0]:[0,2,0]);else if(mode===-1)this.frame([78,50,84],[0,12,0]);else if(this.id==='pcc2'){const x=fl[mode].userData.center;this.frame([x+16,20,30],[x,2,0]);}else{const y=fl[mode].userData.base;this.frame([30,y+30,42],[0,y+1,0]);}}
  apply(){const {floors,shell}=this.root.userData,m=this.floor;if(this.sun){const y=typeof m==='number'&&m>=0?floors[m].userData.base:10;this.sun.target.position.set(0,y,0);this.sun.position.set(55,y+80,70);}shell.visible=m==null;for(const f of floors){const i=f.userData.index;f.position.y=f.userData.base;f.visible=m==null?false:m===-1?true:i===m;f.userData.content.visible=true;f.traverse(o=>{if(o.isSprite)o.visible=m!==-1;else if(this.id==='pcc1'&&(o.name==='Contorno266'||/^D268/.test(o.name)))o.visible=m!==-1;});}if(this.id==='pcc2'){shell.visible=true;shell.traverse(o=>{if(o.isSprite)o.visible=m==null;});for(const f of floors)f.visible=m==null||f.userData.index===m;}const ground=this.root.getObjectByName('Terreno');if(ground)ground.visible=!(this.id==='pcc1'&&m===0);const sur=this.root.userData.surroundings;if(sur)sur.visible=!(this.id==='pcc1'&&m===0);}
  build(){const {floors,shell}=this.root.userData;this.floor='build';this.buildT=0;shell.visible=false;for(const f of floors){f.visible=false;f.userData.content.visible=true;f.traverse(o=>{if(o.isSprite||o.name==='Contorno266'||/^D268/.test(o.name))o.visible=false;});}this.frame([84,56,96],[0,12,0]);}
- tick=()=>{if(!this.running)return;requestAnimationFrame(this.tick);const dt=Math.min(.05,this.clock.getDelta());if(this.buildT!=null){this.buildT+=dt;const {floors,shell}=this.root.userData,step=1.1;floors.forEach((f,i)=>{const t=(this.buildT-i*step)/step;f.visible=t>0;const e=Math.min(1,Math.max(0,t)),k=1-(1-e)**3;f.position.y=f.userData.base+(1-k)*26;});const done=this.buildT>floors.length*step;shell.visible=done&&this.buildT>floors.length*step+.6;this.onBuild?.(Math.min(floors.length,Math.floor(this.buildT/step)+1),shell.visible);if(shell.visible&&this.buildT>floors.length*step+2.4){this.buildT=null;this.floor=null;this.apply();}}this.controls.update();this.renderer.render(this.scene,this.camera);}
- start(){this.running=true;this.resize();this.clock.getDelta();requestAnimationFrame(this.tick);}stop(){this.running=false;}}
+ tick=()=>{if(!this.running)return;this.frameId=requestAnimationFrame(this.tick);const dt=Math.min(.05,this.clock.getDelta());if(this.buildT!=null){this.buildT+=dt;const {floors,shell}=this.root.userData,step=1.1;floors.forEach((f,i)=>{const t=(this.buildT-i*step)/step;f.visible=t>0;const e=Math.min(1,Math.max(0,t)),k=1-(1-e)**3;f.position.y=f.userData.base+(1-k)*26;});const done=this.buildT>floors.length*step;shell.visible=done&&this.buildT>floors.length*step+.6;this.onBuild?.(Math.min(floors.length,Math.floor(this.buildT/step)+1),shell.visible);if(shell.visible&&this.buildT>floors.length*step+2.4){this.buildT=null;this.floor=null;this.apply();}}this.controls.update();this.renderer.render(this.scene,this.camera);}
+ start(){this.resize();if(this.running)return;this.running=true;this.clock.getDelta();this.frameId=requestAnimationFrame(this.tick);}stop(){this.running=false;cancelAnimationFrame(this.frameId);}}
 
 function html(){return `<div class="pcc265-header"><div><small>INFRAESTRUCTURA · EDIFICIOS DE MANDO</small><h2 id="pcc265-heading">Puestos Centrales de Control</h2></div><button type="button" data-pcc265-close>Volver ×</button></div>
 <div class="pcc265-pick" data-pcc265-pick><p>Elige el edificio que quieres recorrer.</p><div>${BUILDINGS265.map(b=>`<button type="button" data-pcc265-building="${b.id}"><b>${b.name}</b><em>${b.place}</em><span>${b.lines}</span><small>${b.text}</small></button>`).join('')}</div></div>
-<div class="pcc265-layout" data-pcc265-layout hidden><section class="pcc265-viewport"><canvas></canvas><div class="pcc265-tools"><button type="button" data-pcc265-back>← Elegir edificio</button><button type="button" data-pcc265-mode="shell" aria-pressed="true">Edificio completo</button><button type="button" data-pcc265-mode="cut">Corte por pisos</button><button type="button" data-pcc265-mode="build">Ver el armado</button></div><p class="pcc265-hint">Arrastra para girar · rueda para acercar · clic derecho para desplazar</p></section>
-<aside class="pcc265-side"><h3 data-pcc265-name></h3><p data-pcc265-about></p><div data-pcc265-info></div><div class="pcc265-floors" data-pcc265-floors></div><p class="pcc265-note">${ASSUMED265.note}</p><p class="pcc265-note">Fuente: ${SOURCE265}</p></aside></div>`;}
+<div class="pcc265-layout" data-pcc265-layout hidden><section class="pcc265-viewport"><canvas></canvas><div class="pcc265-tools"><button type="button" data-pcc265-back>← Elegir edificio</button><button type="button" data-pcc265-mode="shell" aria-pressed="true">Edificio completo</button><button type="button" data-pcc265-mode="cut">Corte por pisos</button><button type="button" data-pcc265-mode="build">Ver el armado</button><button type="button" data-pcc277-open>Entrar al centro de control</button></div><p class="pcc265-hint">Arrastra para girar · rueda para acercar · clic derecho para desplazar</p><p class="pcc277-arrival" role="status" hidden></p></section>
+<aside class="pcc265-side"><h3 data-pcc265-name></h3><p data-pcc265-about></p><div data-pcc265-info></div><div class="pcc265-floors" data-pcc265-floors></div><p class="pcc265-note">${ASSUMED265.note}</p><p class="pcc265-note">Fuente: ${SOURCE265}</p></aside></div><section class="pcc277-center" aria-label="Centro de control de ambas líneas" hidden></section>`;}
 function make(){dialog=doc.createElement('dialog');dialog.id='pcc265-dialog';dialog.setAttribute('aria-labelledby','pcc265-heading');dialog.innerHTML=html();doc.body.append(dialog);const q=s=>dialog.querySelector(s),pick=q('[data-pcc265-pick]'),layout=q('[data-pcc265-layout]'),info=q('[data-pcc265-info]'),floorsEl=q('[data-pcc265-floors]');
  const press=m=>dialog.querySelectorAll('[data-pcc265-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pcc265Mode===m)));
  const pressFloor=i=>floorsEl.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.pcc265Floor)===i)));
  const showFloor=i=>{const f=(view.id==='pcc2'?AREAS267:FLOORS265)[i];view.show(i);press('');pressFloor(i);info.innerHTML=`<h4>${f.name}</h4><p class="pcc265-slide">${view.id==='pcc2'?'':'En la diapositiva: '}${f.slide}</p><ul>${f.items.map(x=>`<li>${x}</li>`).join('')}</ul><p>${f.text}</p>`;};
- q('[data-pcc265-close]').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>view?.stop());
- q('[data-pcc265-back]').addEventListener('click',()=>{view.stop();layout.hidden=true;pick.hidden=false;});
+ const center=q('.pcc277-center'), arrival=q('.pcc277-arrival'), enter=q('[data-pcc277-open]');
+ let control, pending;
+ function clearControl(){
+  pending?.abort();pending=null;control?.dispose();control=null;
+  center.hidden=true;arrival.hidden=true;layout.inert=false;enter.disabled=false;
+ }
+ async function openControl(){
+  if(!view?.root||pending)return;
+  const request=pending=new AbortController();
+  const fromPosition=view.camera.position.clone(),fromTarget=view.controls.target.clone();
+  const floor=view.id==='pcc1'?FLOORS265.length-1:0;
+  showFloor(floor);
+  const toPosition=view.camera.position.clone(),toTarget=view.controls.target.clone();
+  enter.disabled=true;
+  layout.inert=true;
+  arrival.hidden=false;
+  arrival.textContent=view.id==='pcc1'?'Subiendo al sexto piso…':'Entrando a la sala de regulación…';
+  const motion=matchMedia('(prefers-reduced-motion: reduce)').matches?0:950;
+  const flight=new Promise(resolve=>{
+   const start=performance.now();
+   const move=now=>{
+    if(request.signal.aborted){resolve();return;}
+    const p=motion?Math.min(1,(now-start)/motion):1;
+    const t=THREE.MathUtils.smoothstep(p,0,1);
+    view.camera.position.lerpVectors(fromPosition,toPosition,t);
+    view.controls.target.lerpVectors(fromTarget,toTarget,t);
+    if(p<1)requestAnimationFrame(move);else resolve();
+   };
+   requestAnimationFrame(move);
+  });
+  try {
+   const [{mountControl277}]=await Promise.all([import('./pcc-centro277.js?v=277'),flight]);
+   request.signal.throwIfAborted();
+   control=await mountControl277(center,{signal:request.signal,onBack(){clearControl();layout.hidden=false;view.start();enter.focus();}});
+   if(request.signal.aborted){control?.dispose();control=null;return;}
+   view.stop();layout.hidden=true;center.hidden=false;arrival.hidden=true;layout.inert=false;
+   control.focus();
+  } catch(error) {
+   if(!request.signal.aborted){arrival.textContent='No se pudo abrir el centro de control. Vuelve a intentarlo.';console.warn(error);}
+  } finally {
+   if(pending===request){pending=null;enter.disabled=false;layout.inert=false;}
+  }
+ }
+ enter.addEventListener('click',()=>void openControl());
+ q('[data-pcc265-close]').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>{clearControl();view?.stop();});
+ q('[data-pcc265-back]').addEventListener('click',()=>{clearControl();view.stop();layout.hidden=true;pick.hidden=false;});
  pick.addEventListener('click',async e=>{const b=e.target.closest('[data-pcc265-building]');if(!b)return;const B=BUILDINGS265.find(x=>x.id===b.dataset.pcc265Building);pick.hidden=true;layout.hidden=false;if(!view){view=new PccView265(dialog);await view.init();if(globalThis.location?.search?.includes('depurar225'))globalThis.pccView265=view;}
   view.onBuild=(n,shell)=>{info.innerHTML=`<h4>Armado del edificio</h4><p>${shell?'Se coloca la fachada: celosía oscura, azotea roja y pórtico de estructura blanca.':`Se coloca: ${FLOORS265[Math.min(n,FLOORS265.length)-1].name}.`}</p>`;};
   view.load(B.id);view.start();q('[data-pcc265-name]').textContent=`${B.name} · ${B.place}`;q('[data-pcc265-about]').textContent=`${B.lines}. ${B.text}`;press('shell');info.innerHTML='';const one=B.id==='pcc1';dialog.querySelectorAll('[data-pcc265-mode="cut"],[data-pcc265-mode="build"]').forEach(x=>x.hidden=!one);

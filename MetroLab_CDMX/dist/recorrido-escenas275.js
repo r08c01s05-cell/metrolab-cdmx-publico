@@ -82,7 +82,7 @@ export async function buildChapter(chapter,signal) {
  const anchors=new Map(), exploded=[];
  let model, pccShell, liveFlow;
  if(chapter.source==='pcc') {
-  const {buildPcc1} = await import('./pcc-building265.js?v=268');
+  const {buildPcc1} = await import('./pcc-building265.js?v=277');
   signal.throwIfAborted();
   model=buildPcc1();
   model.getObjectByName('Terreno').visible=false;

@@ -13,3 +13,23 @@
 .pcc265-slide{font-style:italic}.pcc265-note{font-size:11.5px;color:#93a39d!important}
 @media(max-width:900px){.pcc265-layout{grid-template-columns:1fr;grid-template-rows:55% 45%}.pcc265-side{border-left:0;border-top:1px solid #2c4248}}
 .pcc267-notes{margin:10px 0;padding-left:18px;font-size:12px;color:#ffd38a}.pcc267-notes li{margin:3px 0}
+.pcc277-center[hidden], .pcc277-arrival[hidden] { display:none; }
+#pcc265-dialog [data-pcc277-open] { color:#13282b; background:#9fe4d3; border-color:#b5f6e5; font-weight:700; }
+.pcc277-arrival { position:absolute; bottom:2.4rem; left:1rem; margin:0; padding:.55rem .9rem; border-radius:.55rem; color:#f0fbf7; background:#17282bf0; }
+.pcc277-center { flex:1; min-height:0; overflow:auto; padding:clamp(.75rem,2vw,1.75rem); background:#0d1b22; animation:pcc277-enter .35s ease-out; }
+.pcc277-toolbar, .pcc277-actions { display:flex; align-items:center; flex-wrap:wrap; gap:.55rem; }
+.pcc277-toolbar { justify-content:space-between; margin-bottom:1rem; }
+.pcc277-toolbar h3 { margin:0; font-size:clamp(1.1rem,2.4vw,1.65rem); }
+.pcc277-toolbar p { margin:.12rem 0 0; color:#b4d0d0; }
+.pcc277-lines { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.9rem; align-items:start; }
+.pcc277-lines .pcc263 { position:static; height:auto; border-top:3px solid var(--pcc277-line); overflow-x:auto; box-shadow:none; }
+.pcc277-lines [data-control-line="1"] { --pcc277-line:#f04e98; }
+.pcc277-lines [data-control-line="8"] { --pcc277-line:#35cb82; }
+.pcc277-lines .pcc263 svg { min-width:535px; }
+.pcc277-lines .pcc263 table { min-width:470px; }
+.pcc277-lines .pcc263-tiles { grid-template-columns:repeat(2,minmax(0,1fr)); }
+#pcc265-dialog .pcc277-center [data-control-emergency] { border-color:#cf6767; color:#ffbeb7; }
+#pcc265-dialog .pcc277-center [data-control-emergency][aria-pressed="true"] { background:#a03938; color:#fff; }
+@keyframes pcc277-enter { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+@media(max-width:1170px) { .pcc277-lines { grid-template-columns:1fr; } }
+@media(prefers-reduced-motion:reduce) { .pcc277-center { animation:none; } }
