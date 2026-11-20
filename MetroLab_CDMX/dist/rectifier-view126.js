@@ -12,9 +12,9 @@ import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
 import {SR_PARTS126} from './rectifier-model126.js?v=264';
 import {createMetroEnvironment} from './metro-render.js?v=222';
-import {loadRectifier127} from './rectifier-assets127.js?v=264';
+import {loadRectifier127} from './rectifier-assets127.js?v=279';
 import {PowerFlow250} from './power-flow250.js?v=261';
-import {GridPanel256} from './grid-substation256.js?v=263';
+import {GridPanel256} from './grid-substation256.js?v=279';
 import {SubstationMaintenanceUI128} from './substation-maintenance128.js?v=264';
 export class RectifierView126{
  static async create(dialog){return new RectifierView126(dialog,await loadRectifier127());}

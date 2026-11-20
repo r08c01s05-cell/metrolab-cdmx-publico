@@ -1,5 +1,6 @@
 import {ASSUMED245,DOCUMENTED245,tractionCap248,FORMATION245} from './electric-dashboard245.js?v=255';
-import {inlineSvg256} from './grid-substation256.js?v=263';
+import {inlineSvg256} from './grid-substation256.js?v=279';
+import {rheoOnly279,brakeInfo279} from './braking279.js?v=279';
 
 // Dinámica y frenado 257. Pestaña nueva del análisis eléctrico con los temas de la presentación
 // que el simulador calculaba por dentro pero no mostraba: la curva de esfuerzo tractor contra
@@ -104,8 +105,8 @@ export class TrainDynamics257{
   const now=blend257(v,massT,b);
   this.$('[data-dy257-blend]').innerHTML=inlineSvg256(`${gb}<path d="${pf}L${Xb(0)},190L${Xb(80)},190Z" fill="#7c8580" stroke="none"/><path d="${pe}L${Xb(0)},190L${Xb(80)},190Z" fill="#ff7a2f" stroke="none"/><text x="${Xb(74)}" y="182" fill="#1d1006" font-size="11">eléctrico</text><text x="${Xb(5)}" y="${Yb(blend257(1,massT,b).need)-6}" fill="#c9d1cd" font-size="11" text-anchor="end">fricción</text>${r&&v>.2?`<line x1="${Xb(Math.min(80,v*3.6))}" x2="${Xb(Math.min(80,v*3.6))}" y1="20" y2="190" stroke="#ffd34d" stroke-width="2"/>`:''}`);
   const near=r?this.nearbyTraction(r.e,r.t):0,receptive=this.receptive==='yes'||(this.receptive==='auto'&&near>0);
-  const braking=st&&st.brakeKW>0,dest=brakeDestination257(braking?st.brakeKW:ASSUMED245.maxKW*.8,{receptive});
-  this.$('[data-dy257-blend-tiles]').innerHTML=`<span><small>Reparto ${braking?'ahora':'a esta velocidad'}</small><b>${fmt(now.share*100)} % eléctrico</b>${v*3.6<ASSUMED257.fadeKmh?'a baja velocidad solo queda la fricción':'la fricción completa el resto'}</span><span class="${receptive?'ok':'warn'}"><small>Línea receptiva</small><b>${receptive?'Sí':'No'}</b>${this.receptive==='auto'?`${near} tren${near===1?'':'es'} acelerando a menos de 2 km`:'elegido a mano'}</span><span><small>${braking?'Potencia de frenado ahora':'Ejemplo con '+fmt(ASSUMED245.maxKW*.8)+' kW'}</small><b>${fmt(dest.regen)} kW a la barra</b>${fmt(dest.rheo)} kW a resistencias · ${fmt(dest.V)} V en el tren</span>`;
+  const braking=st&&st.brakeKW>0,model=r?.t?.model,rheoModel=rheoOnly279(model),P257=braking?st.brakeKW:ASSUMED245.maxKW*.8,dest=rheoModel?{regen:0,rheo:P257,V:DOCUMENTED245.nominalV}:brakeDestination257(P257,{receptive});
+  this.$('[data-dy257-blend-tiles]').innerHTML=`<span><small>Reparto ${braking?'ahora':'a esta velocidad'}</small><b>${fmt(now.share*100)} % eléctrico</b>${v*3.6<ASSUMED257.fadeKmh?'a baja velocidad solo queda la fricción':'la fricción completa el resto'}</span>${rheoModel?`<span class="warn"><small>Freno de este tren · ${model}</small><b>Solo reostático</b>${brakeInfo279(model).control}: la energía se vuelve calor en las resistencias</span>`:`<span class="${receptive?'ok':'warn'}"><small>Línea receptiva</small><b>${receptive?'Sí':'No'}</b>${this.receptive==='auto'?`${near} tren${near===1?'':'es'} acelerando a menos de 2 km`:'elegido a mano'}</span>`}<span><small>${braking?'Potencia de frenado ahora':'Ejemplo con '+fmt(ASSUMED245.maxKW*.8)+' kW'}</small><b>${fmt(dest.regen)} kW a la barra</b>${fmt(dest.rheo)} kW a resistencias · ${fmt(dest.V)} V en el tren</span>`;
   // ATP chart: distance to the next stop.
   const dist=r?Math.abs((r.e.lines?.[line]?.distances?.[r.t.target]??r.t.position)-r.t.position):0,span=Math.max(400,Math.min(1600,Math.ceil((dist+50)/200)*200));
   const Xa=d=>40+400*(1-d/span),Ya=k=>220-196*k/100,lim=(r?.e?.speedLimit?.(r.t)??80)/3.6;let ga='';for(let i=0;i<=4;i++){const d=span*i/4;ga+=`<text x="${Xa(d)}" y="236" fill="#93a39d" font-size="10" text-anchor="middle">${fmt(d)} m</text><line x1="${Xa(d)}" x2="${Xa(d)}" y1="20" y2="220" stroke="#ffffff1c"/>`;}

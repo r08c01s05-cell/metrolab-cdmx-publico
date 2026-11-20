@@ -309,7 +309,7 @@ function make(){dialog=doc.createElement('dialog');dialog.id='pcc265-dialog';dia
    requestAnimationFrame(move);
   });
   try {
-   const [{mountControl277}]=await Promise.all([import('./pcc-centro277.js?v=278'),flight]);
+   const [{mountControl277}]=await Promise.all([import('./pcc-centro277.js?v=279'),flight]);
    request.signal.throwIfAborted();
    control=await mountControl277(center,{signal:request.signal,onBack(){clearControl();layout.hidden=false;view.start();enter.focus();}});
    if(request.signal.aborted){control?.dispose();control=null;return;}

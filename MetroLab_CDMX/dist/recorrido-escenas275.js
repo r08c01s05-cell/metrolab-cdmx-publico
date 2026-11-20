@@ -1,9 +1,9 @@
 import * as Three from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 
-import {lineFacts,trainCues,fleetClassic279,motorCues,tunnelCues,supplyCues,substationCues,runningCues,steelCues,tractionCues,runningSources,tractionSources,supplySources} from './recorrido-fichas276.js?v=279';
-import {FLOORS265,buildPcc1} from './pcc-building265.js?v=278';
-import {makeTraction278,mountTrack279} from './recorrido-traccion278.js?v=279';
+import {lineFacts,trainCues,fleetClassic279,motorCues,tunnelCues,supplyCues,substationCues,runningCues,steelCues,tractionCues,runningSources,tractionSources,supplySources} from './recorrido-fichas276.js?v=280';
+import {FLOORS265,buildPcc1} from './pcc-building265.js?v=279';
+import {makeTraction278,mountTrack279} from './recorrido-traccion278.js?v=280';
 
 const trackAsset='models/andenes/L1/L1_02_Zaragoza.glb.gz';
 const substationAsset='models/revision142/subestacion142.glb.gz';
@@ -126,7 +126,7 @@ export async function buildChapter(chapter,signal) {
  } else if(chapter.source==='supply') {
   const [{construirMaqueta},{tramosDeAlimentacion},{prepararSubestacionGLB,prepararTrenGLB},substation,train] = await Promise.all([
    import('./alimentacion/escena-3d.js'),import('./alimentacion/circuito-3d.js'),
-   import('./alimentacion/modelos-glb.js?v=279'),loadModel(substationAsset,signal),loadModel('models/NM22_cabina.glb.gz',signal)
+   import('./alimentacion/modelos-glb.js?v=280'),loadModel(substationAsset,signal),loadModel('models/NM22_cabina.glb.gz',signal)
   ]);
   signal.throwIfAborted();
   model=new Three.Group();

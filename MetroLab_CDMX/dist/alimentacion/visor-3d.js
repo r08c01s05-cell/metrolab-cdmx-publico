@@ -3,7 +3,7 @@ import { RenderBudget101 } from '../render-budget101.js?v=222';
 import { OrbitControls } from '../vendor/OrbitControls.js';
 import { construirMaqueta } from './escena-3d.js';
 import { torresCampo, tramosDeAlimentacion } from './circuito-3d.js';
-import { subestacionGLB, trenDeReferencia, trenGLB } from './modelos-glb.js?v=279';
+import { subestacionGLB, trenDeReferencia, trenGLB } from './modelos-glb.js?v=280';
 
 const raiz = document.getElementById('corte-electrico-metro');
 const panel = raiz.querySelector('[data-visor]');
