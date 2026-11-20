@@ -9,6 +9,27 @@ export const trainCues = [
  [8,'Puertas de pasajeros','Dan acceso al andén. El enclavamiento impide solicitar tracción mientras las puertas están abiertas.', 'door'],
  [16,'Bogie','Sostiene y guía el coche. Agrupa ruedas, ejes y suspensión, además de la transmisión en un bogie motriz.', 'bogie']
 ];
+export const fleetClassic279 = {
+ NM79:{
+  cues:[
+   [0,'Concarril · fabricación mexicana','El NM-79 pertenece a una generación de formación tradicional de nueve coches y rodadura neumática. La escena muestra un coche motriz con cabina.', 'body'],
+   [8,'Chopper de corriente continua','La arquitectura histórica documentada regula la tensión media aplicada a los motores de CC mediante un chopper. La electrónica de una unidad concreta puede variar con sus rehabilitaciones.', null],
+   [17,'Motor de CC con colector','El GLB de referencia separa las delgas del colector y las escobillas. Las escobillas llevan corriente al inducido y el colector conmuta sus conexiones durante el giro.', 'brushes']
+  ],
+  references:[['NM-79 · estudio del IPN','https://tesis.ipn.mx/jspui/bitstream/123456789/12397/1/PROPUESTA%20DEL%20MANTENIMIENTO%20DEL%20MODULO%20ONDULADOR%20EMPLEADOS%20EN%20LOS%20CONVOY%20NM%2079%20DE%20STC.pdf']]
+ },
+ MP82:{
+  cues:[
+   [0,'Alstom · origen francés','El MP-82 es un tren neumático de la Línea 8. La ficha del Metro describe una formación de nueve coches M–R–N–N–PR–N–N–R–M.', 'body'],
+   [8,'Chopper de tracción y frenado','El diseño estudiado por el IPN usa tiristores para regular los motores de CC. Describe frenado con recuperación y frenado dinámico, según las condiciones del circuito y de la red.', null],
+   [17,'Motor de CC con colector','El despiece de referencia muestra el inducido, el colector y las escobillas. En el NM-22, en cambio, el inversor VVVF alimenta el motor asíncrono con CA trifásica.', 'brushes']
+  ],
+  references:[
+   ['MP-82 · ficha del Metro','https://www.metro.cdmx.gob.mx/operacion/parque-vehicular/mp-82'],
+   ['Chopper MP-82 · estudio del IPN','https://tesis.ipn.mx/jspui/bitstream/123456789/13861/1/tesis_%20METRO.pdf']
+  ]
+ }
+};
 const prescripciones='https://metro.cdmx.gob.mx/storage/app/media/licitacion/2020/30102015_002_20/ANEX1/ACTUALIZADA/15-prescripciones-mr-25sept-cambios.pdf';
 export const runningSources=[
  ['Rodadura neumática y férrea','https://www.metro.cdmx.gob.mx/operacion/carro-neumatico-y-ferrero'],
@@ -26,20 +47,20 @@ export const runningCues=[
  [20,'Rueda guía horizontal','Se apoya lateralmente en la barra guía y centra el bogie. Su eje vertical la distingue de las ruedas portadoras.', 'guide'],
  [27,'Zapata captadora (+)','El cabezal conductor desliza sobre la barra guía. La maqueta muestra captación en ambos costados del bogie.', 'shoe'],
  [34,'Barra guía (+) · 750 V CC','Distribuye la energía de tracción. Los aisladores separan la barra de su soporte.', 'bar'],
- [40,'Frotador de retorno (−)','Esta zapata conecta el circuito del coche con el riel de retorno. Su función es eléctrica y se distingue del apoyo mecánico.', 'return'],
+ [40,'Riel de retorno (−)','El riel de acero cierra el circuito. En el coche, los frotadores negativos hacen contacto con él.', 'return'],
  [47,'Acople sobre la vía','Las llantas vuelven a su pista, la rueda guía queda junto a la barra y la zapata regresa a la superficie de contacto.', 'pista']
 ];
 export const steelCues=[
- [0,'Rodadura férrea','En un bogie férreo, la rueda de acero soporta el peso de forma continua. La pestaña limita el desplazamiento lateral en el riel.', 'steelWheel'],
+ [0,'Rueda de acero y pestaña','Aquí se aísla la rueda de seguridad del NM-22 para ver el contacto acero–riel. En los trenes de rodadura férrea, las ruedas de acero soportan el peso durante la marcha normal.', 'steelWheel'],
  [9,'Riel y fijaciones','El riel transmite la carga a los durmientes o a la base de vía. En los trenes férreos de este Metro, la captación se hace por pantógrafo y catenaria.', 'rail']
 ];
 export const tractionCues=[
  [0,'Tren detenido','La barra guía está energizada. La demanda de tracción empieza con la orden de arranque.', 'bar'],
  [4,'Arranque · captación','El flujo amarillo va de la barra a la zapata. La demanda de corriente sube conforme se aplica par para mover el tren.', 'shoe'],
- [10,'Conversión de potencia','El inversor VVVF usa la CC del enlace para alimentar los motores asíncronos con CA de tensión y frecuencia variables. El azul indica el retorno por rieles.', 'converter'],
+ [10,'Conversión de potencia','El inversor VVVF usa la CC del enlace para alimentar los motores asíncronos con CA de tensión y frecuencia variables. El flujo sobre el cofre del GLB representa esa función.', 'converter'],
  [18,'Marcha por inercia','El tren sigue avanzando con la orden de tracción en cero. La demostración sólo representa el circuito de tracción.', 'motor'],
  [25,'Motor en modo generador','Al frenar eléctricamente, parte de la energía cinética pasa al enlace de CC. La red podría recibirla si fuera receptiva.', 'motor'],
- [31,'Frenado reostático','En este ejemplo la red no admite energía. El chopper de frenado conduce la corriente a las resistencias, que disipan calor.', 'resistor'],
+ [31,'Frenado reostático','En este ejemplo la red no admite energía. El chopper de frenado deriva corriente a las resistencias. El brillo en la rejilla del GLB representa la disipación de calor.', 'resistor'],
  [43,'Fin de la frenada','La corriente de frenado baja al detenerse el tren. Las resistencias se enfrían después de la maniobra.', 'resistor']
 ];
 export const motorCues = [

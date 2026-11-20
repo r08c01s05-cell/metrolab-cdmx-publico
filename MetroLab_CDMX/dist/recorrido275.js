@@ -1,7 +1,7 @@
 import * as Three from 'three';
 import {RenderBudget101} from './render-budget101.js?v=222';
-import {chapters,buildChapter,disposeChapter} from './recorrido-escenas275.js?v=278';
-import {tractionFrame278} from './recorrido-traccion278.js?v=278';
+import {chapters,buildChapter,disposeChapter} from './recorrido-escenas275.js?v=279';
+import {tractionFrame278} from './recorrido-traccion278.js?v=279';
 
 const totalSeconds = chapters.reduce((total,chapter)=>total+chapter.duration,0);
 const formatTime = seconds => `${Math.floor(seconds/60)}:${String(Math.floor(seconds%60)).padStart(2,'0')}`;
@@ -209,12 +209,13 @@ export function openTour275() {
   const supply=chapter.source==='supply';
   const floor=chapter.source==='pcc';
   const runningGear=chapter.source==='runningGear'||chapter.source==='steel';
-  const closeup=anchor&&(chapter.cut==='substation'||supply||floor||runningGear||timed);
+  const classicMotor=chapter.motorPath&&cue?.[3]==='brushes';
+  const closeup=anchor&&(chapter.cut==='substation'||supply||floor||runningGear||timed&&elapsed>=4);
   target.set(0,0,0);
-  if(closeup)target.copy(anchor).multiplyScalar(floor?.98:supply?.98:.72);
+  if(closeup)target.copy(anchor).multiplyScalar(floor||supply||timed?.98:.72);
   const targetZoom=closeup
-   ? floor?.77:supply?(cue[3]==='cfe'?.80:cue[3]==='cable'?.45:.30):timed?.69:runningGear?.68:.55
-   : chapter.cut==='motor'?.81:1;
+   ? floor?.77:supply?(cue[3]==='cfe'?.80:cue[3]==='cable'?.45:.30):timed?.43:runningGear?.68:.55
+   : classicMotor?.61:chapter.cut==='motor'?.81:1;
   const settling=aim.distanceToSquared(target)>.0004||Math.abs(zoom-targetZoom)>.004;
   if(painted===animated&&!settling)return;
   const transition=reducedMotion.matches||painted===-1?1:.16;
@@ -223,7 +224,8 @@ export function openTour275() {
   const ease=reducedMotion.matches?.5:animated*animated*(3-2*animated);
   const [x,y,z,endX,endY,endZ]=chapter.shot;
   const distance=Math.max(1,1.12/camera.aspect);
-  camera.position.set(10*Three.MathUtils.lerp(x,endX,ease),10*Three.MathUtils.lerp(y,endY,ease),10*Three.MathUtils.lerp(z,endZ,ease)).multiplyScalar(distance*zoom).add(aim);
+  const cameraSide=classicMotor?-1:1;
+  camera.position.set(10*Three.MathUtils.lerp(x,endX,ease),10*Three.MathUtils.lerp(y,endY,ease),cameraSide*10*Three.MathUtils.lerp(z,endZ,ease)).multiplyScalar(distance*zoom).add(aim);
   camera.lookAt(aim);
   renderer.render(scene,camera);
   if(anchor)point.project(camera);
