@@ -1,6 +1,7 @@
 import * as Three from 'three';
 import {RenderBudget101} from './render-budget101.js?v=222';
-import {chapters,buildChapter,disposeChapter} from './recorrido-escenas275.js?v=277';
+import {chapters,buildChapter,disposeChapter} from './recorrido-escenas275.js?v=278';
+import {tractionFrame278} from './recorrido-traccion278.js?v=278';
 
 const totalSeconds = chapters.reduce((total,chapter)=>total+chapter.duration,0);
 const formatTime = seconds => `${Math.floor(seconds/60)}:${String(Math.floor(seconds%60)).padStart(2,'0')}`;
@@ -14,7 +15,10 @@ export function openTour275() {
  dialog.innerHTML=`<div class="tour275-shell">
   <header class="tour275-header"><div><b>Recorrido automático</b><span>${chapters.length} capítulos · ${formatTime(totalSeconds)}</span></div><div><button data-fullscreen type="button" aria-label="Activar pantalla completa">Pantalla completa</button><button data-close type="button" autofocus>Salir</button></div></header>
   <div class="tour275-stage"><div class="tour276-model"><canvas aria-label="Maqueta 3D del capítulo"></canvas><span class="tour275-status" role="status"></span><span class="tour276-marker" aria-hidden="true" hidden><i></i><b></b></span></div>
-   <div class="tour275-caption"><p data-location></p><h2></h2><p data-story></p><div class="tour276-facts" hidden></div><div class="tour276-cue" hidden aria-live="polite"><h3></h3><p></p></div></div>
+   <div class="tour275-caption"><p data-location></p><h2></h2><p data-story></p><div class="tour276-facts" hidden></div><div class="tour276-cue" hidden aria-live="polite"><h3></h3><p></p></div>
+    <div class="tour278-meters" hidden><label>Corriente de tracción relativa <meter data-current min="0" max="1" value="0"></meter></label><label>Calor acumulado relativo <meter data-heat min="0" max="1" value="0"></meter></label></div>
+   </div>
+   <div class="tour278-control" hidden></div>
   </div>
   <div class="tour275-timeline"><progress aria-label="Avance del capítulo" max="1" value="0"></progress></div>
   <footer class="tour275-controls"><div><button data-prev type="button" aria-label="Capítulo anterior">←</button><button data-play type="button">Pausar</button><button data-next type="button" aria-label="Capítulo siguiente">→</button><span data-clock></span></div><nav aria-label="Capítulos">${chapters.map((c,i)=>`<button type="button" data-chapter="${i}">${c.label}</button>`).join('')}</nav><nav data-pieces aria-label="Partes del capítulo" hidden></nav></footer>
@@ -24,6 +28,8 @@ export function openTour275() {
  const canvas=query('canvas'),shell=query('.tour275-shell'),status=query('.tour275-status');
  const stage=query('.tour275-stage'),progress=query('progress'),play=query('[data-play]'),clock=query('[data-clock]');
  const marker=query('.tour276-marker'),cuePanel=query('.tour276-cue'),facts=query('.tour276-facts'),pieces=query('[data-pieces]');
+ const canvasBox=query('.tour276-model'), controlBox=query('.tour278-control'),meters=query('.tour278-meters');
+ const currentMeter=query('[data-current]'), heatMeter=query('[data-heat]');
  const point=new Three.Vector3();
  const aim=new Three.Vector3(),target=new Three.Vector3();
  const fullscreen=query('[data-fullscreen]');
@@ -35,7 +41,7 @@ export function openTour275() {
  const key=new Three.DirectionalLight('#fff1df',2.45);
  key.position.set(4,9,9);
  scene.add(hemi,key);
- let renderer,budget,asset,loading,frame,observer;
+ let renderer,budget,asset,control,loading,frame,observer;
  let index=0,cueIndex=-1,elapsed=0,lastTime=null,playing=true,ready=false,finished=false,closed=false,painted=-1;
  let zoom=1;
 
@@ -54,11 +60,18 @@ export function openTour275() {
   return cues[next];
  }
 
- function showFacts(data) {
-  facts.hidden=!data;
+ function showFacts(data,references=[]) {
+  facts.hidden=!data&&!references.length;
   facts.replaceChildren();
-  if(!data)return;
-  facts.innerHTML=`<p>${data.ends}</p><dl><div><dt>Estaciones</dt><dd>${data.stations}</dd></div><div><dt>Longitud total</dt><dd>${data.total}</dd></div><div><dt>Vía en servicio</dt><dd>${data.service}</dd></div></dl><a href="${data.source}" target="_blank" rel="noopener noreferrer">Ficha oficial del Metro</a>`;
+  if(data)facts.innerHTML=`<p>${data.ends}</p><dl><div><dt>Estaciones</dt><dd>${data.stations}</dd></div><div><dt>Longitud total</dt><dd>${data.total}</dd></div><div><dt>Vía en servicio</dt><dd>${data.service}</dd></div></dl><a href="${data.source}" target="_blank" rel="noopener noreferrer">Ficha oficial del Metro</a>`;
+  for(const [label,url] of references){
+   const link=document.createElement('a');
+   link.textContent=label;
+   link.href=url;
+   link.target='_blank';
+   link.rel='noopener noreferrer';
+   facts.append(link);
+  }
  }
 
  function resize() {
@@ -72,10 +85,14 @@ export function openTour275() {
  function toggle() {
   if(finished){playing=true;void select(0);return;}
   playing=!playing;
+  control?.setPaused(!playing);
   lastTime=null;
   play.textContent=playing?'Pausar':'Continuar';
  }
  function clearScene() {
+  control?.dispose();
+  control=null;
+  controlBox.replaceChildren();
   if(!asset)return;
   scene.remove(asset.root);
   disposeChapter(asset.root);
@@ -87,6 +104,7 @@ export function openTour275() {
   loading?.abort();
   const request=loading=new AbortController();
   const chapter=chapters[next];
+  const isControl=chapter.source==='control';
   index=next;cueIndex=-1;elapsed=0;lastTime=null;finished=false;ready=false;painted=-1;
   aim.set(0,0,0);zoom=1;
   clearScene();
@@ -98,7 +116,13 @@ export function openTour275() {
   query('[data-location]').textContent=`${next+1} de ${chapters.length} · ${chapter.label}`;
   query('h2').textContent=chapter.title;
   query('[data-story]').textContent=chapter.text??'';
-  showFacts(chapter.facts);
+  showFacts(chapter.facts,chapter.references);
+  meters.hidden=chapter.source!=='traction';
+  currentMeter.value=heatMeter.value=0;
+  canvasBox.hidden=isControl;
+  controlBox.hidden=!isControl;
+  stage.classList.toggle('tour278-stage-control',isControl);
+  if(!isControl)resize();
   cuePanel.hidden=!chapter.cues;
   marker.hidden=true;
   pieces.hidden=!chapter.cues;
@@ -112,6 +136,28 @@ export function openTour275() {
   stage.classList.remove('tour275-ready');
   progress.value=0;
   clock.textContent=`0:00 / ${formatTime(chapter.duration)}`;
+  if(isControl){
+   const message=document.createElement('p'),host=document.createElement('div');
+   message.setAttribute('role','status');
+   message.textContent='Abriendo los tableros de circulación y energía…';
+   controlBox.append(message,host);
+   const timeout=setTimeout(()=>request.abort(),18000);
+   try{
+    const {mountControl277}=await import('./pcc-centro277.js?v=278');
+    request.signal.throwIfAborted();
+    const result=await mountControl277(host,{signal:request.signal,presentation:true});
+    if(closed||loading!==request||request.signal.aborted){result.dispose();return;}
+    control=result;
+    control.setPaused(!playing);
+    message.remove();
+   }catch(error){
+    if(!closed&&loading===request)message.textContent='No se pudieron cargar los tableros del centro de control.';
+   }finally{
+    clearTimeout(timeout);
+    if(!closed&&loading===request){ready=true;lastTime=null;}
+   }
+   return;
+  }
   if(!renderer) {
    status.textContent='Vista 3D no disponible en este navegador.';
    ready=true;
@@ -143,26 +189,38 @@ export function openTour275() {
   if(elapsed>=chapter.duration&&!finished) {
    if(index+1<chapters.length){void select(index+1);return;}
    finished=true;playing=false;play.textContent='Repetir recorrido';
+   control?.setPaused(true);
   }
   const fraction=elapsed/chapter.duration;
   const cue=showCue(chapter);
   progress.value=fraction;
   const time=`${formatTime(elapsed)} / ${formatTime(chapter.duration)}`;
   if(clock.textContent!==time)clock.textContent=time;
-  const animated=reducedMotion.matches?.55:fraction;
   if(!asset||!budget.allows(now))return;
-  asset.animate(animated);
+  const timed=chapter.source==='traction';
+  const animated=reducedMotion.matches&&chapter.moving ? .55 : fraction;
+  if(timed){
+   const {current,heat}=tractionFrame278(elapsed);
+   currentMeter.value=current;
+   heatMeter.value=heat;
+  }
+  if(painted!==animated)asset.animate(animated,cue?.[3]);
   const anchor=cue?.[3]&&asset.anchor(cue[3],point);
-  const closeup=anchor&&(chapter.cut==='substation'||chapter.source==='supply'&&cue[3]!=='cfe');
+  const supply=chapter.source==='supply';
+  const floor=chapter.source==='pcc';
+  const runningGear=chapter.source==='runningGear'||chapter.source==='steel';
+  const closeup=anchor&&(chapter.cut==='substation'||supply||floor||runningGear||timed);
   target.set(0,0,0);
-  if(closeup)target.copy(anchor).multiplyScalar(.68);
-  const targetZoom=closeup?.55:chapter.cut==='motor'?.81:1;
+  if(closeup)target.copy(anchor).multiplyScalar(floor?.98:supply?.98:.72);
+  const targetZoom=closeup
+   ? floor?.77:supply?(cue[3]==='cfe'?.80:cue[3]==='cable'?.45:.30):timed?.69:runningGear?.68:.55
+   : chapter.cut==='motor'?.81:1;
   const settling=aim.distanceToSquared(target)>.0004||Math.abs(zoom-targetZoom)>.004;
   if(painted===animated&&!settling)return;
   const transition=reducedMotion.matches||painted===-1?1:.16;
   aim.lerp(target,transition);
   zoom=Three.MathUtils.lerp(zoom,targetZoom,transition);
-  const ease=animated*animated*(3-2*animated);
+  const ease=reducedMotion.matches?.5:animated*animated*(3-2*animated);
   const [x,y,z,endX,endY,endZ]=chapter.shot;
   const distance=Math.max(1,1.12/camera.aspect);
   camera.position.set(10*Three.MathUtils.lerp(x,endX,ease),10*Three.MathUtils.lerp(y,endY,ease),10*Three.MathUtils.lerp(z,endZ,ease)).multiplyScalar(distance*zoom).add(aim);
@@ -173,7 +231,7 @@ export function openTour275() {
   if(!marker.hidden){
    marker.style.left=`${50+point.x*50}%`;
    marker.style.top=`${50-point.y*50}%`;
-   marker.classList.toggle('tour276-marker-left',point.x>.46);
+   marker.classList.toggle('tour276-marker-left',point.x>0);
   }
   painted=animated;
  }

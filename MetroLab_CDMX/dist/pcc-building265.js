@@ -309,7 +309,7 @@ function make(){dialog=doc.createElement('dialog');dialog.id='pcc265-dialog';dia
    requestAnimationFrame(move);
   });
   try {
-   const [{mountControl277}]=await Promise.all([import('./pcc-centro277.js?v=277'),flight]);
+   const [{mountControl277}]=await Promise.all([import('./pcc-centro277.js?v=278'),flight]);
    request.signal.throwIfAborted();
    control=await mountControl277(center,{signal:request.signal,onBack(){clearControl();layout.hidden=false;view.start();enter.focus();}});
    if(request.signal.aborted){control?.dispose();control=null;return;}
@@ -323,12 +323,29 @@ function make(){dialog=doc.createElement('dialog');dialog.id='pcc265-dialog';dia
  }
  enter.addEventListener('click',()=>void openControl());
  q('[data-pcc265-close]').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>{clearControl();view?.stop();});
- q('[data-pcc265-back]').addEventListener('click',()=>{clearControl();view.stop();layout.hidden=true;pick.hidden=false;});
- pick.addEventListener('click',async e=>{const b=e.target.closest('[data-pcc265-building]');if(!b)return;const B=BUILDINGS265.find(x=>x.id===b.dataset.pcc265Building);pick.hidden=true;layout.hidden=false;if(!view){view=new PccView265(dialog);await view.init();if(globalThis.location?.search?.includes('depurar225'))globalThis.pccView265=view;}
+ q('[data-pcc265-back]').addEventListener('click',()=>{clearControl();view?.stop();layout.hidden=true;pick.hidden=false;});
+ let initialization;
+ pick.addEventListener('click',async e=>{const b=e.target.closest('[data-pcc265-building]');if(!b)return;const B=BUILDINGS265.find(x=>x.id===b.dataset.pcc265Building);pick.hidden=true;layout.hidden=false;
+  q('[data-pcc265-name]').textContent=`${B.name} · ${B.place}`;
+  q('[data-pcc265-about]').textContent=`${B.lines}. ${B.text}`;
+  info.textContent='Cargando la maqueta del edificio…';
+  try{
+   if(!view){
+    const candidate=new PccView265(dialog);
+    initialization??=candidate.init().then(()=>candidate).finally(()=>{initialization=null;});
+    view=await initialization;
+    if(globalThis.location?.search?.includes('depurar225'))globalThis.pccView265=view;
+   }
+   if(!dialog.open||layout.hidden)return;
+  }catch(error){
+   console.warn('Vista 3D del P.C.C.:',error);
+   info.textContent='No se pudo iniciar la vista 3D del edificio.';
+   return;
+  }
   view.onBuild=(n,shell)=>{info.innerHTML=`<h4>Armado del edificio</h4><p>${shell?'Se coloca la fachada: celosía oscura, azotea roja y pórtico de estructura blanca.':`Se coloca: ${FLOORS265[Math.min(n,FLOORS265.length)-1].name}.`}</p>`;};
-  view.load(B.id);view.start();q('[data-pcc265-name]').textContent=`${B.name} · ${B.place}`;q('[data-pcc265-about]').textContent=`${B.lines}. ${B.text}`;press('shell');info.innerHTML='';const one=B.id==='pcc1';dialog.querySelectorAll('[data-pcc265-mode="cut"],[data-pcc265-mode="build"]').forEach(x=>x.hidden=!one);
+  view.load(B.id);view.start();press('shell');info.innerHTML='';const one=B.id==='pcc1';dialog.querySelectorAll('[data-pcc265-mode="cut"],[data-pcc265-mode="build"]').forEach(x=>x.hidden=!one);
   floorsEl.innerHTML=one?[...FLOORS265].map((f,i)=>[f,i]).reverse().map(([f,i])=>`<button type="button" data-pcc265-floor="${i}" aria-pressed="false"><b>${f.name}</b><span>${f.slide}</span></button>`).join(''):AREAS267.map((f,i)=>`<button type="button" data-pcc265-floor="${i}" aria-pressed="false"><b>${f.name}</b><span>${f.slide}</span></button>`).join('')+`<ul class="pcc267-notes">${PCC2_NOTES267.map(x=>`<li>${x}</li>`).join('')}</ul><p class="pcc265-note">Fuentes del P.C.C. 2: ${Object.values(SOURCES267).join('; ')}.</p>`;});
  floorsEl.addEventListener('click',e=>{const b=e.target.closest('[data-pcc265-floor]');if(b)showFloor(Number(b.dataset.pcc265Floor));});
  dialog.addEventListener('click',e=>{const b=e.target.closest('[data-pcc265-mode]');if(!b||!view)return;const m=b.dataset.pcc265Mode;press(m);pressFloor(-9);info.innerHTML=m==='cut'?'<h4>Corte por pisos</h4><p>Sótano, planta baja y seis pisos. Elige un piso en la lista para ver su equipo.</p>':'';if(m==='shell')view.show(null);else if(m==='cut')view.show(-1);else view.build();});}
-export async function open(){if(!doc)return;if(!dialog)make();if(dialog.open)return;dialog.querySelector('[data-pcc265-pick]').hidden=false;dialog.querySelector('[data-pcc265-layout]').hidden=true;dialog.showModal();}
+export async function open({building}={}){if(!doc)return;if(!dialog)make();if(dialog.open)return;const pick=dialog.querySelector('[data-pcc265-pick]');pick.hidden=false;dialog.querySelector('[data-pcc265-layout]').hidden=true;dialog.showModal();if(BUILDINGS265.some(b=>b.id===building))pick.querySelector(`[data-pcc265-building="${building}"]`)?.click();}
 if(typeof window!=='undefined')window.metroPcc265={open};

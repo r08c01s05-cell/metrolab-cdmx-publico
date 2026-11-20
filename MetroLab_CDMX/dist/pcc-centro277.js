@@ -1,6 +1,6 @@
-import {Pcc263} from './pcc263.js?v=277';
+import {Pcc263} from './pcc263.js?v=278';
 
-export async function mountControl277(host,{signal,onBack}) {
+export async function mountControl277(host,{signal,onBack,presentation=false}) {
  const doc=host.ownerDocument,win=doc.defaultView;
  const response=await win.fetch(new URL('./datos.json?v=144',import.meta.url),{signal});
  if(!response.ok)throw new Error(`Datos de las líneas no disponibles (${response.status})`);
@@ -13,14 +13,14 @@ export async function mountControl277(host,{signal,onBack}) {
  for(let i=0;i<180;i++)engine.step(step);
  host.innerHTML=`<div class="pcc277-toolbar">
    <div><h3>Centro de control · Líneas 1 y 8</h3><p>Escenario de práctica del simulador</p></div>
-   <div class="pcc277-actions">
+   <div class="pcc277-actions" ${presentation?'hidden':''}>
     <button type="button" data-control-back>← Volver al recorrido del edificio</button>
     <button type="button" data-control-pause aria-pressed="false">Pausar simulación</button>
     <button type="button" data-control-emergency aria-pressed="false">Freno de emergencia · ambas líneas</button>
    </div>
   </div><div class="pcc277-lines"><section data-control-line="1" aria-label="Tablero de Línea 1"></section><section data-control-line="8" aria-label="Tablero de Línea 8"></section></div>`;
  const q=selector=>host.querySelector(selector);
- const panels=[1,8].map(line=>new Pcc263(doc,win,{host:q(`[data-control-line="${line}"]`),state:()=>({engine,currentLine:line}),zones}));
+ const panels=[1,8].map(line=>new Pcc263(doc,win,{host:q(`[data-control-line="${line}"]`),state:()=>({engine,currentLine:line}),zones,presentation}));
  let paused=false;
  for(const panel of panels)panel.toggle(true);
  const update=()=>panels.forEach(panel=>panel.tick());
@@ -42,6 +42,7 @@ export async function mountControl277(host,{signal,onBack}) {
   update();
  },step*1000);
  return {
+  setPaused(value){paused=value;},
   focus(){q('[data-control-back]').focus();},
   dispose(){win.clearInterval(timer);panels.forEach(panel=>panel.dispose());host.replaceChildren();}
  };

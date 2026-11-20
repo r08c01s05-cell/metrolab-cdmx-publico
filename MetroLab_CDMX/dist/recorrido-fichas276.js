@@ -9,6 +9,39 @@ export const trainCues = [
  [8,'Puertas de pasajeros','Dan acceso al andén. El enclavamiento impide solicitar tracción mientras las puertas están abiertas.', 'door'],
  [16,'Bogie','Sostiene y guía el coche. Agrupa ruedas, ejes y suspensión, además de la transmisión en un bogie motriz.', 'bogie']
 ];
+const prescripciones='https://metro.cdmx.gob.mx/storage/app/media/licitacion/2020/30102015_002_20/ANEX1/ACTUALIZADA/15-prescripciones-mr-25sept-cambios.pdf';
+export const runningSources=[
+ ['Rodadura neumática y férrea','https://www.metro.cdmx.gob.mx/operacion/carro-neumatico-y-ferrero'],
+ ['Especificación de Línea 1 · § 4.5',prescripciones]
+];
+export const tractionSources=[['Especificación de Línea 1 · § 5.12',prescripciones]];
+export const supplySources=[
+ ['Metro-Energía · 230 y 15 kV','https://www.metro.cdmx.gob.mx/comunicacion/nota/construyen-gobierno-capitalino-y-cfe-la-subestacion-de-alta-tension-seat-mas-moderna-y-grande-del-pais-denominado-proyecto-metro-energia'],
+ ['Informe FIMETRO · p. 91','https://metro.cdmx.gob.mx/storage/app/media/FIMETRO/INFORME-TRIMESTRAL-FIMETRO/2025/Cuarto%20Informe%20Trimestral%202024.pdf#page=91']
+];
+export const runningCues=[
+ [0,'Bogie motriz ensamblado','Bastidor, suspensión y dos ejes sostienen el coche. Las piezas se van a separar para que se distingan sus funciones.',null],
+ [6,'Neumático portador','La llanta soporta el peso del coche sobre la pista y transmite el esfuerzo de tracción y frenado.', 'tire'],
+ [13,'Rueda de seguridad de acero','Es concéntrica con la rueda portadora. Puede apoyarse en el riel en caso de pérdida de presión y guiar con su pestaña donde falta barra guía.', 'steelWheel'],
+ [20,'Rueda guía horizontal','Se apoya lateralmente en la barra guía y centra el bogie. Su eje vertical la distingue de las ruedas portadoras.', 'guide'],
+ [27,'Zapata captadora (+)','El cabezal conductor desliza sobre la barra guía. La maqueta muestra captación en ambos costados del bogie.', 'shoe'],
+ [34,'Barra guía (+) · 750 V CC','Distribuye la energía de tracción. Los aisladores separan la barra de su soporte.', 'bar'],
+ [40,'Frotador de retorno (−)','Esta zapata conecta el circuito del coche con el riel de retorno. Su función es eléctrica y se distingue del apoyo mecánico.', 'return'],
+ [47,'Acople sobre la vía','Las llantas vuelven a su pista, la rueda guía queda junto a la barra y la zapata regresa a la superficie de contacto.', 'pista']
+];
+export const steelCues=[
+ [0,'Rodadura férrea','En un bogie férreo, la rueda de acero soporta el peso de forma continua. La pestaña limita el desplazamiento lateral en el riel.', 'steelWheel'],
+ [9,'Riel y fijaciones','El riel transmite la carga a los durmientes o a la base de vía. En los trenes férreos de este Metro, la captación se hace por pantógrafo y catenaria.', 'rail']
+];
+export const tractionCues=[
+ [0,'Tren detenido','La barra guía está energizada. La demanda de tracción empieza con la orden de arranque.', 'bar'],
+ [4,'Arranque · captación','El flujo amarillo va de la barra a la zapata. La demanda de corriente sube conforme se aplica par para mover el tren.', 'shoe'],
+ [10,'Conversión de potencia','El inversor VVVF usa la CC del enlace para alimentar los motores asíncronos con CA de tensión y frecuencia variables. El azul indica el retorno por rieles.', 'converter'],
+ [18,'Marcha por inercia','El tren sigue avanzando con la orden de tracción en cero. La demostración sólo representa el circuito de tracción.', 'motor'],
+ [25,'Motor en modo generador','Al frenar eléctricamente, parte de la energía cinética pasa al enlace de CC. La red podría recibirla si fuera receptiva.', 'motor'],
+ [31,'Frenado reostático','En este ejemplo la red no admite energía. El chopper de frenado conduce la corriente a las resistencias, que disipan calor.', 'resistor'],
+ [43,'Fin de la frenada','La corriente de frenado baja al detenerse el tren. Las resistencias se enfrían después de la maniobra.', 'resistor']
+];
 export const motorCues = [
  [0,'Motor de tracción · maqueta','El motor convierte la energía eléctrica en giro. Las piezas se separan para mostrar su posición relativa.', null],
  [7,'Carcasa','Protege el conjunto y ayuda a evacuar el calor al exterior.', 'housing'],
@@ -23,12 +56,13 @@ export const tunnelCues = [
  [14,'Solera y drenaje','La solera soporta la base de vía. El drenaje recoge el agua en la parte baja del túnel.', 'slab']
 ];
 export const supplyCues = [
- [0,'Línea de transmisión','La corriente alterna llega al sistema desde la red de alta tensión.', 'cfe'],
- [9,'Patio de transformación','Reduce la tensión a media tensión para distribuir la energía hacia las subestaciones rectificadoras.', 'seat'],
- [18,'Alimentador de media tensión','Une el patio con la subestación. En la maqueta las líneas amarillas identifican el recorrido de corriente alterna.', 'cable'],
- [27,'Rectificación','En la subestación se reduce la tensión nuevamente y se rectifica para obtener corriente continua de tracción.', 'rec'],
- [36,'Barra guía y captador','El contacto deslizante del tren recibe la alimentación desde la barra guía. En las líneas 1 y 8 la tracción se representa a 750 V CC.', 'contact'],
- [46,'Retorno por vía','La corriente regresa a la subestación por el circuito de retorno asociado a la vía. El flujo azul lo indica en la maqueta.', 'returnPath']
+ [0,'CFE · 230 kV CA','En el ejemplo Metro-Energía, las tres fases llegan desde la red de alta tensión. La maqueta sigue los conductores desde las torres al patio.', 'cfe'],
+ [9,'Buen Tono · 230 → 15 kV CA','La subestación de alta tensión reduce el voltaje para distribuir energía por alimentadores de media tensión.', 'seat'],
+ [18,'Alimentador · 15 kV CA','El cable de media tensión lleva energía del patio a las subestaciones rectificadoras. El amarillo identifica la etapa de corriente alterna.', 'cable'],
+ [28,'Transformador de tracción · 15 kV → 570 V CA','En el caso documentado de Línea 1, el secundario alimenta el rectificador con 570 V CA.', 'tr'],
+ [38,'Rectificador · 750 V CC','Los diodos convierten la CA en CC para la tracción. La salida se protege y se distribuye a los tramos de barra guía.', 'rec'],
+ [48,'Barra guía y captación (+)','El flujo naranja llega a la vía y a la zapata del tren. La barra guía se representa con su tensión nominal de 750 V CC.', 'contact'],
+ [58,'Retorno por rieles (−)','El flujo azul cierra el circuito desde la vía hasta la subestación rectificadora.', 'returnPath']
 ];
 export const substationCues = [
  [0,'Frente de la subestación','Vista desde el lado de acceso. El despiece separa los equipos para mostrar su papel en la cadena de tracción.', null],
