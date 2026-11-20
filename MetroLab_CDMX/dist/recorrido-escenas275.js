@@ -1,18 +1,31 @@
 import * as Three from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 
-import {lineFacts,trainCues,motorCues,tunnelCues,supplyCues,substationCues} from './recorrido-fichas276.js?v=276';
+import {lineFacts,trainCues,motorCues,tunnelCues,supplyCues,substationCues,runningCues,steelCues,tractionCues,runningSources,tractionSources,supplySources} from './recorrido-fichas276.js?v=278';
+import {FLOORS265,buildPcc1} from './pcc-building265.js?v=278';
+import {makeTraction278} from './recorrido-traccion278.js?v=278';
+
+const pccCues=[
+ [0,'Fachada de Buen Tono','El edificio histórico reúne la recepción eléctrica, la distribución y el mando centralizado. La maqueta sube del sótano al sexto piso.',null],
+ [8,'Corte del edificio','Vista de conjunto: las losas separan el sótano, la planta baja y los seis pisos de instalaciones y oficinas.',null],
+ ...FLOORS265.map((f,i)=>[16+i*9,f.name,f.id==='p6'?'En esta planta se muestran oficinas, videovigilancia y el simulador mencionados en el material de referencia.':f.text,f.id]),
+ [88,'Sala de mando · quinto piso','Desde la sala de mando se coordinan la circulación y la alimentación. En la siguiente escena aparecen los dos tableros del escenario simulado.', 'p5']
+];
 
 export const chapters = [
  {title:'De Pantitlán a Observatorio', label:'Línea 1', duration:20, color:'#fd79ac', facts:lineFacts[1], text:'Zaragoza abre el recorrido. La estación permite reconocer la disposición de las vías, los andenes laterales y los accesos.', path:'models/andenes/L1/L1_02_Zaragoza.glb.gz', cut:'station', shot:[.74,.45,.58,.38,.34,.42]},
  {title:'De Garibaldi a Constitución', label:'Línea 8', duration:20, color:'#74dba1', facts:lineFacts[8], text:'En Coyuya, las vías flanquean el andén central. Desde el mismo andén se accede a los trenes de ambos sentidos.', source:'coyuya', cut:'station', shot:[-.72,.47,.67,-.35,.35,.48]},
  {title:'El tren en movimiento', label:'Tren NM-22', duration:25, color:'#ffae74', cues:trainCues, path:'models/NM22_cabina.glb.gz', moving:true, shot:[.73,.3,1.47,.16,.23,1.25]},
+ {title:'Despiece del rodaje neumático', label:'Bogie y captadores', duration:53, color:'#ffae74', cues:runningCues, references:runningSources, source:'runningGear', shot:[.75,.57,1.47,.40,.56,1.47]},
+ {title:'Rueda de acero sobre riel', label:'Rodaje férreo', duration:18, color:'#c7e0ef', cues:steelCues, references:runningSources.slice(0,1), source:'steel', shot:[.59,.53,1.49,.35,.42,1.48]},
  {title:'Despiece del motor de tracción', label:'Despiece del motor', duration:48, color:'#ffae74', cues:motorCues, path:'models/Motor_NM22_referencia94.glb.gz', cut:'motor', shot:[1.30,.5,.50,1.44,.28,.20]},
  {title:'Túnel de sección rectangular', label:'Túnel cajón', duration:16, color:'#99d0ef', text:'Muros laterales y losas forman el cajón. La maqueta muestra dos vías sobre la losa inferior, con espacio para circulación y mantenimiento.', path:'models/Tunel_cajon273.glb', shot:[.77,.56,1.58,.12,.20,1.60]},
  {title:'Por dentro del túnel circular', label:'Túnel circular', duration:22, color:'#99d0ef', cues:tunnelCues, path:'models/Tunel_circular273.glb?v=274', cut:'tunnel', shot:[.89,.58,1.64,.08,.18,1.57]},
- {title:'De la red eléctrica al tren', label:'Alimentación', duration:54, color:'#ffe190', cues:supplyCues, source:'supply', shot:[-.38,.62,1.34,.25,.37,1.28]},
+ {title:'De CFE a la barra guía', label:'Alimentación', duration:68, color:'#ffe190', cues:supplyCues, references:supplySources, source:'supply', shot:[-.20,.55,1.55,.18,.43,1.36]},
  {title:'Despiece de la subestación', label:'Subestación', duration:56, color:'#ffe190', cues:substationCues, path:'models/revision142/subestacion142.glb.gz', cut:'substation', shot:[.26,.33,-1.60,-.16,.28,-1.49]},
- {title:'La red desde el puesto de control', label:'Puesto de control', duration:20, color:'#caafff', text:'El Puesto Central de Control reúne información de circulación y alimentación para coordinar el servicio. La vista se abre para mostrar la distribución del edificio.', source:'pcc', shot:[.60,.52,1.46,-.37,.47,1.38]}
+ {title:'Del arranque al frenado', label:'Tracción y frenado', duration:48, color:'#ffbf70', cues:tractionCues, references:tractionSources, source:'traction', shot:[.59,.44,1.25,.44,.38,1.25]},
+ {title:'Piso por piso en Buen Tono', label:'Edificio del PCC', duration:98, color:'#caafff', cues:pccCues, source:'pcc', shot:[.68,.54,1.55,.47,.83,1.40]},
+ {title:'Centro de control', label:'Tableros de las líneas', duration:42, color:'#caafff', source:'control', text:'Sigue la posición de los trenes, el estado de las zonas de tracción y el balance de energía de las líneas 1 y 8 en los tableros del simulador.'}
 ];
 
 async function loadModel(path, signal) {
@@ -80,9 +93,8 @@ function placeParts(parts,amount) {
 
 export async function buildChapter(chapter,signal) {
  const anchors=new Map(), exploded=[];
- let model, pccShell, liveFlow;
+ let model, pccShell, pccFloors, liveFlow, traction;
  if(chapter.source==='pcc') {
-  const {buildPcc1} = await import('./pcc-building265.js?v=277');
   signal.throwIfAborted();
   model=buildPcc1();
   model.getObjectByName('Terreno').visible=false;
@@ -91,7 +103,16 @@ export async function buildChapter(chapter,signal) {
   model.traverse(object=>{
    if(object.isSprite&&!object.name.startsWith('Rotulo:P.C.C.'))object.visible=false;
   });
-  pccShell=model.userData.shell;
+  ({shell:pccShell,floors:pccFloors}=model.userData);
+  for(const floor of pccFloors){
+   const walls=floor.getObjectByName('Muros_'+floor.userData.id);
+   if(walls)walls.visible=false;
+   anchors.set(floor.userData.id,{object:floor,point:new Three.Vector3(0,1,0)});
+  }
+ } else if(['runningGear','steel','traction'].includes(chapter.source)) {
+  model=new Three.Group();
+  traction=makeTraction278(model,chapter.source);
+  for(const [id,object] of Object.entries(traction.anchors))anchors.set(id,{object,point:new Three.Vector3()});
  } else if(chapter.source==='coyuya') {
   const {makeCoyuya208} = await import('./coyuya208.js?v=209');
   signal.throwIfAborted();
@@ -104,17 +125,18 @@ export async function buildChapter(chapter,signal) {
   model=new Three.Group();
   const parts=construirMaqueta(model);
   parts.aerea.visible=false;
-  for(const id of ['cfe','seat','cable','rec'])setAnchor(anchors,id,parts[id]);
-  anchors.set('contact',{object:model,point:new Three.Vector3(30,-1.8,2.05)});
+  for(const id of ['seat','cable','tr','rec'])setAnchor(anchors,id,parts[id]);
+  anchors.set('cfe',{object:model,point:new Three.Vector3(-29,16,-4.2)});
+  anchors.set('contact',{object:model,point:new Three.Vector3(27.55,-1.88,2.05)});
   anchors.set('returnPath',{object:model,point:new Three.Vector3(31,-2.31,.96)});
   const marker=new Three.SphereGeometry(.26,8,6);
   const colors={ac:new Three.MeshBasicMaterial({color:'#fff093'}),dc:new Three.MeshBasicMaterial({color:'#ff9e65'}),ret:new Three.MeshBasicMaterial({color:'#92ddeb'})};
-  liveFlow=tramosDeAlimentacion({mediumOnly:false,overhead:false}).filter(([,group])=>group!=='aerea').map(([kind,,points])=>{
+  liveFlow=tramosDeAlimentacion({mediumOnly:false,overhead:false}).filter(([,group])=>group!=='aux').map(([kind,group,points])=>{
    const path=new Three.CatmullRomCurve3(points.map(point=>new Three.Vector3(...point)));
    const line=new Three.Line(new Three.BufferGeometry().setFromPoints(path.getPoints(24)),new Three.LineBasicMaterial({color:colors[kind]?.color??'#83b9c9',transparent:true,opacity:.55}));
    const dot=new Three.Mesh(marker,colors[kind]??colors.ret);
    model.add(line,dot);
-   return {path,dot};
+   return {path,dot,line,group:group==='track'?'contact':group==='return'?'returnPath':group};
   });
  } else {
   model=await loadModel(chapter.path,signal);
@@ -152,8 +174,10 @@ export async function buildChapter(chapter,signal) {
  content.add(model);
  const bounds=visibleBounds(model),center=bounds.getCenter(new Three.Vector3());
  placeParts(exploded,1);
+ if(chapter.source==='runningGear')traction.animate(12);
  bounds.union(visibleBounds(model));
  placeParts(exploded,0);
+ traction?.animate(0);
  const size=bounds.getSize(new Three.Vector3());
  if(chapter.cut==='motor')bounds.getCenter(center);
  model.position.sub(center);
@@ -165,11 +189,19 @@ export async function buildChapter(chapter,signal) {
  return {root,anchor(id,point){
   const anchor=anchors.get(id);
   return anchor ? anchor.object.localToWorld(point.copy(anchor.point)) : null;
- },animate(progress){
+ },animate(progress,cue){
   if(chapter.moving)model.position.x=trainStart+(progress-.5)*size.x*.26;
   if(exploded.length)placeParts(exploded,Three.MathUtils.smoothstep(progress,.04,.16));
-  if(pccShell)pccShell.visible=progress<.38;
-  liveFlow?.forEach(({path,dot},i)=>path.getPointAt((progress*5+i*.13)%1,dot.position));
+  if(pccShell){
+   pccShell.visible=progress<8/chapter.duration;
+   for(const floor of pccFloors)floor.visible=cue?floor.userData.id===cue:!pccShell.visible||floor.userData.index>0;
+  }
+  traction?.animate(progress*chapter.duration);
+  liveFlow?.forEach(({path,dot,line,group},i)=>{
+   dot.visible=group===cue;
+   line.material.opacity=dot.visible?.78:.28;
+   if(dot.visible)path.getPointAt((progress*12+i*.13)%1,dot.position);
+  });
  }};
 }
 

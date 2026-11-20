@@ -39,9 +39,9 @@ const fmt=(n,d=0)=>Number(n).toLocaleString('es-MX',{maximumFractionDigits:d,min
 const ZC={A:'#ffb238',B:'#79dbc1',C:'#c47dff',D:'#ff7a2f',E:'#39a7ff',F:'#e8d44d'};
 
 export class Pcc263{
- constructor(doc=document,win=window,{host,state,zones=ZONE_STATE261}={}){this.doc=doc;this.win=win;this.on=false;this.memo=new Map();this.holds=new HoldBook263();this.phase=0;
+ constructor(doc=document,win=window,{host,state,zones=ZONE_STATE261,presentation=false}={}){this.doc=doc;this.win=win;this.on=false;this.memo=new Map();this.holds=new HoldBook263();this.phase=0;
   this.host=host;this.readState=state;this.zones=zones;
-  this.button=doc.createElement('button');this.button.type='button';this.button.className='pcc263-toggle';this.button.textContent='🖥 P.C.C.';this.button.title='Puesto Central de Control: trenes, zonas de tracción y flujos de energía';this.button.setAttribute('aria-pressed','false');this.button.onclick=()=>this.toggle();
+  this.button=doc.createElement('button');this.button.type='button';this.button.className='pcc263-toggle';this.button.textContent='🖥 P.C.C.';this.button.title='Puesto Central de Control: trenes, zonas de tracción y flujos de energía';this.button.setAttribute('aria-pressed','false');this.button.onclick=()=>this.open();
   if(!host)(doc.querySelector('.sim106-view-tools')||doc.getElementById('sim106-shell')||doc.body)?.append(this.button);
   this.panel=doc.createElement('aside');this.panel.className='pcc263';this.panel.hidden=true;this.panel.setAttribute('aria-label','Puesto Central de Control');
   this.panel.innerHTML=`<header><div><small>PUESTO CENTRAL DE CONTROL</small><b data-pcc-title>Línea</b></div><button type="button" data-pcc-close aria-label="Cerrar">×</button></header>
@@ -51,6 +51,8 @@ export class Pcc263{
 <div class="pcc263-tiles" data-pcc-tiles></div><table data-pcc-table></table><p class="pcc263-note" data-pcc-note></p>`;
   (host||doc.getElementById('sim106-stage')||doc.body)?.append(this.panel);const q=s=>this.panel.querySelector?.(s);
   if(host){q('[data-pcc-close]').hidden=true;q('[data-pcc-emergency]').hidden=true;}
+  this.presentation=presentation;
+  if(presentation){q('.pcc263-orders').hidden=true;q('[data-pcc-table]').hidden=true;}
   q('[data-pcc-close]')?.addEventListener?.('click',()=>this.toggle(false));
   q('[data-pcc-holdall]')?.addEventListener?.('click',()=>{this.holds.holdAll(this.last?.rows.map(r=>r.id)||[]);this.tick();});
   q('[data-pcc-release]')?.addEventListener?.('click',()=>{this.holds.releaseAll();this.tick();});
@@ -62,6 +64,18 @@ export class Pcc263{
   // Las retenciones se aplican aunque el panel esté cerrado.
   if(!host)this.timer=win.setInterval?.(()=>this.tick(),200);}
  state(){return (this.readState?this.readState():this.win.metroViewState?.())||null;}
+ async open(){
+  const screen=this.doc.body?.dataset;
+  if(this.host||screen?.gameScreen!=='simulation'||screen.driving==='true'){this.toggle();return;}
+  this.button.disabled=true;
+  try{
+   const {open}=await import('./pcc-building265.js?v=278');
+   await open({building:this.state()?.currentLine===8?'pcc2':'pcc1'});
+  }catch(error){
+   console.warn('No se pudo abrir el edificio del P.C.C.',error);
+   this.toggle(true);
+  }finally{this.button.disabled=false;}
+ }
  toggle(on=!this.on){this.on=on;this.button.setAttribute('aria-pressed',String(on));this.panel.hidden=!on;if(on)this.tick();}
  tick(){const s=this.state();if(!s?.engine)return;const active=this.on||this.holds.manual.size||this.zones.out.size||this.zones.open.size||this.holds.auto.size;if(!active)return;
   const snap=this.last=snapshot263(s.engine,s.currentLine,this.memo,this.zones);this.holds.setAuto(snap.rows);this.holds.apply(s.engine);if(this.on){this.phase=(this.phase+3)%24;this.render(snap,s.engine);}}
@@ -88,6 +102,7 @@ export class Pcc263{
   q('[data-pcc-tiles]').innerHTML=`<span><small>Piden los trenes</small><b>${fmt(T.demandKW)} kW</b>tracción y auxiliares</span><span><small>Entregan las S.R.</small><b>${fmt(T.srKW)} kW</b>≈ ${fmt(T.amps)} A a 750 V</span><span class="ok"><small>Regresa a la barra guía</small><b>${fmt(T.regenKW)} kW</b>motores como generadores</span><span class="${T.rheoKW>1?'warn':''}"><small>Se quema en resistencias</small><b>${fmt(T.rheoKW)} kW</b>sin tren que la reciba</span>`;
   q('[data-pcc-table]').innerHTML=`<tr><th>Tren</th><th>Zona</th><th>km/h</th><th>Modo</th><th>kW</th><th>Estado</th><th>Orden</th></tr>`+snap.rows.map(r=>{const held=this.holds.held(r.id),auto=this.holds.auto.has(r.id)&&!this.holds.manual.has(r.id),kw=r.mode==='regenera'?-(r.regenKW+r.rheoKW):r.drawKW;return `<tr><td>${r.id}</td><td>${r.zone??'·'}${r.zoneLive?'':' ⚠'}</td><td>${fmt(r.speedKmh)}</td><td style="color:${MODES263[r.mode].color}">${MODES263[r.mode].label}</td><td>${fmt(kw)}</td><td>${auto?'Retenido: zona sin tensión':held&&r.inStation?'Retenido por el P.C.C.':held?'Se retendrá al llegar':r.state}</td><td><button type="button" data-pcc-hold="${r.id}" aria-pressed="${this.holds.manual.has(r.id)}">${this.holds.manual.has(r.id)?'Liberar':'Retener'}</button></td></tr>`;}).join('');
   const dead=[...L1_ZONES261.map(z=>z.zone)].filter(z=>snap.positions.length&&!snap.fed.has(z));
-  q('[data-pcc-note]').textContent=(dead.length?`Zona ${dead.join(', ')} sin tensión: sus trenes detenidos quedan retenidos; los que van entre estaciones siguen hasta la siguiente porque el corte por zona no existe en el motor del simulador. `:'')+(this.host?'Selecciona un tren para identificarlo en el tablero. ':'Toca una S.R. para sacarla de servicio y un tren para seguirlo con la cámara. ')+ASSUMED263.note;}
+  const help=this.presentation?'':this.host?'Selecciona un tren para identificarlo en el tablero. ':'Toca una S.R. para sacarla de servicio y un tren para seguirlo con la cámara. ';
+  q('[data-pcc-note]').textContent=(dead.length?`Zona ${dead.join(', ')} sin tensión: sus trenes detenidos quedan retenidos; los que van entre estaciones siguen hasta la siguiente porque el corte por zona no existe en el motor del simulador. `:'')+help+ASSUMED263.note;}
  dispose(){this.win.clearInterval?.(this.timer);this.button.remove?.();this.panel.remove?.();}}
 export function installPcc263(doc=document,win=window){if(win.pcc263)return win.pcc263;return win.pcc263=new Pcc263(doc,win);}
