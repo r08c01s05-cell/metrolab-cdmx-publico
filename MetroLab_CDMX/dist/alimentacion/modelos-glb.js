@@ -26,7 +26,10 @@ function cargar(clave) {
 }
 
 export async function subestacionGLB() {
-  const origen=(await cargar('subestacion')).clone();
+  return prepararSubestacionGLB((await cargar('subestacion')).clone());
+}
+
+export function prepararSubestacionGLB(origen) {
   origen.updateMatrixWorld(true);
   const piezas=new Map();
   for(const nombre of ['transformer','rectifier','dc']) {
@@ -54,7 +57,10 @@ export function trenDeReferencia({sistema,overhead}) {
 }
 
 export async function trenGLB(clave) {
-  const modelo=(await cargar(clave)).clone();
+  return prepararTrenGLB((await cargar(clave)).clone(),clave);
+}
+
+export function prepararTrenGLB(modelo,clave) {
   if(clave==='mp82') modelo.rotation.y=Math.PI;
   const caja=new T.Box3().setFromObject(modelo);
   const centro=caja.getCenter(new T.Vector3());

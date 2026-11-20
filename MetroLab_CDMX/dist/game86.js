@@ -22,7 +22,7 @@ if(tourButton)tourButton.onclick=async()=>{
  if(tourButton.disabled)return;
  tourButton.disabled=true;
  try {
-  const {openTour275}=await import('./recorrido275.js?v=279');
+  const {openTour275}=await import('./recorrido275.js?v=280');
   openTour275();
  } catch(error) {
   $('tour275-home-status').textContent='No se pudo abrir el recorrido. Vuelve a intentarlo.';

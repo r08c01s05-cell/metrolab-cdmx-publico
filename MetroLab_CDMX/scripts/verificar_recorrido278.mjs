@@ -1,7 +1,19 @@
 import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
 import * as Three from 'three';
 import {chapters,buildChapter,disposeChapter} from '../dist/recorrido-escenas275.js';
 import {tractionFrame278} from '../dist/recorrido-traccion278.js';
+
+const fetchAsset=globalThis.fetch;
+globalThis.fetch=async (url,options)=>{
+ const resource=new URL(url);
+ if(resource.protocol!=='file:')return fetchAsset(url,options);
+ const bytes=await readFile(resource,{signal:options?.signal});
+ return new Response(bytes,{status:200});
+};
+globalThis.self=globalThis;
+// La prueba CPU conserva mallas, materiales y UV; la decodificación de imágenes se verifica en navegador.
+globalThis.createImageBitmap=async()=>({width:1,height:1,close(){}});
 
 const before=tractionFrame278(0),peak=tractionFrame278(6),coast=tractionFrame278(22);
 const brake=tractionFrame278(32),stopped=tractionFrame278(43),cooled=tractionFrame278(48);
@@ -22,6 +34,10 @@ for(const source of ['runningGear','steel','traction','supply','pcc']){
   if(id)assert(scene.anchor(id,point)?.toArray().every(Number.isFinite),id);
  }
  if(source==='runningGear'){
+  const wheelGroups=scene.root.getObjectsByProperty('name','Neumático portador GLB');
+  assert.equal(wheelGroups.length,4);
+  assert(wheelGroups.every(group=>group.children.length===1&&group.children[0].geometry.index.count>100));
+  assert(scene.root.getObjectByName('Vía GLB de Zaragoza').children.some(object=>object.name.startsWith('Pista_de_rodamiento')));
   const position=seconds=>{
    scene.animate(seconds/chapter.duration);
    return scene.anchor('shoe',new Three.Vector3());
@@ -31,10 +47,16 @@ for(const source of ['runningGear','steel','traction','supply','pcc']){
   assert(position(53).distanceTo(start)<1e-6);
  }
  if(source==='traction'){
+  assert(scene.root.getObjectByName('Cofre GLB de referencia').children.length>5);
   scene.animate(0);
   const start=scene.anchor('shoe',new Three.Vector3());
   scene.animate(1,'resistor');
   assert(scene.anchor('shoe',point).x>start.x);
+ }
+ if(source==='supply'){
+  assert(scene.root.getObjectByName('GLB NM-22'));
+  assert(scene.root.getObjectByName('GLB transformer'));
+  assert(scene.root.getObjectByName('GLB rectifier'));
  }
  if(source==='pcc'){
   const building=scene.root.getObjectByName('Edificio_PCC1');
@@ -46,6 +68,15 @@ for(const source of ['runningGear','steel','traction','supply','pcc']){
   scene.animate(88/chapter.duration,'p5');
   assert.deepEqual(floors.filter(floor=>floor.visible).map(floor=>floor.userData.id),['p5']);
  }
+ disposeChapter(scene.root);
+}
+for(const name of ['NM79','MP82']){
+ const chapter=chapters.find(item=>item.path===`models/${name}_cabina.glb.gz`);
+ const scene=await buildChapter(chapter,signal);
+ scene.animate(0,'body');
+ assert(scene.anchor('body',new Three.Vector3()));
+ scene.animate(.9,'brushes');
+ assert(scene.anchor('brushes',new Three.Vector3()));
  disposeChapter(scene.root);
 }
 assert.equal(chapters.at(-1).source,'control');
