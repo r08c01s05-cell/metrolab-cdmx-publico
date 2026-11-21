@@ -1,8 +1,8 @@
 import * as T from 'three';
 import { RenderBudget101 } from '../render-budget101.js?v=222';
 import { OrbitControls } from '../vendor/OrbitControls.js';
-import { construirMaqueta } from './escena-3d.js';
-import { torresCampo, tramosDeAlimentacion } from './circuito-3d.js';
+import { construirMaqueta } from './escena-3d.js?v=284';
+import { predioTransmision, torresCampo, tramosDeAlimentacion } from './circuito-3d.js?v=284';
 import { subestacionGLB, trenDeReferencia, trenGLB } from './modelos-glb.js?v=280';
 
 const raiz = document.getElementById('corte-electrico-metro');
@@ -32,11 +32,11 @@ render.domElement.className = 'escena-3d';
 render.domElement.setAttribute('aria-hidden','true');
 escena.add(new T.HemisphereLight(0xe4efff,0x716151,1.57));
 const sol = new T.DirectionalLight(0xffedcf,2.7);
-sol.position.set(-28,54,30);
-sol.target.position.set(-9,0,-2);
+sol.position.set(-67,80,44);
+sol.target.position.set(-39,0,-8);
 sol.castShadow=true;
 sol.shadow.mapSize.set(2048,2048);
-Object.assign(sol.shadow.camera,{left:-57,right:57,top:36,bottom:-34,near:1,far:118});
+Object.assign(sol.shadow.camera,{left:-91,right:91,top:57,bottom:-60,near:1,far:200});
 sol.shadow.camera.updateProjectionMatrix();
 sol.shadow.normalBias=.075;
 sol.shadow.bias=-.0002;
@@ -62,16 +62,21 @@ let trenMontado;
 let solicitudTren=0;
 let estadoSubestacion='Cargando el GLB de la subestación.';
 let estadoTren='';
-const camara = new T.PerspectiveCamera(35,1,.12,680);
+const camara = new T.PerspectiveCamera(35,1,.12,1200);
 const controles = new OrbitControls(camara,render.domElement);
 controles.maxPolarAngle=Math.PI*.487;
 controles.minDistance=2;
-controles.maxDistance=600;
+controles.maxDistance=920;
 const direccion = new T.Vector3(-.22,.4,1).normalize();
 const derechaCamara = new T.Vector3(0,1,0).cross(direccion).normalize();
 const arribaCamara = direccion.clone().cross(derechaCamara);
-const vistaGeneral = new T.Box3(new T.Vector3(-56.5,-4.4,-12.1),new T.Vector3(39.2,24.2,4.6));
+const vistaGeneral = new T.Box3(
+  new T.Vector3(predioTransmision.oeste,predioTransmision.base,predioTransmision.norte),
+  new T.Vector3(39.2,24.2,predioTransmision.sur)
+);
 const vistaPatio = new T.Box3(new T.Vector3(.9,-3.2,-3.5),new T.Vector3(15.9,8.3,4.1));
+const vistaCampo = new T.Box3().setFromObject(grupos.campo).union(new T.Box3().setFromObject(grupos.cfe));
+const botonCampo=raiz.querySelector('[data-campo]');
 let vistaActual='general';
 const marcador = new T.Mesh(
   new T.SphereGeometry(.19,16,12),
@@ -323,6 +328,10 @@ function patio() {
   vistaActual='patio';
   enfocar(vistaPatio);
 }
+function campo() {
+  vistaActual='campo';
+  enfocar(vistaCampo);
+}
 function acercar() {
   if(!seleccion) return;
   vistaActual='equipo';
@@ -339,7 +348,8 @@ function seleccionar(evento) {
   if(cambioDeLinea) {
     incorporarTren(nueva);
     configurarRed(nueva);
-    if(vistaActual==='general') general();
+    botonCampo.hidden=nueva.mediumOnly;
+    if(vistaActual==='general'||vistaActual==='campo'&&nueva.mediumOnly) general();
   }
   const {high,medium,dc,secondary,overhead,mediumOnly}=seleccion;
   const textos={
@@ -376,6 +386,7 @@ render.domElement.addEventListener('pointerup',evento => {
 controles.addEventListener('change',solicitarDibujo);
 raiz.addEventListener('maqueta:seleccion',seleccionar);
 raiz.querySelector('[data-general]').addEventListener('click',general);
+botonCampo.addEventListener('click',campo);
 raiz.querySelector('[data-patio]').addEventListener('click',patio);
 raiz.querySelector('[data-acercar]').addEventListener('click',acercar);
 flujoUI.addEventListener('click',()=>{animar=!animar;estadoFlujo();});
@@ -393,6 +404,7 @@ new ResizeObserver(() => {
   camara.aspect=ancho/alto;
   camara.updateProjectionMatrix();
   if(vistaActual==='patio') patio();
+  else if(vistaActual==='campo') campo();
   else if(vistaActual==='equipo') acercar();
   else general();
 }).observe(panel);

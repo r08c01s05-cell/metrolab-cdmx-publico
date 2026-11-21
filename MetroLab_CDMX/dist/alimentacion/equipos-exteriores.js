@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { mergeGeometries } from '../vendor/BufferGeometryUtils.js';
-import { fases, salidasReductor } from './circuito-3d.js';
+import { fases, salidasReductor } from './circuito-3d.js?v=284';
 
 const ejeVertical = new T.Vector3(0,1,0);
 const metal = (color, roughness=.46) => new T.MeshStandardMaterial({color,roughness,metalness:.66});

@@ -46,7 +46,8 @@ export function batchStationModel(source){
   if(!geo)throw Error('Incompatible station geometry');
   const mesh=new THREE.Mesh(geo,b.material);mesh.name='Andenes_'+b.component;
   mesh.userData={componente:b.component,...(b.shell?{shell:b.shell,side:b.side}:{})};
-  mesh.castShadow=false;mesh.receiveShadow=false;result.add(mesh);
+  const exterior=/^(Exterior ·|Paño inclinado)/.test(b.material.name);
+  mesh.castShadow=exterior&&b.shell==='roof';mesh.receiveShadow=exterior;result.add(mesh);
   b.geometries.forEach(g=>g.dispose());
  }
  originalGeometry.forEach(g=>g.dispose());

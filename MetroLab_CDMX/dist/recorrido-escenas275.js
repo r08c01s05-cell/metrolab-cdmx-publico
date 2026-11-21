@@ -18,7 +18,7 @@ const pccCues=[
 
 export const chapters = [
  {title:'De Pantitlán a Observatorio', label:'Línea 1', duration:20, color:'#fd79ac', facts:lineFacts[1], text:'Zaragoza abre el recorrido. La estación permite reconocer la disposición de las vías, los andenes laterales y los accesos.', path:'models/andenes/L1/L1_02_Zaragoza.glb.gz', cut:'station', shot:[.74,.45,.58,.38,.34,.42]},
- {title:'De Garibaldi a Constitución', label:'Línea 8', duration:20, color:'#74dba1', facts:lineFacts[8], text:'En Coyuya, las vías flanquean el andén central. Desde el mismo andén se accede a los trenes de ambos sentidos.', source:'coyuya', cut:'station', shot:[-.72,.47,.67,-.35,.35,.48]},
+ {title:'De Garibaldi a Constitución', label:'Línea 8', duration:20, color:'#74dba1', facts:lineFacts[8], text:'En Coyuya, el puente y la cubierta escalonada distinguen la estación desde la avenida. El corte muestra el andén central entre las vías.', source:'coyuya', cut:'surface', shot:[-.72,.47,.67,-.35,.35,.48]},
  {title:'El tren en movimiento', label:'Tren NM-22', duration:25, color:'#ffae74', cues:trainCues, path:'models/NM22_cabina.glb.gz', moving:true, shot:[.73,.3,1.47,.16,.23,1.25]},
  ...['NM79','MP82'].map(id=>{
   const name=id.replace(/([A-Z]+)(\d+)/,'$1-$2');
@@ -54,8 +54,9 @@ function visibleBounds(root) {
  root.updateWorldMatrix(true,true);
  root.traverseVisible(object => {
   if(!object.isMesh)return;
-  if(!object.geometry.boundingBox)object.geometry.computeBoundingBox();
-  box.union(object.geometry.boundingBox.clone().applyMatrix4(object.matrixWorld));
+  const source=object.isInstancedMesh?object:object.geometry;
+  if(!source.boundingBox)source.computeBoundingBox();
+  box.union(source.boundingBox.clone().applyMatrix4(object.matrixWorld));
  });
  return box;
 }
@@ -120,12 +121,15 @@ export async function buildChapter(chapter,signal) {
   }
  } else if(chapter.source==='coyuya') {
   // El GLB archivado conserva los andenes laterales anteriores a la corrección.
-  const {makeCoyuya208} = await import('./coyuya208.js?v=209');
+  const [{makeCoyuya208},{buildStationDistrict284}] = await Promise.all([
+   import('./coyuya208.js?v=285'),import('./entorno-estacion284.js?v=285')
+  ]);
   signal.throwIfAborted();
   model=makeCoyuya208();
+  model.add(buildStationDistrict284({id:'L8-10',nombre:'Coyuya'}));
  } else if(chapter.source==='supply') {
-  const [{construirMaqueta},{tramosDeAlimentacion},{prepararSubestacionGLB,prepararTrenGLB},substation,train] = await Promise.all([
-   import('./alimentacion/escena-3d.js'),import('./alimentacion/circuito-3d.js'),
+  const [{construirMaqueta},{tramosDeAlimentacion,observacionTransmision},{prepararSubestacionGLB,prepararTrenGLB},substation,train] = await Promise.all([
+   import('./alimentacion/escena-3d.js?v=284'),import('./alimentacion/circuito-3d.js?v=284'),
    import('./alimentacion/modelos-glb.js?v=280'),loadModel(substationAsset,signal),loadModel('models/NM22_cabina.glb.gz',signal)
   ]);
   signal.throwIfAborted();
@@ -149,7 +153,7 @@ export async function buildChapter(chapter,signal) {
   setAnchor(anchors,'cable',parts.cable);
   setAnchor(anchors,'tr',equipment.get('transformer'));
   setAnchor(anchors,'rec',equipment.get('rectifier'));
-  anchors.set('cfe',{object:model,point:new Three.Vector3(-29,16,-4.2)});
+  anchors.set('cfe',{object:model,point:new Three.Vector3(...observacionTransmision)});
   anchors.set('contact',{object:model,point:new Three.Vector3(...(wagon.captador??[27.55,-1.88,2.05]))});
   anchors.set('returnPath',{object:model,point:new Three.Vector3(31,-2.31,.96)});
   const marker=new Three.SphereGeometry(.26,8,6);
@@ -169,8 +173,11 @@ export async function buildChapter(chapter,signal) {
  } else {
   model=await loadModel(chapter.path,signal);
  }
- if(chapter.cut==='station')model.traverse(object=>{
-  if(/^(Techo|Cubierta|(?:Cassette_)?Plaf[oó]n|Pared[ _]exterior|Pared[ _]de[ _]fondo)/i.test(object.name))object.visible=false;
+ const stationShell=[];
+ if(['station','surface'].includes(chapter.cut))model.traverse(object=>{
+  if(!/^(Techo|Cubierta|(?:Cassette_)?Plaf[oó]n|Pared[ _]exterior|Pared[ _]de[ _]fondo)/i.test(object.name))return;
+  if(chapter.cut==='surface')stationShell.push(object);
+  else object.visible=false;
  });
  if(chapter.cut==='substation')for(const name of ['roof','Cerramiento_retirado']) {
   const object=model.getObjectByName(name);
@@ -243,6 +250,7 @@ export async function buildChapter(chapter,signal) {
   const anchor=anchors.get(id);
   return anchor ? anchor.object.localToWorld(point.copy(anchor.point)) : null;
  },animate(progress,cue){
+  for(const part of stationShell)part.visible=progress<.58;
   if(chapter.moving)model.position.x=trainStart+(progress-.5)*size.x*.26;
   if(motorStage){
    motorStage.visible=cue==='brushes';
@@ -266,6 +274,7 @@ export async function buildChapter(chapter,signal) {
 export function disposeChapter(root) {
  const geometries=new Set(), materials=new Set(), textures=new Set();
  root.traverse(object=>{
+  if(object.isInstancedMesh)object.dispose();
   if(object.geometry)geometries.add(object.geometry);
   for(const material of [object.material].flat())if(material)materials.add(material);
  });

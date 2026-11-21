@@ -1,6 +1,8 @@
 import * as T from 'three';
 import {inheritSurfaceDetail205}from'./surface-detail205.js?v=205';
 import {STATION_REFERENCES213,referenceTexture213}from'./station-reference213.js?v=215';
+import {exteriorMaterial285} from './materiales-exterior285.js?v=285';
+import {texturaCaja} from './alimentacion/superficies-3d.js';
 const plain=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 function metricUV213(o,scale){
  const g=o.geometry.clone(),p=g.attributes.position,n=g.attributes.normal,uv=new Float32Array(p.count*2),v=new T.Vector3(),normal=new T.Vector3(),matrix=new T.Matrix3().getNormalMatrix(o.matrixWorld);
@@ -46,14 +48,23 @@ export function finishStation213(root,station,anisotropy=4){
 // their original positions; exterior supports stay outside the running envelope.
 export function finishSurfaceArchitecture213(root,station){
  const profile=STATION_REFERENCES213[station.id];if(profile?.wall!=='surface')return;
- const terminal=station.id==='L8-19',columns=new T.MeshStandardMaterial({name:'Estructura según fotografía '+station.id,color:profile.column,roughness:terminal?.72:.58,metalness:terminal?.02:.35}),wall=new T.MeshStandardMaterial({name:'Murete según fotografía '+station.id,color:profile.wallColor,roughness:.8});
+ const terminal=station.id==='L8-19';
+ const columns=exteriorMaterial285(terminal?'concreto':'metal',terminal?'#c3c4b7':'#a7afb0',2.1);
+ const wall=exteriorMaterial285('concreto','#aead9e',3.5);
+ const structural=/Columna exterior|Diagonal exterior|Pilar de isla|Cercha transversal|Cordón superior de cercha|Diagonal de cercha/;
  const removed=[],surfaces=[];let outer=0;
  root.traverse(o=>{if(!o.isMesh)return;
-  if(/Columna exterior|Diagonal exterior|Pilar de isla|Cercha transversal|Cordón superior de cercha|Diagonal de cercha/.test(o.name))o.material=columns;
+  if(structural.test(o.name))o.material=columns;
   if(o.name==='Muro exterior bajo'){o.material=wall;outer=Math.abs(o.position.z);}
   if(o.name==='Malla lateral'||o.name==='Barrote de cerramiento')removed.push(o);
   if(terminal&&/Columna exterior|Diagonal exterior/.test(o.name)){const p=o.geometry.parameters;o.geometry=new T.BoxGeometry(.40,p.height,.40);}
   if(terminal&&o.name==='Pilar de isla'){const p=o.geometry.parameters;o.geometry=new T.BoxGeometry(.28,p.height,.28);}
+ });
+ const textured=new Set();
+ root.traverse(o=>{
+  if(o.material!==columns&&o.material!==wall||textured.has(o.geometry))return;
+  const {width,height,depth}=o.geometry.parameters;
+  texturaCaja(o.geometry,width,height,depth,1);textured.add(o.geometry);
  });
  for(const o of removed){o.removeFromParent();surfaces.push(o.geometry);}for(const g of new Set(surfaces))g.dispose();
  if(outer){

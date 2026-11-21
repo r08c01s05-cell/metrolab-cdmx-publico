@@ -1,6 +1,6 @@
 import * as Three from 'three';
 import {RenderBudget101} from './render-budget101.js?v=222';
-import {chapters,buildChapter,disposeChapter} from './recorrido-escenas275.js?v=280';
+import {chapters,buildChapter,disposeChapter} from './recorrido-escenas275.js?v=285';
 import {tractionFrame278} from './recorrido-traccion278.js?v=280';
 
 const totalSeconds = chapters.reduce((total,chapter)=>total+chapter.duration,0);

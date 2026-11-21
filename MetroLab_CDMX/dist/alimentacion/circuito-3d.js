@@ -1,9 +1,11 @@
 // Dimensiones ilustrativas del campo de transmisión, en metros.
 export const torresCampo = {
-  origen:[-48,0,-4.2],
-  llegada:[-21,0,-4.2],
+  origen:[-94,0,-9],
+  llegada:[-38,0,-9],
   escala:3.6,
 };
+export const predioTransmision={oeste:-118,este:-1,norte:-36,sur:20,base:-4.4};
+export const observacionTransmision=[-64,15,-9];
 export const origenTorre = [1.65,0,-.65];
 export function borneTorre(punto,base) {
   return punto.map((coordenada,eje)=>base[eje]+(coordenada-origenTorre[eje])*torresCampo.escala);
@@ -35,9 +37,9 @@ export function tramosDeAlimentacion({mediumOnly, overhead, captador}) {
       const canal=2.79+i*.19;
       const llegadaX=8.9+i*.34;
       return [
-        ['ac','cfe',vano(entrada,terminalOpuesto,1.8),true],
+        ['ac','cfe',vano(entrada,terminalOpuesto,2.8),true],
         ['ac','cfe',[terminalOpuesto,[torresCampo.llegada[0],salida[1]-1.18,salida[2]-2.8],salida],true],
-        ['ac','cfe',vano(salida,portico,.85),true],
+        ['ac','cfe',vano(salida,portico,1.35),true],
         ['ac','seat',[portico,[x+.18,y-.55,z],[x+.18,-.06,z],[x+.18,-.94,canal],
           [llegadaX,-.94,canal],[llegadaX,.13,canal],[llegadaX,2.92,primario[2]+.43],primario]]
       ];
