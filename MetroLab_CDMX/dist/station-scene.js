@@ -1,10 +1,11 @@
 import {installRouteEnergy249} from './energy-flow249.js?v=255';
+import {buildStationDistrict284,disposeStationDistrict284} from './entorno-estacion284.js?v=285';
 import {STATION_REFERENCES213} from './station-reference213.js?v=215';
-import {finishStation213,finishSurfaceArchitecture213,updateStationBounce213} from './station-finish213.js?v=215';
+import {finishStation213,finishSurfaceArchitecture213,updateStationBounce213} from './station-finish213.js?v=285';
 import {bogieHalf212} from './car-support212.js?v=212';
 import {finishObservatorio209} from './terminal-surface209.js?v=209';
 import {configureLayout208,isCoyuya208,isSurfaceIsland209,surfaceSpec209,platformEye209,trainTrack208,doorSide208,offsetAt208} from './station-layout208.js?v=209';
-import {makeCoyuya208,widenCoyuya208} from './coyuya208.js?v=209';
+import {makeCoyuya208,widenCoyuya208} from './coyuya208.js?v=285';
 import {PlatformPerson178} from './platform-person178.js?v=260';
 import{platformSolids169,clampPlatformCamera169,constrainPlatformActors169}from'./platform-collision169.js?v=225';
 import{finishPlatforms160}from'./platform-finish160.js?v=205';
@@ -36,7 +37,7 @@ import {predictArrivals,prepareArrivalDisplays,drawArrivalDisplays} from './arri
 import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
-import {batchStationModel,disposeStationModel,prepareStationMaterials,TRACK_OFFSET,PLATFORM_EDGE,trackCenter,platformSide} from './station-assets.js?v=208';
+import {batchStationModel,disposeStationModel,prepareStationMaterials,TRACK_OFFSET,PLATFORM_EDGE,trackCenter,platformSide} from './station-assets.js?v=285';
 import {createMetroEnvironment,enhanceMetroMaterials,makeNM79Overview,batchTrainStatics} from './metro-render.js?v=222';
 import {doorOpenness,planPassengerStop} from './passenger-flow.js?v=260';
 import {buildNaturalPassengerFrame} from './passenger-journeys.js?v=260';
@@ -85,6 +86,8 @@ export class StationScene {
  textPanel(parent,text,x,y,z,width,height,color='#263f56',ink='white'){const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=128;const c=canvas.getContext('2d');c.fillStyle=color;c.fillRect(0,0,1024,128);c.fillStyle=ink;c.textAlign='center';c.textBaseline='middle';c.font='bold 58px Arial';let size=58;while(c.measureText(text).width>940&&size>25)c.font=`bold ${--size}px Arial`;c.fillText(text,512,64);const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;this.nameTextures.push(texture);const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,height),new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide}));mesh.position.set(x,y,z);parent.add(mesh);return mesh;}
  makeStation(station,pos,color){
  const p=new THREE.Group();p.name='Estacion_'+station.id;p.userData={stationId:station.id,loaded:false,error:false,attempts:1};p.position.x=pos;if(this.alignment97){const pose97=this.alignment97.pose(pos);p.position.set(pose97.x,0,pose97.z);p.rotation.y=pose97.yaw;}this.stations.add(p);
+ const district=buildStationDistrict284(station);
+ if(district){p.add(district);p.userData.district284=district;}
  if(isSurfaceIsland209(station)){
  const source=makeCoyuya208(station);finishSurfaceArchitecture213(source,station);prepareStationMaterials(source,this.renderer.capabilities.getMaxAnisotropy());refineSurfaceMaterials100(source,this.renderer.capabilities.getMaxAnisotropy());finishPlatforms160(source,this.renderer.capabilities.getMaxAnisotropy());finishStation213(source,station,this.renderer.capabilities.getMaxAnisotropy());p.userData.solids169=platformSolids169(source);p.userData.solids169.layout208='island';
  p.userData.arrivalDisplays=prepareArrivalDisplays(source);const model=batchStationModel(source);p.add(model);p.userData.model=model;p.userData.loaded=true;p.userData.layout208='island';const spec209=surfaceSpec209(station);station.geometria_3d={...station.geometria_3d,tipo_anden_modelado:spec209.kind==='terminal'?'dos islas y tres vías':'central',revision_modelo:'SUPERFICIE-209',confianza_visual:'referencia fotográfica · dimensiones aproximadas',observado:spec209.kind==='terminal'?'Terminal de dos islas con vía central y dos vías exteriores. Vía central representada sin servicio automático.':'Isla entre dos vías; paleta y estructura según referencia local de la estación.',supuestos:['Dimensiones de simulación: islas de 156 × 7.5 m, altura 1.2 m. No son cotas levantadas.','Escaleras, pasarelas y mobiliario con ubicación aproximada; pendientes de plano acotado.'],dimensiones_provisionales_m:{longitud:156,ancho_anden_central:7.5,altura_plataforma:1.2,centros_vias:spec209.kind==='terminal'?[-10.4,0,10.4]:[-5.2,5.2]}};p.userData.textureCount=prepareStationTextures(model,this.renderer);p.userData.loadTask=Promise.resolve();freezeStatic101(p);this.shellState101=null;return p;
@@ -107,7 +110,7 @@ export class StationScene {
  for(const {side,x,y,z} of slots){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1.14,1.52),material);mesh.name='Cartel mapa aportado';mesh.position.set(x,y,z);mesh.rotation.y=side>0?Math.PI:0;mesh.userData={componente:'pared',shell:'wall',side};model.add(mesh);}
  }
  clearStations(){for(const p of this.stationCache.values())this.disposeStation(p);this.stationCache.clear();this.stations.clear();}
- disposeStation(p){this.stations.remove(p);if(p.userData.model)disposeStationModel(p.userData.model);}
+ disposeStation(p){this.stations.remove(p);if(p.userData.model)disposeStationModel(p.userData.model);if(p.userData.district284)disposeStationDistrict284(p.userData.district284);}
  refreshStations(line,idx,anchor,focus){
  const keep=stationLoadPlan(line,idx,anchor,focus);
  for(const [i,p]of this.stationCache)if(!keep.has(i)){this.disposeStation(p);this.stationCache.delete(i);}
@@ -256,11 +259,13 @@ const group=new THREE.Group(),roof=[],doors=[];const n=9,gap=.65,length=(150.9-(
  async prepareAudio142(){await this.audio.enable();const line=this.getState().engine.lines[this.getState().currentLine];await Promise.all(line.stations.filter(s=>this.audio.manifest?.stations?.[s.id]).map(s=>this.audio.reference(s.id)));if(this.audio.motionError)throw Error('No se pudo preparar el audio de marcha');}
  async enableAudio(){await this.prepareAudio142();$('audio-toggle').textContent='Silenciar sonido';$('audio-toggle').setAttribute('aria-pressed','true');}
  setupEvents(){this.passenger178=new PlatformPerson178(this);$('station-3d').addEventListener('pointerdown',()=>{if(this.cameraMode==='full')$('follow-train').checked=false;});$('station-3d').addEventListener('wheel',()=>{if(this.cameraMode==='full')$('follow-train').checked=false;},{passive:true});$('scene-nav-orbit').onclick=()=>this.navigation.setMode('orbit');$('scene-nav-pan').onclick=()=>this.navigation.setMode('pan');$('scene-nav-home').onclick=()=>this.setCamera(this.cameraMode,true);$('retry-trains').onclick=()=>{this.cabinCharacters.retry?.();this.loadLine(this.getState().currentLine);for(const p of this.stationCache.values())if(p.userData.error){p.userData.attempts=0;p.userData.retryAt=0;}};const audioButton=$('audio-toggle');audioButton.onclick=async()=>{try{if(this.audio.enabled){this.audio.setEnabled(false);}else await this.prepareAudio142();audioButton.textContent=this.audio.enabled?'Silenciar sonido':'Activar sonido';audioButton.setAttribute('aria-pressed',this.audio.enabled);}catch{audioButton.textContent='Audio no disponible';}};$('audio-volume').oninput=()=>this.audio.setVolume(Number($('audio-volume').value));for(const [id,m]of [['camera-full','full'],['camera-platform','platform'],['camera-passenger','passenger'],['camera-train','train'],['camera-car','car'],['camera-driver','driver'],['camera-cab-platform','cab-platform']])$(id).onclick=()=>this.setCamera(m);$('follow-train').onchange=()=>{this.lastStation=-1;this.setCamera(this.cameraMode);};$('cutaway').onchange=()=>{};$('scene-train').onchange=()=>window.selectSceneTrain?.($('scene-train').value);$('next-arrival').onclick=()=>window.advanceToNextArrival?.();}
- // Fit the entire 162 m station, including both lateral platforms, at any aspect ratio.
+ // Encuadra la estación y, cuando existe, su entorno exterior.
  fitOverview(){
  const normal=new THREE.Vector3(0,95,60).normalize(),right=new THREE.Vector3(1,0,0),up=new THREE.Vector3().crossVectors(normal,right);
  const tanV=Math.tan(THREE.MathUtils.degToRad(this.camera.fov/2)),tanH=tanV*this.camera.aspect;let distance=0;
- for(const x of [-81,81])for(const y of [-1.5,12])for(const z of [-8.6,8.6]){
+ const district=this.stationCache.get(this.cameraStation)?.userData.district284;
+ const extent=district?[115,district.userData.outer]:[81,8.6];
+ for(const x of [-extent[0],extent[0]])for(const y of [-1.5,district?14:12])for(const z of [-extent[1],extent[1]]){
   const v=new THREE.Vector3(x,y,z),depth=v.dot(normal);
   distance=Math.max(distance,depth+Math.abs(v.dot(right))/tanH,depth+Math.abs(v.dot(up))/tanV);
  }

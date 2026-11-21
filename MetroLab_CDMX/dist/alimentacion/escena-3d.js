@@ -1,6 +1,7 @@
 import * as T from 'three';
-import { fases, origenTorre, torresCampo } from './circuito-3d.js';
-import { construirTorre, construirReductor } from './equipos-exteriores.js';
+import { fases, origenTorre, torresCampo } from './circuito-3d.js?v=284';
+import { construirCampo284 } from './terreno-284.js?v=284';
+import { construirTorre, construirReductor } from './equipos-exteriores.js?v=284';
 import { superficies3D, texturaCaja } from './superficies-3d.js';
 
 export function construirMaqueta(escena) {
@@ -105,36 +106,8 @@ export function construirMaqueta(escena) {
     montaje.add(copia);
     cfe.add(montaje);
   }
-  caja(campo,-28.75,-4.28,-3.8,55.5,.22,16.7,'oscuro');
-  caja(campo,-28.75,-2.23,-3.8,55.5,3.9,16.5,'estrato');
-  caja(campo,-28.75,-.27,-3.8,55.5,.13,16.5,'pasto');
-  caja(campo,-27.8,-.191,1.75,54.1,.045,2.4,'brecha');
-  for(const carril of [1.08,2.4]) {
-    const huella=caja(campo,-27.8,-.165,carril,54,.006,.49,'brecha');
-    huella.material=huella.material.clone();
-    huella.material.color.multiplyScalar(.76);
-  }
-  for(const [x,,z] of [torresCampo.origen,torresCampo.llegada]) {
-    caja(campo,x,-.185,z,9.8,.04,9.3,'grava');
-    caja(campo,x,-.176,.15,2.2,.045,2.2,'brecha');
-  }
-  const vegetacion=new T.InstancedMesh(new T.DodecahedronGeometry(1,0),new T.MeshStandardMaterial({
-    color:0x78804c, roughness:.94,
-  }),260);
-  vegetacion.receiveShadow=true;
+  construirCampo284(campo,caja,materiales);
   const tono=new T.Color();
-  for(let i=0;i<vegetacion.count;i++) {
-    const x=-55+(i*2.911)%53;
-    const z=i%3===0 ? 3.07+(i*.511)%1.22 : -10.85+(i*.481)%10.7;
-    const cercaDeTorre=[torresCampo.origen,torresCampo.llegada].some(([tx,,tz])=>Math.abs(x-tx)<5.15&&Math.abs(z-tz)<4.95);
-    const ancho=cercaDeTorre?0:.07+(i%7)**2*.009;
-    matriz.makeScale(ancho,ancho*(.62+(i%4)*.25),ancho*.8);
-    matriz.setPosition(x,-.205,z);
-    vegetacion.setMatrixAt(i,matriz);
-    tono.setRGB(.68+(i%11)*.026,.7+(i%13)*.023,.53+(i%9)*.055);
-    vegetacion.setColorAt(i,tono);
-  }
-  campo.add(vegetacion);
   const piedras=new T.InstancedMesh(new T.DodecahedronGeometry(1,0),new T.MeshStandardMaterial({
     color:0x9d9485,roughness:.97,
   }),220);

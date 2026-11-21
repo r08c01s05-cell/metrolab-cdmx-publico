@@ -1,5 +1,6 @@
 import * as T from 'three';
 import {COYUYA208,surfaceSpec209,platformRegions209} from './station-layout208.js?v=209';
+import {configurarEnvolvente285} from './envolvente-estacion285.js?v=285';
 
 // Single island, grey diagonal steel framing, open mesh sides and covered tracks.
 // Photo reference: dist/referencias/linea8_57/L8-10.jpg. Hidden areas are approximate.
@@ -8,9 +9,10 @@ export function makeCoyuya208(station={id:'L8-10'}){
  const root=new T.Group();root.name=spec.name+'_andenes209';root.userData={layout208:'island',regions209:platforms,approximate208:true,stationId:station.id};
  const mats=new Map(),geo=new Map(),signs=new Map();
  function material(name,color,metalness=0,roughness=.72){if(!mats.has(name))mats.set(name,new T.MeshStandardMaterial({name,color,metalness,roughness}));return mats.get(name);}
- const concrete=material('Concreto aparente '+spec.name,'#aaa99f'),steel=material('Acero estructural '+spec.name,spec.steel,.65,.42),dark=material('Acero antracita','#344a48',.65,.4),floor=material('Piso terrazo andén '+spec.name,'#a2a69e'),warning=material('Franja podotáctil amarilla','#d7b246'),roof=material('Cubierta metálica Coyuya','#a9b1aa',.48,.56),seat=material('Asiento metálico','#728781',.6,.46);
+ const concrete=material('Concreto aparente '+spec.name,'#aaa99f'),steel=material('Acero estructural '+spec.name,spec.steel,.65,.42),dark=material('Acero antracita','#344a48',.65,.4),floor=material('Piso terrazo andén '+spec.name,'#a2a69e'),warning=material('Franja podotáctil amarilla','#d7b246'),seat=material('Asiento metálico','#728781',.6,.46);
  function box(name,x,y,z,w,h,d,mat,c='estructura') {const key=[w,h,d].join('/');if(!geo.has(key))geo.set(key,new T.BoxGeometry(w,h,d));const m=new T.Mesh(geo.get(key),mat);m.name=name;m.position.set(x,y,z);m.userData.componente=c;m.castShadow=true;m.receiveShadow=true;root.add(m);return m;}
  function beam(name,a,b,width,depth=width,mat=steel){const p=new T.Vector3(...a),q=new T.Vector3(...b),m=box(name,...p.clone().add(q).multiplyScalar(.5).toArray(),width,p.distanceTo(q),depth,mat);m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),q.sub(p).normalize());return m;}
+ const {yAt,rise}=configurarEnvolvente285(root,station.id,outer,stairBases,beam);
  function label(text,x,y,z,w,h,turn=0){
   if(!signs.has(text)){const c=document.createElement('canvas');c.width=1024;c.height=128;const ctx=c.getContext('2d');ctx.fillStyle='#19634f';ctx.fillRect(0,0,1024,128);ctx.fillStyle='#fff';ctx.font='bold 51px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,512,65,980);const map=new T.CanvasTexture(c);map.colorSpace=T.SRGBColorSpace;signs.set(text,new T.MeshStandardMaterial({map,roughness:.8,side:T.FrontSide}));}
   const m=new T.Mesh(new T.PlaneGeometry(w,h),signs.get(text));m.name='Señal '+text;m.position.set(x,y,z);m.rotation.y=turn;m.userData.componente='senal';root.add(m);const back=m.clone();back.rotation.y+=Math.PI;back.position.x-=Math.sin(turn)*.008;back.position.z-=Math.cos(turn)*.008;root.add(back);return m;
@@ -28,16 +30,17 @@ export function makeCoyuya208(station={id:'L8-10'}){
  for(const sign of[-1,1]){
   // Outer retaining wall is beyond the running/guide envelope of each track.
   box('Muro exterior bajo',0,.75,sign*outer,160,1.5,.25,concrete,'pared');
-  for(let x=-76;x<=76;x+=8){
-   beam('Columna exterior', [x,0,sign*outer],[x,6.05,sign*outer],.20,.24);
-   beam('Diagonal exterior', [x-3.5,1.55,sign*outer],[x,5.85,sign*outer],.18,.18);
-   beam('Diagonal exterior', [x+3.5,1.55,sign*outer],[x,5.85,sign*outer],.18,.18);
+  for(let x=-76;x<=76;x+=8)beam('Columna exterior',[x,.65,sign*outer],[x,yAt(x)-.12,sign*outer],.23,.24);
+  for(let x=-76;x<76;x+=8){
+   const z=sign*outer,h1=yAt(x)-.13,h2=yAt(x+8)-.13,mid=x+4,ym=(h1+h2)*.25+.40;
+   beam('Diagonal exterior',[x,.83,z],[mid,ym,z],.31,.22);
+   beam('Diagonal exterior',[mid,ym,z],[x+8,h2,z],.31,.22);
+   beam('Diagonal exterior',[x,h1,z],[mid,ym,z],.31,.22);
+   beam('Diagonal exterior',[mid,ym,z],[x+8,.83,z],.31,.22);
   }
   // Thin geometric grid gives depth without transparent, coplanar alpha planes.
   for(let x=-79;x<=79;x+=1.0)box('Barrote de cerramiento',x,2.9,sign*(outer-.01),.018,2.8,.018,steel);
   for(let y=1.6;y<=4.3;y+=.30)box('Malla lateral',0,y,sign*(outer-.01),160,.012,.012,steel);
-  box('Canalón lateral',0,6.14,sign*(outer-.07),158,.18,.23,dark,'techo');
-  const gaps=stairBases.map(base=>base+Math.sign(base)*7.5).sort((a,b)=>a-b);for(const [a,b]of[[-79,gaps[0]-1.6],[gaps[0]+1.6,gaps[1]-1.6],[gaps[1]+1.6,79]]){const cover=box('Cubierta inclinada',(a+b)/2,6.49,sign*outer/2,b-a,.12,outer+.15,roof,'techo');cover.rotation.x=-sign*.06;}
  for(const platform of platforms)box('Canalización bajo cubierta',0,5.93,platform.center+sign*2.8,153,.08,.12,dark,'techo');
   for(const platform of platforms)for(let x=-68;x<=68;x+=17){
    const light=box('Luminaria lineal',x,5.72,platform.center+sign*2.75,3.8,.09,.22,material('Difusor de luminaria','#eef4e8',0,.4),'techo');light.material.emissive=new T.Color('#dce9d7');light.material.emissiveIntensity=.65;
@@ -46,11 +49,12 @@ export function makeCoyuya208(station={id:'L8-10'}){
  }
  for(let x=-72;x<=72;x+=12){
   // Central columns leave two clear boarding/walking lanes on the island.
-  for(const platform of platforms)for(const z of (stairBases.some(base=>x>=Math.min(base,base+Math.sign(base)*7.5)-1&&x<=Math.max(base,base+Math.sign(base)*7.5)+1)?[]:[platform.center-.46,platform.center+.46]))beam('Pilar de isla',[x,1.2,z],[x,6.8,z],.18,.18);
+  const eave=yAt(x)-.14;
+  for(const platform of platforms)for(const z of (stairBases.some(base=>x>=Math.min(base,base+Math.sign(base)*7.5)-1&&x<=Math.max(base,base+Math.sign(base)*7.5)+1)?[]:[platform.center-.46,platform.center+.46]))beam('Pilar de isla',[x,1.2,z],[x,eave+rise*(1-Math.abs(z)/outer),z],.18,.18);
   beam('Cercha transversal',[x,6.05,-outer-.05],[x,6.05,outer+.05],.14,.16);
   for(const sign of[-1,1]){
-   beam('Cordón superior de cercha',[x,6.05,sign*outer],[x,6.82,0],.14,.16);
-   for(let z=1.4;z<outer-1.4;z+=1.4)beam('Diagonal de cercha',[x,6.05,sign*z],[x,6.82-(z+1.4)*(.77/outer),sign*(z+1.4)],.065,.065);
+   beam('Cordón superior de cercha',[x,eave,sign*outer],[x,eave+rise,0],.14,.16);
+   for(let z=1.4;z<outer-1.4;z+=1.4)beam('Diagonal de cercha',[x,6.05,sign*z],[x,eave+rise*(1-(z+1.4)/outer),sign*(z+1.4)],.065,.065);
   }
  }
  for(const direction of[-1,1]){

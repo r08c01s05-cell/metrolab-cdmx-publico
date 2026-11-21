@@ -26,7 +26,7 @@ export function abrirAlimentacion() {
     entrada?.focus();
   }, {once: true});
 
-  visor.src = new URL('./alimentacion/index.html', import.meta.url);
+  visor.src = new URL('./alimentacion/index.html?v=284', import.meta.url);
   document.body.append(dialogo);
   dialogo.showModal();
 }
